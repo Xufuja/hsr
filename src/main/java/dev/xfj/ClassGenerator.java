@@ -1,5 +1,6 @@
 package dev.xfj;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -35,15 +36,31 @@ public class ClassGenerator {
             JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
 
             if (!jsonObject.entrySet().isEmpty()) {
-                for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
-                    Files.createDirectories(Paths.get(outputDirectory));
-                    String noExtension = item.replace(".json", "");
-                    createClass(entry.getValue().toString(), new File(outputDirectory), "dev.xfj." + noExtension.toLowerCase(), noExtension);
-                    break;
-                }
-
+                JsonArray array = findActualObject(jsonObject);
+                Files.createDirectories(Paths.get(outputDirectory));
+                createClass(array.toString(), new File(outputDirectory), "dev.xfj." + item.replace(".json", "").toLowerCase(), item);
             }
         }
+    }
+
+    private JsonArray findActualObject(JsonObject jsonObject) {
+        JsonArray jsonArray = new JsonArray();
+        for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
+            jsonArray.add(entry.getValue());
+
+            boolean allNumeric = false;
+            //Generally, when all keys are numeric, it looks like it should be an array with the name being an index
+            for (var key : jsonArray.get(0).getAsJsonObject().keySet()) {
+                allNumeric = key.chars().allMatch(Character::isDigit);
+            }
+
+            if (allNumeric) {
+                jsonArray = findActualObject(jsonArray.get(0).getAsJsonObject());
+            }
+            //Only fetch the first entry
+            break;
+        }
+        return jsonArray;
     }
 
     private void createClass(String jsonString, File outputDirectory, String packageName, String className)
