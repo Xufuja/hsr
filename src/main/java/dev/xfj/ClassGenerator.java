@@ -36,14 +36,14 @@ public class ClassGenerator {
             JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
 
             if (!jsonObject.entrySet().isEmpty()) {
-                JsonArray array = findActualObject(jsonObject);
+                JsonArray array = findObject(jsonObject);
                 Files.createDirectories(Paths.get(outputDirectory));
                 createClass(array.toString(), new File(outputDirectory), "dev.xfj." + item.replace(".json", "").toLowerCase(), item);
             }
         }
     }
 
-    private JsonArray findActualObject(JsonObject jsonObject) {
+    private JsonArray findObject(JsonObject jsonObject) {
         JsonArray jsonArray = new JsonArray();
         for (Map.Entry<String, JsonElement> entry : jsonObject.entrySet()) {
             jsonArray.add(entry.getValue());
@@ -55,7 +55,7 @@ public class ClassGenerator {
             }
 
             if (allNumeric) {
-                jsonArray = findActualObject(jsonArray.get(0).getAsJsonObject());
+                jsonArray = findObject(jsonArray.get(0).getAsJsonObject());
             }
             //Only fetch the first entry
             break;
@@ -65,7 +65,7 @@ public class ClassGenerator {
 
     private void createClass(String jsonString, File outputDirectory, String packageName, String className)
             throws IOException {
-        JCodeModel jcodeModel = new JCodeModel();
+        JCodeModel jCodeModel = new JCodeModel();
 
         GenerationConfig config = new DefaultGenerationConfig() {
             @Override
@@ -85,9 +85,9 @@ public class ClassGenerator {
         };
 
         SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new GsonAnnotator(config), new SchemaStore()), new SchemaGenerator());
-        mapper.generate(jcodeModel, className, packageName, jsonString);
+        mapper.generate(jCodeModel, className, packageName, jsonString);
 
-        jcodeModel.build(outputDirectory);
+        jCodeModel.build(outputDirectory);
     }
 
     private Set<String> getAllFiles() throws IOException {
@@ -98,5 +98,24 @@ public class ClassGenerator {
                     .map(Path::toString)
                     .collect(Collectors.toSet());
         }
+    }
+
+    public static int getStableHash(String str) {
+        char[] chars = str.toCharArray();
+        int hash1 = 5381;
+        int hash2 = hash1;
+
+        for (int i = 0; i < chars.length && chars[i] != '\0'; i += 2) {
+
+            hash1 = ((hash1 << 5) + hash1) ^ chars[i];
+
+            if (i == chars.length - 1 || chars[i + 1] == '\0') {
+                break;
+            }
+
+            hash2 = ((hash2 << 5) + hash2) ^ chars[i + 1];
+        }
+
+        return (hash1 + (hash2 * 1566083941));
     }
 }
