@@ -1,41 +1,29 @@
 package dev.xfj;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import dev.xfj.handlers.AvatarHandler;
+import dev.xfj.handlers.EquipmentHandler;
+import dev.xfj.handlers.LanguageHandler;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.Map;
 
 public class Application {
-    private final Map<String, String> languageMap;
+    private final LanguageHandler languageHandler;
 
     public Application(String languageCode) throws FileNotFoundException {
-        this.languageMap = loadLanguage(languageCode);
+        languageHandler = new LanguageHandler(languageCode);
     }
 
-    public <T> Map<String, T> loadJSON(Class<T> clazz, String file) throws FileNotFoundException {
-        return loadJSON(clazz, "C:\\Dev\\StarRailData\\ExcelOutput\\", file);
+    public void run() throws FileNotFoundException {
+        AvatarHandler avatarHandler = new AvatarHandler();
+        EquipmentHandler equipmentHandler = new EquipmentHandler();
+        equipmentHandler.getEquipmentConfig().values().stream().map(equipmentConfigJson -> String.format("Light Cone ID: %1$s\r\n\t\tName: %2$s\r\n\t\tPath: %3$s",
+                equipmentConfigJson.getEquipmentID(),
+                getLanguage().get(equipmentConfigJson.getEquipmentName().getHash()),
+                getLanguage().get(avatarHandler.getAvatarBaseType().get(equipmentConfigJson.getAvatarBaseType()).getBaseTypeText().getHash()))).forEach(System.out::println);
     }
 
-    private <T> Map<String, T> loadJSON(Class<T> clazz, String baseDirectory, String file) throws FileNotFoundException {
-        JsonReader jsonReader = new JsonReader(new FileReader(baseDirectory + file));
-        JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
-        Gson gson = new Gson();
-        Type type = clazz != String.class ? TypeToken.getParameterized(Map.class, String.class, clazz).getType() : TypeToken.getParameterized(Map.class, Integer.class, clazz).getType();
-
-        return gson.fromJson(jsonObject, type);
-    }
-
-    private Map<String, String> loadLanguage(String code) throws FileNotFoundException {
-        return loadJSON(String.class, "C:\\Dev\\StarRailData\\TextMap\\", String.format("TextMap%1$s.json", code));
-    }
-
-    public Map<String, String> getLanguageMap() {
-        return languageMap;
+    public Map<String, String> getLanguage() {
+        return languageHandler.getLanguageMap();
     }
 }
