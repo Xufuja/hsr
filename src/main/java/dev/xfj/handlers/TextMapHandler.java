@@ -3,10 +3,10 @@ package dev.xfj.handlers;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-public class LanguageHandler implements Handler {
+public class TextMapHandler implements Handler {
     private final Map<String, String> languageMap;
 
-    public LanguageHandler(String languageCode) throws FileNotFoundException {
+    public TextMapHandler(String languageCode) throws FileNotFoundException {
         this.languageMap = loadLanguage(languageCode);
     }
 
@@ -18,4 +18,7 @@ public class LanguageHandler implements Handler {
         return languageMap;
     }
 
+    public String getTranslation(int key) {
+        return languageMap.get(key);
+    }
 }
