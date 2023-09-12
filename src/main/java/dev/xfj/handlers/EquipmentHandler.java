@@ -20,7 +20,7 @@ public class EquipmentHandler implements Handler{
     private final Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfigJson;
     private final Map<String, EquipmentExpTypeJson> equipmentExpTypeJson;
     private final Map<String, EquipmentPromotionConfigJson> equipmentPromotionConfigJson;
-    private final Map<String, EquipmentSkillConfigJson> equipmentSkillConfigJson;
+    private final Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
 
     public EquipmentHandler() throws FileNotFoundException {
         this.equipmentAtlas = loadJSON(EquipmentAtlasJson.class);
@@ -28,8 +28,7 @@ public class EquipmentHandler implements Handler{
         this.equipmentExpItemConfigJson = loadJSON(EquipmentExpItemConfigJson.class);
         this.equipmentExpTypeJson = loadJSON(EquipmentExpTypeJson.class);
         this.equipmentPromotionConfigJson = loadJSON(EquipmentPromotionConfigJson.class);
-        this.equipmentSkillConfigJson = loadJSON(EquipmentSkillConfigJson.class);
-        System.out.println(1);
+        this.equipmentSkillConfigJson = loadNestedJSON(EquipmentSkillConfigJson.class);
     }
 
     public Map<String, EquipmentConfigJson> getEquipmentConfig() {
@@ -53,6 +52,8 @@ public class EquipmentHandler implements Handler{
             lightCone.setExpProvide(entry.getValue().getExpProvide());
             lightCone.setCoinCost(entry.getValue().getCoinCost());
             lightCone.setDefaultUnlock(equipmentAtlas.get(String.valueOf(lightCone.getLightConeId())).isDefaultUnlock());
+
+            System.out.println(Language.getTranslation(equipmentSkillConfigJson.get("20000").get("1").getSkillName().getHash()));
 
             lightCones.put(lightCone.getLightConeId(), lightCone);
         }
