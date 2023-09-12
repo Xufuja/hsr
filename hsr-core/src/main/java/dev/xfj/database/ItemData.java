@@ -82,11 +82,11 @@ public class ItemData {
     private static <T> Object createBaseItem(Class<T> clazz, Object itemConfig) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
         Object item = createItemObject(itemConfig);
         //I suppose it works...
-        item.getClass().getMethod("setItemId", int.class).invoke(item, (Integer) clazz.getMethod("getId").invoke(itemConfig));
-        item.getClass().getMethod("setMainType", String.class).invoke(item, (String) clazz.getMethod("getItemMainType").invoke(itemConfig));
-        item.getClass().getMethod("setSubType", String.class).invoke(item, (String) clazz.getMethod("getItemSubType").invoke(itemConfig));
-        item.getClass().getMethod("setInventoryDisplayTag", int.class).invoke(item, (Integer) clazz.getMethod("getInventoryDisplayTag").invoke(itemConfig));
-        item.getClass().getMethod("setRarity", String.class).invoke(item, (String) clazz.getMethod("getRarity").invoke(itemConfig));
+        item.getClass().getMethod("setItemId", int.class).invoke(item, clazz.getMethod("getId").invoke(itemConfig));
+        item.getClass().getMethod("setMainType", String.class).invoke(item, clazz.getMethod("getItemMainType").invoke(itemConfig));
+        item.getClass().getMethod("setSubType", String.class).invoke(item, clazz.getMethod("getItemSubType").invoke(itemConfig));
+        item.getClass().getMethod("setInventoryDisplayTag", int.class).invoke(item, clazz.getMethod("getInventoryDisplayTag").invoke(itemConfig));
+        item.getClass().getMethod("setRarity", String.class).invoke(item, clazz.getMethod("getRarity").invoke(itemConfig));
 
         Object name = clazz.getMethod("getItemName").invoke(itemConfig);
         item.getClass().getMethod("setName", String.class).invoke(item, TextMapData.getTranslation((Integer) name.getClass().getMethod("getHash").invoke(name)));
@@ -97,7 +97,7 @@ public class ItemData {
         Object desc = clazz.getMethod("getItemDesc").invoke(itemConfig);
         item.getClass().getMethod("setDescription", String.class).invoke(item, TextMapData.getTranslation((Integer) desc.getClass().getMethod("getHash").invoke(desc)));
 
-        item.getClass().getMethod("setStackLimit", int.class).invoke(item, (Integer) clazz.getMethod("getPileLimit").invoke(itemConfig));
+        item.getClass().getMethod("setStackLimit", int.class).invoke(item, clazz.getMethod("getPileLimit").invoke(itemConfig));
 
         return item;
     }
