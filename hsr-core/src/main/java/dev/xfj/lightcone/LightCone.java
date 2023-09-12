@@ -5,6 +5,7 @@ import java.util.Map;
 public class LightCone {
     private int lightConeId;
     private String name;
+    private String backgroundDescription;
     private String description;
     private int rarity;
     private String path;
@@ -31,6 +32,14 @@ public class LightCone {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBackgroundDescription() {
+        return backgroundDescription;
+    }
+
+    public void setBackgroundDescription(String backgroundDescription) {
+        this.backgroundDescription = backgroundDescription;
     }
 
     public String getDescription() {

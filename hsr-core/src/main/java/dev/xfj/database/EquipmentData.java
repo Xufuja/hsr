@@ -45,7 +45,8 @@ public class EquipmentData {
 
             lightCone.setLightConeId(entry.getValue().getEquipmentID());
             lightCone.setName(TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()));
-            lightCone.setDescription(TextMapData.getTranslation(entry.getValue().getEquipmentDesc().getHash()));
+            lightCone.setBackgroundDescription(Database.getLightConeItems().get(lightCone.getLightConeId()).getBackgroundDescription());
+            lightCone.setDescription(Database.getLightConeItems().get(lightCone.getLightConeId()).getDescription());
             lightCone.setRarity(getRarity(entry.getValue().getRarity()));
             lightCone.setPath(AvatarData.getPathName(entry.getValue().getAvatarBaseType()));
             lightCone.setMaxAscension(entry.getValue().getMaxPromotion());

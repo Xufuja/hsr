@@ -17,8 +17,7 @@ public class Application {
     }
 
     public void run() {
-        Database.getLightCones().forEach((key, value) -> System.out.println(String.format("Light Cone ID: %1$s\r\n\t\tName: %2$s\r\n\t\tPath: %3$s", value.getLightConeId(), value.getName(), value.getPath())));
-        System.out.println(TextMapData.getTranslation(ItemData.getItemConfig().get("221").getItemName().getHash()));
+        Database.getLightCones().forEach((key, value) -> System.out.println(String.format("Light Cone ID: %1$s\r\n\t\tName: %2$s\r\n\t\tPath: %3$s\r\n\t\tLore: %4$s", value.getLightConeId(), value.getName(), value.getPath(), value.getBackgroundDescription())));
 
     }
 
