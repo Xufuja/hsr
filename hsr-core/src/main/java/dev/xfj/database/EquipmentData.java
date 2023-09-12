@@ -1,11 +1,11 @@
 package dev.xfj.database;
 
-import dev.xfj.equipmentatlas.EquipmentAtlasJson;
-import dev.xfj.equipmentconfig.EquipmentConfigJson;
-import dev.xfj.equipmentexpitemconfig.EquipmentExpItemConfigJson;
-import dev.xfj.equipmentexptype.EquipmentExpTypeJson;
-import dev.xfj.equipmentpromotionconfig.EquipmentPromotionConfigJson;
-import dev.xfj.equipmentskillconfig.EquipmentSkillConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentatlas.EquipmentAtlasJson;
+import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentexpitemconfig.EquipmentExpItemConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
+import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConeSkill;
 

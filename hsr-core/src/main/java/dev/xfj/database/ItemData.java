@@ -4,9 +4,9 @@ import dev.xfj.item.Item;
 import dev.xfj.item.ItemEquipment;
 import dev.xfj.item.ItemNormal;
 import dev.xfj.item.ItemReturn;
-import dev.xfj.itemconfig.ItemConfigJson;
-import dev.xfj.itemconfigequipment.ItemConfigEquipmentJson;
-import dev.xfj.itemconfigequipment.ReturnItemID;
+import dev.xfj.jsonschema2pojo.itemconfig.ItemConfigJson;
+import dev.xfj.jsonschema2pojo.itemconfigequipment.ItemConfigEquipmentJson;
+import dev.xfj.jsonschema2pojo.itemconfigequipment.ReturnItemID;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

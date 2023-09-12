@@ -38,7 +38,7 @@ public class ClassGenerator {
             if (!jsonObject.entrySet().isEmpty()) {
                 JsonArray array = findObject(jsonObject);
                 Files.createDirectories(Paths.get(outputDirectory));
-                createClass(array.toString(), new File(outputDirectory), "dev.xfj." + item.replace(".json", "").toLowerCase(), item);
+                createClass(array.toString(), new File(outputDirectory), "dev.xfj.jsonschema2pojo." + item.replace(".json", "").toLowerCase(), item);
             }
         }
     }

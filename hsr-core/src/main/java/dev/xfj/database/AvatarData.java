@@ -1,6 +1,6 @@
 package dev.xfj.database;
 
-import dev.xfj.avatarbasetype.AvatarBaseTypeJson;
+import dev.xfj.jsonschema2pojo.avatarbasetype.AvatarBaseTypeJson;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
