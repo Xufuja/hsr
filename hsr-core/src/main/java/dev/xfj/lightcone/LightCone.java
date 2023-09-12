@@ -1,4 +1,6 @@
-package dev.xfj;
+package dev.xfj.lightcone;
+
+import java.util.Map;
 
 public class LightCone {
     private int lightConeId;
@@ -13,6 +15,7 @@ public class LightCone {
     private int expProvide;
     private int coinCost;
     private boolean defaultUnlock;
+    private Map<Integer, LightConeSkill> skills;
 
     public int getLightConeId() {
         return lightConeId;
@@ -108,5 +111,13 @@ public class LightCone {
 
     public void setDefaultUnlock(boolean defaultUnlock) {
         this.defaultUnlock = defaultUnlock;
+    }
+
+    public Map<Integer, LightConeSkill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(Map<Integer, LightConeSkill> skills) {
+        this.skills = skills;
     }
 }

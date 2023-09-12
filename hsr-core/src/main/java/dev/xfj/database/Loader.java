@@ -1,4 +1,4 @@
-package dev.xfj.handlers;
+package dev.xfj.database;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,23 +12,22 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-public interface Handler {
-
-    default <T> Map<String, T> loadJSON(Class<T> clazz) throws FileNotFoundException {
+public interface Loader {
+    static <T> Map<String, T> loadJSON(Class<T> clazz) throws FileNotFoundException {
         String file = clazz.getSimpleName().replace("Json", ".json");
         return loadJSON(clazz, "C:\\Dev\\StarRailData\\ExcelOutput\\", file);
     }
 
-    default <T> Map<String, Map<String, T>> loadNestedJSON(Class<T> clazz) throws FileNotFoundException {
+    static <T> Map<String, Map<String, T>> loadNestedJSON(Class<T> clazz) throws FileNotFoundException {
         String file = clazz.getSimpleName().replace("Json", ".json");
         return loadNestedJSON(clazz, "C:\\Dev\\StarRailData\\ExcelOutput\\", file);
     }
 
-    default <T> Map<String, T> loadJSON(Class<T> clazz, String file) throws FileNotFoundException {
+    static <T> Map<String, T> loadJSON(Class<T> clazz, String file) throws FileNotFoundException {
         return loadJSON(clazz, "C:\\Dev\\StarRailData\\ExcelOutput\\", file);
     }
 
-    default <T> Map<String, T> loadJSON(Class<T> clazz, String baseDirectory, String file) throws FileNotFoundException {
+    static <T> Map<String, T> loadJSON(Class<T> clazz, String baseDirectory, String file) throws FileNotFoundException {
         JsonReader jsonReader = new JsonReader(new FileReader(baseDirectory + file));
         JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
         Gson gson = new GsonBuilder()
@@ -42,7 +41,7 @@ public interface Handler {
         return result;
     }
 
-    default <T> Map<String, Map<String, T>> loadNestedJSON(Class<T> clazz, String baseDirectory, String file) throws FileNotFoundException {
+    static <T> Map<String, Map<String, T>> loadNestedJSON(Class<T> clazz, String baseDirectory, String file) throws FileNotFoundException {
         JsonReader jsonReader = new JsonReader(new FileReader(baseDirectory + file));
         JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
         Gson gson = new GsonBuilder()

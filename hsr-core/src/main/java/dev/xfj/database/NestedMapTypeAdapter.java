@@ -1,4 +1,4 @@
-package dev.xfj.handlers;
+package dev.xfj.database;
 
 import com.google.gson.*;
 

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/hsr.iml" filepath="$PROJECT_DIR$/.idea/hsr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hsr-core.iml" filepath="$PROJECT_DIR$/hsr-core.iml" />
     </modules>
   </component>
 </project>
