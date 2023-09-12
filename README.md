@@ -2,9 +2,11 @@
 
 ## Description
 
-Parser for [Dimbreath's](https://github.com/Dimbreath) StarRailData repository
+I recently discovered [Dimbreath's](https://github.com/Dimbreath) StarRailData's repository and figured it would be interesting to create a parser for it.
 
-## Usage
+Heavily work in progress.
+
+## Notes
 
 Ideally, I have this work out of the box, but the class generator needs some assistance.
 
@@ -42,6 +44,7 @@ For example, the first entry is as follows:
       "AbilityProperty": []
     }
   }
+}
 ```
 
 Change the `3` -> `3.0`:
@@ -70,6 +73,7 @@ Change the `3` -> `3.0`:
       "AbilityProperty": []
     }
   }
+}
 ```
 
 If you now run the generator, it will be treated as a `Double`.
