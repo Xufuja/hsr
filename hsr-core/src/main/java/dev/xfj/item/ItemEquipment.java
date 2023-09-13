@@ -2,7 +2,7 @@ package dev.xfj.item;
 
 import java.util.List;
 
-public class ItemEquipment extends Item{
+public class ItemEquipment extends Item {
     private boolean isSellable;
     private List<ItemReturn> returnList;
 

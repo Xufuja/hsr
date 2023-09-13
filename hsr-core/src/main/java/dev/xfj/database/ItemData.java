@@ -1,9 +1,6 @@
 package dev.xfj.database;
 
-import dev.xfj.item.Item;
-import dev.xfj.item.ItemEquipment;
-import dev.xfj.item.ItemNormal;
-import dev.xfj.item.ItemReturn;
+import dev.xfj.item.*;
 import dev.xfj.jsonschema2pojo.itemconfig.ItemConfigJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ItemConfigEquipmentJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ReturnItemID;
@@ -26,19 +23,16 @@ public class ItemData {
         try {
             itemConfig = Loader.loadJSON(ItemConfigJson.class);
             itemConfigEquipment = Loader.loadJSON(ItemConfigEquipmentJson.class);
-
-            Database.normalItems = getNormalItems();
-            Database.lightConeItems = getEquipmentItems();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    private static Map<Integer, Item> getNormalItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    protected static Map<Integer, Item> loadNormalItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         Map<Integer, Item> items = new HashMap<>();
 
         for (Map.Entry<String, ItemConfigJson> entry : itemConfig.entrySet()) {
-            ItemNormal item = (ItemNormal) createBaseItem(ItemConfigJson.class, entry.getValue());
+            ItemNormal item = createBaseItem(ItemNormal.class, ItemConfigJson.class, entry.getValue());
             item.setPurposeType(entry.getValue().getPurposeType());
             items.put(item.getItemId(), item);
         }
@@ -46,11 +40,11 @@ public class ItemData {
         return items;
     }
 
-    private static Map<Integer, ItemEquipment> getEquipmentItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    protected static Map<Integer, ItemEquipment> loadEquipmentItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         Map<Integer, ItemEquipment> items = new HashMap<>();
 
         for (Map.Entry<String, ItemConfigEquipmentJson> entry : itemConfigEquipment.entrySet()) {
-            ItemEquipment item = (ItemEquipment) createBaseItem(ItemConfigEquipmentJson.class, entry.getValue());
+            ItemEquipment item = createBaseItem(ItemEquipment.class, ItemConfigEquipmentJson.class, entry.getValue());
             item.setSellable(entry.getValue().isIsSellable());
             List<ItemReturn> returns = new ArrayList<>();
 
@@ -67,20 +61,22 @@ public class ItemData {
         return items;
     }
 
-    private static Object createItemObject(Object itemData) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Constructor<?> constructor = null;
+    protected static Map<Integer, ItemExp> loadExpItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+        Map<Integer, ItemExp> items = new HashMap<>();
 
-        if (itemData instanceof ItemConfigJson) {
-            constructor = ItemNormal.class.getConstructor();
-        } else if (itemData instanceof ItemConfigEquipmentJson) {
-            constructor = ItemEquipment.class.getConstructor();
+        for (String key : EquipmentData.getEquipmentExpItemConfigJson().keySet()) {
+            ItemExp item = createBaseItem(ItemExp.class, ItemConfigJson.class, itemConfig.get(key));
+            item.setExpProvide(EquipmentData.getEquipmentExpItemConfigJson().get(key).getExpProvide());
+            item.setCoinCost(EquipmentData.getEquipmentExpItemConfigJson().get(key).getCoinCost());
+            items.put(item.getItemId(), item);
         }
 
-        return constructor.newInstance();
+        return items;
     }
 
-    private static <T> Object createBaseItem(Class<T> clazz, Object itemConfig) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        Object item = createItemObject(itemConfig);
+    private static <T, U> U createBaseItem(Class<U> returnType, Class<T> clazz, Object itemConfig) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        Constructor<U> constructor = returnType.getConstructor();
+        Object item = constructor.newInstance();
         //I suppose it works...
         item.getClass().getMethod("setItemId", int.class).invoke(item, clazz.getMethod("getId").invoke(itemConfig));
         item.getClass().getMethod("setMainType", String.class).invoke(item, clazz.getMethod("getItemMainType").invoke(itemConfig));
@@ -99,6 +95,6 @@ public class ItemData {
 
         item.getClass().getMethod("setStackLimit", int.class).invoke(item, clazz.getMethod("getPileLimit").invoke(itemConfig));
 
-        return item;
+        return returnType.cast(item);
     }
 }

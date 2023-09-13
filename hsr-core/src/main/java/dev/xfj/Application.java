@@ -3,16 +3,13 @@ package dev.xfj;
 import dev.xfj.database.*;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 
 public class Application {
 
-    public Application(String languageCode) throws FileNotFoundException {
+    public Application(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         System.out.println("Loading Database...");
-        TextMapData.languageCode = languageCode;
-        TextMapData.init();
-        AvatarData.init();
-        ItemData.init();
-        EquipmentData.init();
+        Database.init(languageCode);
         System.out.println("Database loaded!");
     }
 

@@ -33,11 +33,9 @@ public class EquipmentData {
         equipmentExpTypeJson = Loader.loadJSON(EquipmentExpTypeJson.class);
         equipmentPromotionConfigJson = Loader.loadJSON(EquipmentPromotionConfigJson.class);
         equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
-
-        Database.lightCones = getLightCones();
     }
 
-    private static Map<Integer, LightCone> getLightCones() {
+    protected static Map<Integer, LightCone> loadLightCones() {
         Map<Integer, LightCone> lightCones = new HashMap<>();
 
         for (Map.Entry<String, EquipmentConfigJson> entry : equipmentConfig.entrySet()) {
@@ -113,5 +111,29 @@ public class EquipmentData {
 
         }
         return skills;
+    }
+
+    public static Map<String, EquipmentAtlasJson> getEquipmentAtlas() {
+        return equipmentAtlas;
+    }
+
+    public static Map<String, EquipmentConfigJson> getEquipmentConfig() {
+        return equipmentConfig;
+    }
+
+    public static Map<String, EquipmentExpItemConfigJson> getEquipmentExpItemConfigJson() {
+        return equipmentExpItemConfigJson;
+    }
+
+    public static Map<String, EquipmentExpTypeJson> getEquipmentExpTypeJson() {
+        return equipmentExpTypeJson;
+    }
+
+    public static Map<String, EquipmentPromotionConfigJson> getEquipmentPromotionConfigJson() {
+        return equipmentPromotionConfigJson;
+    }
+
+    public static Map<String, Map<String, EquipmentSkillConfigJson>> getEquipmentSkillConfigJson() {
+        return equipmentSkillConfigJson;
     }
 }
