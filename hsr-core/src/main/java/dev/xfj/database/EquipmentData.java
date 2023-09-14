@@ -19,7 +19,7 @@ public class EquipmentData {
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
     private static Map<String, EquipmentConfigJson> equipmentConfig;
     private static Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfigJson;
-    private static Map<String, EquipmentExpTypeJson> equipmentExpTypeJson;
+    private static Map<String, Map<String, EquipmentExpTypeJson>> equipmentExpTypeJson;
     private static Map<String, EquipmentPromotionConfigJson> equipmentPromotionConfigJson;
     private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
 
@@ -30,7 +30,7 @@ public class EquipmentData {
         equipmentAtlas = Loader.loadJSON(EquipmentAtlasJson.class);
         equipmentConfig = Loader.loadJSON(EquipmentConfigJson.class);
         equipmentExpItemConfigJson = Loader.loadJSON(EquipmentExpItemConfigJson.class);
-        equipmentExpTypeJson = Loader.loadJSON(EquipmentExpTypeJson.class);
+        equipmentExpTypeJson = Loader.loadNestedJSON(EquipmentExpTypeJson.class);
         equipmentPromotionConfigJson = Loader.loadJSON(EquipmentPromotionConfigJson.class);
         equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
     }
@@ -60,6 +60,22 @@ public class EquipmentData {
         }
 
         return lightCones;
+    }
+
+    protected static Map<Integer, Map<Integer, Integer>> loadLightConeExp() {
+        Map<Integer, Map<Integer, Integer>> exp = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, EquipmentExpTypeJson>> outerEntry : equipmentExpTypeJson.entrySet()) {
+            Map<Integer, Integer> expPerExpType = new HashMap<>();
+
+            for (Map.Entry<String, EquipmentExpTypeJson> innerEntry : outerEntry.getValue().entrySet()) {
+                expPerExpType.put(innerEntry.getValue().getLevel(), innerEntry.getValue().getExp());
+            }
+
+            exp.put(Integer.valueOf(outerEntry.getKey()), expPerExpType);
+        }
+
+        return exp;
     }
 
     private static int getRarity(String rarity) {
@@ -125,7 +141,7 @@ public class EquipmentData {
         return equipmentExpItemConfigJson;
     }
 
-    public static Map<String, EquipmentExpTypeJson> getEquipmentExpTypeJson() {
+    public static Map<String, Map<String, EquipmentExpTypeJson>> getEquipmentExpTypeJson() {
         return equipmentExpTypeJson;
     }
 

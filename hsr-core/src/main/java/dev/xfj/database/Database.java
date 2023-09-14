@@ -10,10 +10,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Database {
-    protected static Map<Integer, LightCone> lightCones;
     protected static Map<Integer, Item> normalItems;
     protected static Map<Integer, ItemEquipment> lightConeItems;
     protected static Map<Integer, ItemExp> expItems;
+    protected static Map<Integer, LightCone> lightCones;
+    protected static Map<Integer, Map<Integer, Integer>> lightConeExp;
 
     public static void init(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         TextMapData.languageCode = languageCode;
@@ -26,10 +27,7 @@ public class Database {
         Database.lightConeItems = ItemData.loadEquipmentItems();
         Database.expItems = ItemData.loadExpItems();
         Database.lightCones = EquipmentData.loadLightCones();
-    }
-
-    public static Map<Integer, LightCone> getLightCones() {
-        return lightCones;
+        Database.lightConeExp = EquipmentData.loadLightConeExp();
     }
 
     public static Map<Integer, Item> getNormalItems() {
@@ -38,5 +36,17 @@ public class Database {
 
     public static Map<Integer, ItemEquipment> getLightConeItems() {
         return lightConeItems;
+    }
+
+    public static Map<Integer, ItemExp> getExpItems() {
+        return expItems;
+    }
+
+    public static Map<Integer, LightCone> getLightCones() {
+        return lightCones;
+    }
+
+    public static Map<Integer, Map<Integer, Integer>> getLightConeExp() {
+        return lightConeExp;
     }
 }
