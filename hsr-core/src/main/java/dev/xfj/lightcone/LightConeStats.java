@@ -9,6 +9,7 @@ public class LightConeStats {
     private int ascension;
     private List<ItemCount> ascensionMaterials;
     private int levelRequirement;
+    private int equilibriumLevelRequirement;
     private int maxLevel;
     private double baseHp;
     private double hpPerLevel;
@@ -47,6 +48,14 @@ public class LightConeStats {
 
     public void setLevelRequirement(int levelRequirement) {
         this.levelRequirement = levelRequirement;
+    }
+
+    public int getEquilibriumLevelRequirement() {
+        return equilibriumLevelRequirement;
+    }
+
+    public void setEquilibriumLevelRequirement(int equilibriumLevelRequirement) {
+        this.equilibriumLevelRequirement = equilibriumLevelRequirement;
     }
 
     public int getMaxLevel() {

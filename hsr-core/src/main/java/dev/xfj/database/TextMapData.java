@@ -18,7 +18,7 @@ public class TextMapData {
         return Loader.loadJSON(String.class, "C:\\Dev\\StarRailData\\TextMap\\", String.format("TextMap%1$s.json", code));
     }
 
-    public static String getTranslation(int key) {
+    protected static String getTranslation(int key) {
         return languageMap.get(key);
     }
 }

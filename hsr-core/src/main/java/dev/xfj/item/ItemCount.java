@@ -1,12 +1,14 @@
 package dev.xfj.item;
 
+import dev.xfj.database.Database;
+
 public class ItemCount {
     private int itemId;
     private int ItemNumber;
 
     public ItemCount(int itemId, int itemNumber) {
         this.itemId = itemId;
-        ItemNumber = itemNumber;
+        this.ItemNumber = itemNumber;
     }
 
     public int getItemId() {

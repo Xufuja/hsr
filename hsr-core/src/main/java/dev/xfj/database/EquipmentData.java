@@ -7,6 +7,7 @@ import dev.xfj.jsonschema2pojo.equipmentexpitemconfig.EquipmentExpItemConfigJson
 import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
 import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConeSkill;
 import dev.xfj.lightcone.LightConeStats;
@@ -20,22 +21,22 @@ import java.util.stream.Collectors;
 
 public class EquipmentData {
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
+    private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
+    private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfigJson;
     private static Map<String, EquipmentConfigJson> equipmentConfig;
     private static Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfigJson;
     private static Map<String, Map<String, EquipmentExpTypeJson>> equipmentExpTypeJson;
-    private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfigJson;
-    private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
 
     private EquipmentData() {
     }
 
     public static void init() throws FileNotFoundException {
         equipmentAtlas = Loader.loadJSON(EquipmentAtlasJson.class);
+        equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
+        equipmentPromotionConfigJson = Loader.loadNestedJSON(EquipmentPromotionConfigJson.class);
         equipmentConfig = Loader.loadJSON(EquipmentConfigJson.class);
         equipmentExpItemConfigJson = Loader.loadJSON(EquipmentExpItemConfigJson.class);
         equipmentExpTypeJson = Loader.loadNestedJSON(EquipmentExpTypeJson.class);
-        equipmentPromotionConfigJson = Loader.loadNestedJSON(EquipmentPromotionConfigJson.class);
-        equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
     }
 
     protected static Map<Integer, LightCone> loadLightCones() {
@@ -46,8 +47,8 @@ public class EquipmentData {
 
             lightCone.setLightConeId(entry.getValue().getEquipmentID());
             lightCone.setName(TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()));
-            lightCone.setBackgroundDescription(Database.getLightConeItems().get(lightCone.getLightConeId()).getBackgroundDescription());
-            lightCone.setDescription(Database.getLightConeItems().get(lightCone.getLightConeId()).getDescription());
+            lightCone.setBackgroundDescription(Database.lightConeItems.get(lightCone.getLightConeId()).getBackgroundDescription());
+            lightCone.setDescription(Database.lightConeItems.get(lightCone.getLightConeId()).getDescription());
             lightCone.setRarity(getRarity(entry.getValue().getRarity()));
             lightCone.setPath(AvatarData.getPathName(entry.getValue().getAvatarBaseType()));
             lightCone.setMaxAscension(entry.getValue().getMaxPromotion());
@@ -57,8 +58,8 @@ public class EquipmentData {
             lightCone.setExpProvide(entry.getValue().getExpProvide());
             lightCone.setCoinCost(entry.getValue().getCoinCost());
             lightCone.setDefaultUnlock(equipmentAtlas.get(String.valueOf(lightCone.getLightConeId())).isDefaultUnlock());
-            lightCone.setSkills(getSkills(lightCone.getSkillId(), lightCone.getMaxRefine()));
-
+            lightCone.setSkills(Database.lightConeSkills.get(lightCone.getLightConeId()));
+            lightCone.setStats(Database.lightConeStats.get(lightCone.getLightConeId()));
             lightCones.put(lightCone.getLightConeId(), lightCone);
         }
 
@@ -93,6 +94,7 @@ public class EquipmentData {
                 lightConeStats.setAscension(innerEntry.getValue().getPromotion());
                 lightConeStats.setAscensionMaterials(innerEntry.getValue().getPromotionCostList().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()));
                 lightConeStats.setLevelRequirement(innerEntry.getValue().getPlayerLevelRequire());
+                lightConeStats.setEquilibriumLevelRequirement(innerEntry.getValue().getWorldLevelRequire());
                 lightConeStats.setMaxLevel(innerEntry.getValue().getMaxLevel());
                 lightConeStats.setBaseHp(innerEntry.getValue().getBaseHP().getValue());
                 lightConeStats.setHpPerLevel(innerEntry.getValue().getBaseHPAdd().getValue());
@@ -109,55 +111,53 @@ public class EquipmentData {
         return stats;
     }
 
+    protected static Map<Integer, Map<Integer, LightConeSkill>> loadLightConeSkills() {
+        Map<Integer, Map<Integer, LightConeSkill>> skills = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, EquipmentSkillConfigJson>> outerEntry : equipmentSkillConfigJson.entrySet()) {
+            Map<Integer, LightConeSkill> skillsPerRefine = new HashMap<>();
+
+            for (Map.Entry<String, EquipmentSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                LightConeSkill skill = new LightConeSkill();
+                skill.setSkillId(innerEntry.getValue().getSkillID());
+                skill.setName(TextMapData.getTranslation(innerEntry.getValue().getSkillName().getHash()));
+                skill.setDescription(TextMapData.getTranslation(innerEntry.getValue().getSkillDesc().getHash()));
+                skill.setAbilityName(innerEntry.getValue().getAbilityName());
+                skill.setParameters(innerEntry.getValue().getParamList().stream().map(Param::getValue).collect(Collectors.toList()));
+
+                List<Map<String, Double>> properties = new ArrayList<>();
+                for (Object ability : innerEntry.getValue().getAbilityProperty()) {
+                    Map<String, Double> map = new HashMap<>();
+                    String key = null;
+                    double value = 0.0;
+
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) ability).entrySet()) {
+                        if (key == null) {
+                            key = (String) entry.getValue();
+                        } else {
+                            value = ((Map<String, Double>) entry.getValue()).get("Value");
+                        }
+                    }
+
+                    map.put(key, value);
+                    properties.add(map);
+                }
+                skill.setAbilityProperties(properties);
+                skillsPerRefine.put(innerEntry.getValue().getLevel(), skill);
+            }
+
+            skills.put(Integer.valueOf(outerEntry.getKey()), skillsPerRefine);
+        }
+
+        return skills;
+    }
+
     private static int getRarity(String rarity) {
         return Integer.parseInt(rarity.replace("CombatPowerLightconeRarity", ""));
     }
 
     private static EquipmentSkillConfigJson getSkill(int id, int refine) {
         return equipmentSkillConfigJson.get(String.valueOf(id)).get(String.valueOf(refine));
-    }
-
-    private static Map<Integer, LightConeSkill> getSkills(int id, int maxRefine) {
-        Map<Integer, LightConeSkill> skills = new HashMap<>();
-
-        for (int i = 0; i < maxRefine; i++) {
-            int current = i + 1;
-            EquipmentSkillConfigJson temp = getSkill(id, current);
-            LightConeSkill skill = new LightConeSkill();
-            skill.setSkillId(id);
-            skill.setName(TextMapData.getTranslation(temp.getSkillName().getHash()));
-            skill.setDescription(TextMapData.getTranslation(temp.getSkillDesc().getHash()));
-            skill.setAbilityName(temp.getAbilityName());
-            List<Double> params = new ArrayList<>();
-
-            for (var param : temp.getParamList()) {
-                params.add(param.getValue());
-            }
-
-            skill.setParameters(params);
-            skills.put(current, skill);
-
-            List<Map<String, Double>> properties = new ArrayList<>();
-            for (Object ability : temp.getAbilityProperty()) {
-                Map<String, Double> map = new HashMap<>();
-                String key = null;
-                double value = 0.0;
-
-                for (Map.Entry<String, Object> entry : ((Map<String, Object>) ability).entrySet()) {
-                    if (key == null) {
-                        key = (String) entry.getValue();
-                    } else {
-                        value = ((Map<String, Double>) entry.getValue()).get("Value");
-                    }
-                }
-
-                map.put(key, value);
-                properties.add(map);
-            }
-            skill.setAbilityProperties(properties);
-
-        }
-        return skills;
     }
 
     public static Map<String, EquipmentAtlasJson> getEquipmentAtlas() {

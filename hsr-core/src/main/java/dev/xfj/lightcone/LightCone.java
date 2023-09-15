@@ -1,5 +1,7 @@
 package dev.xfj.lightcone;
 
+import dev.xfj.database.Database;
+
 import java.util.Map;
 
 public class LightCone {
@@ -17,6 +19,40 @@ public class LightCone {
     private int coinCost;
     private boolean defaultUnlock;
     private Map<Integer, LightConeSkill> skills;
+    private Map<Integer, LightConeStats> stats;
+
+    public int[] addLevel(int ascension, int level, int exp) {
+        LightConeStats current = stats.get(ascension);
+        int maxLevel = current.getMaxLevel();
+
+        int currentLevel = level;
+        int currentExp = 0;
+        int leftOverExp = 0;
+
+        if (currentLevel < maxLevel) {
+            currentExp += exp;
+            int expRemainder = currentExp - Database.getLightConeExp().get(expType).get(level);;
+
+            if (expRemainder >= 0) {
+                currentLevel++;
+                if (expRemainder > 0) {
+                    leftOverExp = expRemainder;
+                }
+            } else {
+                leftOverExp = exp;
+            }
+
+            if (leftOverExp > 0 && leftOverExp >= Database.getLightConeExp().get(expType).get(level + 1)) {
+                int[] additional = addLevel(ascension, currentLevel, leftOverExp);
+                currentLevel = additional[0];
+                leftOverExp = additional[1];
+            }
+
+            return new int[]{currentLevel, leftOverExp};
+        } else {
+            return new int[]{currentLevel, 0};
+        }
+    }
 
     public int getLightConeId() {
         return lightConeId;
@@ -128,5 +164,13 @@ public class LightCone {
 
     public void setSkills(Map<Integer, LightConeSkill> skills) {
         this.skills = skills;
+    }
+
+    public Map<Integer, LightConeStats> getStats() {
+        return stats;
+    }
+
+    public void setStats(Map<Integer, LightConeStats> stats) {
+        this.stats = stats;
     }
 }
