@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ItemEquipment extends Item {
     private boolean isSellable;
-    private List<ItemReturn> returnList;
+    private List<ItemCount> returnList;
 
     public boolean isSellable() {
         return isSellable;
@@ -14,11 +14,11 @@ public class ItemEquipment extends Item {
         isSellable = sellable;
     }
 
-    public List<ItemReturn> getReturnList() {
+    public List<ItemCount> getReturnList() {
         return returnList;
     }
 
-    public void setReturnList(List<ItemReturn> returnList) {
+    public void setReturnList(List<ItemCount> returnList) {
         this.returnList = returnList;
     }
 }

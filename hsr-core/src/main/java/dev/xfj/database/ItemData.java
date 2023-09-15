@@ -46,10 +46,10 @@ public class ItemData {
         for (Map.Entry<String, ItemConfigEquipmentJson> entry : itemConfigEquipment.entrySet()) {
             ItemEquipment item = createBaseItem(ItemEquipment.class, ItemConfigEquipmentJson.class, entry.getValue());
             item.setSellable(entry.getValue().isIsSellable());
-            List<ItemReturn> returns = new ArrayList<>();
+            List<ItemCount> returns = new ArrayList<>();
 
             for (ReturnItemID itemEntry : entry.getValue().getReturnItemIDList()) {
-                ItemReturn itemReturn = new ItemReturn(itemEntry.getItemID(), itemEntry.getItemNum());
+                ItemCount itemReturn = new ItemCount(itemEntry.getItemID(), itemEntry.getItemNum());
                 returns.add(itemReturn);
             }
 

@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.equipmentatlas.EquipmentAtlasJson;
 import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentexpitemconfig.EquipmentExpItemConfigJson;
@@ -8,19 +9,21 @@ import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfig
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConeSkill;
+import dev.xfj.lightcone.LightConeStats;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EquipmentData {
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
     private static Map<String, EquipmentConfigJson> equipmentConfig;
     private static Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfigJson;
     private static Map<String, Map<String, EquipmentExpTypeJson>> equipmentExpTypeJson;
-    private static Map<String, EquipmentPromotionConfigJson> equipmentPromotionConfigJson;
+    private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfigJson;
     private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
 
     private EquipmentData() {
@@ -31,7 +34,7 @@ public class EquipmentData {
         equipmentConfig = Loader.loadJSON(EquipmentConfigJson.class);
         equipmentExpItemConfigJson = Loader.loadJSON(EquipmentExpItemConfigJson.class);
         equipmentExpTypeJson = Loader.loadNestedJSON(EquipmentExpTypeJson.class);
-        equipmentPromotionConfigJson = Loader.loadJSON(EquipmentPromotionConfigJson.class);
+        equipmentPromotionConfigJson = Loader.loadNestedJSON(EquipmentPromotionConfigJson.class);
         equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
     }
 
@@ -76,6 +79,34 @@ public class EquipmentData {
         }
 
         return exp;
+    }
+
+    protected static Map<Integer, Map<Integer, LightConeStats>> loadLightConeStats() {
+        Map<Integer, Map<Integer, LightConeStats>> stats = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, EquipmentPromotionConfigJson>> outerEntry : equipmentPromotionConfigJson.entrySet()) {
+            Map<Integer, LightConeStats> statsPerAscension = new HashMap<>();
+
+            for (Map.Entry<String, EquipmentPromotionConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                LightConeStats lightConeStats = new LightConeStats();
+                lightConeStats.setLightConeId(innerEntry.getValue().getEquipmentID());
+                lightConeStats.setAscension(innerEntry.getValue().getPromotion());
+                lightConeStats.setAscensionMaterials(innerEntry.getValue().getPromotionCostList().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()));
+                lightConeStats.setLevelRequirement(innerEntry.getValue().getPlayerLevelRequire());
+                lightConeStats.setMaxLevel(innerEntry.getValue().getMaxLevel());
+                lightConeStats.setBaseHp(innerEntry.getValue().getBaseHP().getValue());
+                lightConeStats.setHpPerLevel(innerEntry.getValue().getBaseHPAdd().getValue());
+                lightConeStats.setBaseAttack(innerEntry.getValue().getBaseAttack().getValue());
+                lightConeStats.setAttackPerLevel(innerEntry.getValue().getBaseAttackAdd().getValue());
+                lightConeStats.setBaseDefense(innerEntry.getValue().getBaseDefence().getValue());
+                lightConeStats.setDefensePerLevel(innerEntry.getValue().getBaseDefenceAdd().getValue());
+                statsPerAscension.put(innerEntry.getValue().getPromotion(), lightConeStats);
+            }
+
+            stats.put(Integer.valueOf(outerEntry.getKey()), statsPerAscension);
+        }
+
+        return stats;
     }
 
     private static int getRarity(String rarity) {
@@ -145,7 +176,7 @@ public class EquipmentData {
         return equipmentExpTypeJson;
     }
 
-    public static Map<String, EquipmentPromotionConfigJson> getEquipmentPromotionConfigJson() {
+    public static Map<String, Map<String, EquipmentPromotionConfigJson>> getEquipmentPromotionConfigJson() {
         return equipmentPromotionConfigJson;
     }
 

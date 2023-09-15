@@ -1,10 +1,10 @@
 package dev.xfj.item;
 
-public class ItemReturn {
+public class ItemCount {
     private int itemId;
     private int ItemNumber;
 
-    public ItemReturn(int itemId, int itemNumber) {
+    public ItemCount(int itemId, int itemNumber) {
         this.itemId = itemId;
         ItemNumber = itemNumber;
     }

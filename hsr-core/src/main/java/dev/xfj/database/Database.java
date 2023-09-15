@@ -4,6 +4,7 @@ import dev.xfj.item.Item;
 import dev.xfj.item.ItemEquipment;
 import dev.xfj.item.ItemExp;
 import dev.xfj.lightcone.LightCone;
+import dev.xfj.lightcone.LightConeStats;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +16,7 @@ public class Database {
     protected static Map<Integer, ItemExp> expItems;
     protected static Map<Integer, LightCone> lightCones;
     protected static Map<Integer, Map<Integer, Integer>> lightConeExp;
+    protected static Map<Integer, Map<Integer, LightConeStats>> lightConeStats;
 
     public static void init(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         TextMapData.languageCode = languageCode;
@@ -28,6 +30,7 @@ public class Database {
         Database.expItems = ItemData.loadExpItems();
         Database.lightCones = EquipmentData.loadLightCones();
         Database.lightConeExp = EquipmentData.loadLightConeExp();
+        Database.lightConeStats = EquipmentData.loadLightConeStats();
     }
 
     public static Map<Integer, Item> getNormalItems() {
