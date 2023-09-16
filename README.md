@@ -88,7 +88,7 @@ To fix this:
 
 1. Open `StarRailData\ExcelOutput\EquipmentPromotionConfig.json`
 2. Go to the first `PlayerLevelRequire` property you see
-3. Add a new line and set it to ` "WorldLevelRequire": 0,`
+3. Add a new line and set it to `"WorldLevelRequire": 0,`
 
 For example, the first entry is as follows:
 

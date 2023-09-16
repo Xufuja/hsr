@@ -22,9 +22,12 @@ public class Application {
             System.out.println(String.format("Light Cone ID: %1$s\r\n\t\tName: %2$s\r\n\t\tPath: %3$s\r\n\t\tLore: %4$s", lc.getLightConeId(), lc.getName(), lc.getPath(), lc.getBackgroundDescription()));
             int[] level = lc.addLevel(lc.getMaxAscension(), 70, 350000);
             System.out.println(String.format("Level: %1$s, Exp: %2$s", level[0], level[1]));
-            LightConeStats stats = lc.getStats().get(lc.getMaxAscension());
-            System.out.println(String.format("Max Level %1$s\r\nPlayer or Equilibrium Level Requirement: %2$s\r\nBase HP: %3$s\r\nBase Attack: %4$s\r\nBase Defense: %5$s\r\nCurrent HP: %6$s\r\nCurrent Attack: %7$s\r\nCurrent Defense %8$s\r\n", stats.getMaxLevel(), stats.getLevelRequirement() != 0 ? stats.getLevelRequirement() : stats.getEquilibriumLevelRequirement(), stats.getBaseHp(), stats.getBaseAttack(), stats.getBaseDefense(), stats.getBaseHp() + ((level[0] - 1) * stats.getHpPerLevel()), stats.getBaseAttack() + ((level[0] - 1) * stats.getAttackPerLevel()), stats.getBaseDefense() + ((level[0] - 1) * stats.getDefensePerLevel())));
+            LightConeStats stats = lc.getStatsByAscension(lc.getMaxAscension());
+            System.out.println(String.format("Max Level %1$s\r\nPlayer or Equilibrium Level Requirement: %2$s\r\nBase HP: %3$s\r\nBase Attack: %4$s\r\nBase Defense: %5$s\r\nCurrent HP: %6$s\r\nCurrent Attack: %7$s\r\nCurrent Defense %8$s\r\n", stats.getMaxLevel(), stats.getLevelRequirement() != 0 ? stats.getLevelRequirement() : stats.getEquilibriumLevelRequirement(), stats.getBaseHp(), stats.getBaseAttack(), stats.getBaseDefense(), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.HP, lc.getMaxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.ATTACK, lc.getMaxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.DEFENSE, lc.getMaxAscension(), level[0])));
         }
+        LightCone lightCone = Database.getLightCones().get(21000);
+        int[] lev = lightCone.addLevel(0, 1, 40);
+        System.out.println(String.format("Level: %1$s\r\nExp: %2$s", lev[0], lev[1]));
     }
 
 

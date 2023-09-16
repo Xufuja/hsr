@@ -12,46 +12,64 @@ public class LightCone {
     private int rarity;
     private String path;
     private int maxAscension;
-    private int maxRefine;
+    private int maxSuperimpose;
     private int expType;
     private int skillId;
     private int expProvide;
     private int coinCost;
     private boolean defaultUnlock;
-    private Map<Integer, LightConeSkill> skills;
+    private Map<Integer, LightConePassive> passives;
     private Map<Integer, LightConeStats> stats;
 
+    public enum BaseStatCategory {
+        HP,
+        ATTACK,
+        DEFENSE
+    }
+
+    public double getBaseStatAtLevel(BaseStatCategory stat, int ascension, int level) {
+        LightConeStats lc = stats.get(ascension);
+        return switch (stat) {
+            case HP -> lc.getBaseHp() + ((level - 1) * lc.getHpPerLevel());
+            case ATTACK -> lc.getBaseAttack() + ((level - 1) * lc.getAttackPerLevel());
+            case DEFENSE -> lc.getBaseDefense() + ((level - 1) * lc.getDefensePerLevel());
+        };
+    }
+
+    public LightConeStats getStatsByAscension(int ascension) {
+        return stats.get(ascension);
+    }
+
+    public LightConePassive getPassiveBySuperimposition(int superimposition) {
+        return passives.get(superimposition);
+    }
+
     public int[] addLevel(int ascension, int level, int exp) {
-        LightConeStats current = stats.get(ascension);
-        int maxLevel = current.getMaxLevel();
+        int maxLevel = stats.get(ascension).getMaxLevel();
 
-        int currentLevel = level;
-        int currentExp = 0;
-        int leftOverExp = 0;
-
-        if (currentLevel < maxLevel) {
-            currentExp += exp;
-            int expRemainder = currentExp - Database.getLightConeExp().get(expType).get(level);;
-
-            if (expRemainder >= 0) {
-                currentLevel++;
-                if (expRemainder > 0) {
-                    leftOverExp = expRemainder;
-                }
-            } else {
-                leftOverExp = exp;
-            }
-
-            if (leftOverExp > 0 && leftOverExp >= Database.getLightConeExp().get(expType).get(level + 1)) {
-                int[] additional = addLevel(ascension, currentLevel, leftOverExp);
-                currentLevel = additional[0];
-                leftOverExp = additional[1];
-            }
-
-            return new int[]{currentLevel, leftOverExp};
-        } else {
-            return new int[]{currentLevel, 0};
+        if (level == maxLevel) {
+            return new int[]{level, 0};
         }
+
+        int expRemainder = exp - Database.getLightConeExp().get(expType).get(level);
+
+        if (expRemainder < 0) {
+            return new int[]{level, exp};
+        }
+
+        if (expRemainder > 0) {
+            exp = expRemainder;
+        }
+
+        level++;
+
+        if (exp >= Database.getLightConeExp().get(expType).get(level)) {
+            int[] additional = addLevel(ascension, level, exp);
+            level = additional[0];
+            exp = additional[1];
+        }
+
+        return new int[]{level, exp};
     }
 
     public int getLightConeId() {
@@ -110,12 +128,12 @@ public class LightCone {
         this.maxAscension = maxAscension;
     }
 
-    public int getMaxRefine() {
-        return maxRefine;
+    public int getMaxSuperimpose() {
+        return maxSuperimpose;
     }
 
-    public void setMaxRefine(int maxRefine) {
-        this.maxRefine = maxRefine;
+    public void setMaxSuperimpose(int maxSuperimpose) {
+        this.maxSuperimpose = maxSuperimpose;
     }
 
     public int getExpType() {
@@ -158,12 +176,12 @@ public class LightCone {
         this.defaultUnlock = defaultUnlock;
     }
 
-    public Map<Integer, LightConeSkill> getSkills() {
-        return skills;
+    public Map<Integer, LightConePassive> getSkills() {
+        return passives;
     }
 
-    public void setSkills(Map<Integer, LightConeSkill> skills) {
-        this.skills = skills;
+    public void setSkills(Map<Integer, LightConePassive> skills) {
+        this.passives = skills;
     }
 
     public Map<Integer, LightConeStats> getStats() {

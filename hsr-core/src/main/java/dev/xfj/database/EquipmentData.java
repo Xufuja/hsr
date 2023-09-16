@@ -9,7 +9,7 @@ import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfig
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.lightcone.LightCone;
-import dev.xfj.lightcone.LightConeSkill;
+import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
 
 import java.io.FileNotFoundException;
@@ -52,13 +52,13 @@ public class EquipmentData {
             lightCone.setRarity(getRarity(entry.getValue().getRarity()));
             lightCone.setPath(AvatarData.getPathName(entry.getValue().getAvatarBaseType()));
             lightCone.setMaxAscension(entry.getValue().getMaxPromotion());
-            lightCone.setMaxRefine(entry.getValue().getMaxRank());
+            lightCone.setMaxSuperimpose(entry.getValue().getMaxRank());
             lightCone.setExpType(entry.getValue().getExpType());
             lightCone.setSkillId(entry.getValue().getSkillID());
             lightCone.setExpProvide(entry.getValue().getExpProvide());
             lightCone.setCoinCost(entry.getValue().getCoinCost());
             lightCone.setDefaultUnlock(equipmentAtlas.get(String.valueOf(lightCone.getLightConeId())).isDefaultUnlock());
-            lightCone.setSkills(Database.lightConeSkills.get(lightCone.getLightConeId()));
+            lightCone.setSkills(Database.lightConePassives.get(lightCone.getLightConeId()));
             lightCone.setStats(Database.lightConeStats.get(lightCone.getLightConeId()));
             lightCones.put(lightCone.getLightConeId(), lightCone);
         }
@@ -111,19 +111,19 @@ public class EquipmentData {
         return stats;
     }
 
-    protected static Map<Integer, Map<Integer, LightConeSkill>> loadLightConeSkills() {
-        Map<Integer, Map<Integer, LightConeSkill>> skills = new HashMap<>();
+    protected static Map<Integer, Map<Integer, LightConePassive>> loadLightConePassives() {
+        Map<Integer, Map<Integer, LightConePassive>> passives = new HashMap<>();
 
         for (Map.Entry<String, Map<String, EquipmentSkillConfigJson>> outerEntry : equipmentSkillConfigJson.entrySet()) {
-            Map<Integer, LightConeSkill> skillsPerRefine = new HashMap<>();
+            Map<Integer, LightConePassive> passivePerSuperimpose = new HashMap<>();
 
             for (Map.Entry<String, EquipmentSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
-                LightConeSkill skill = new LightConeSkill();
-                skill.setSkillId(innerEntry.getValue().getSkillID());
-                skill.setName(TextMapData.getTranslation(innerEntry.getValue().getSkillName().getHash()));
-                skill.setDescription(TextMapData.getTranslation(innerEntry.getValue().getSkillDesc().getHash()));
-                skill.setAbilityName(innerEntry.getValue().getAbilityName());
-                skill.setParameters(innerEntry.getValue().getParamList().stream().map(Param::getValue).collect(Collectors.toList()));
+                LightConePassive passive = new LightConePassive();
+                passive.setSkillId(innerEntry.getValue().getSkillID());
+                passive.setName(TextMapData.getTranslation(innerEntry.getValue().getSkillName().getHash()));
+                passive.setDescription(TextMapData.getTranslation(innerEntry.getValue().getSkillDesc().getHash()));
+                passive.setAbilityName(innerEntry.getValue().getAbilityName());
+                passive.setParameters(innerEntry.getValue().getParamList().stream().map(Param::getValue).collect(Collectors.toList()));
 
                 List<Map<String, Double>> properties = new ArrayList<>();
                 for (Object ability : innerEntry.getValue().getAbilityProperty()) {
@@ -142,23 +142,20 @@ public class EquipmentData {
                     map.put(key, value);
                     properties.add(map);
                 }
-                skill.setAbilityProperties(properties);
-                skillsPerRefine.put(innerEntry.getValue().getLevel(), skill);
+                passive.setAbilityProperties(properties);
+                passivePerSuperimpose.put(innerEntry.getValue().getLevel(), passive);
             }
 
-            skills.put(Integer.valueOf(outerEntry.getKey()), skillsPerRefine);
+            passives.put(Integer.valueOf(outerEntry.getKey()), passivePerSuperimpose);
         }
 
-        return skills;
+        return passives;
     }
 
     private static int getRarity(String rarity) {
         return Integer.parseInt(rarity.replace("CombatPowerLightconeRarity", ""));
     }
 
-    private static EquipmentSkillConfigJson getSkill(int id, int refine) {
-        return equipmentSkillConfigJson.get(String.valueOf(id)).get(String.valueOf(refine));
-    }
 
     public static Map<String, EquipmentAtlasJson> getEquipmentAtlas() {
         return equipmentAtlas;

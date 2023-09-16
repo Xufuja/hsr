@@ -3,7 +3,7 @@ package dev.xfj.lightcone;
 import java.util.List;
 import java.util.Map;
 
-public class LightConeSkill {
+public class LightConePassive {
     private int skillId;
     private String name;
     private String description;

@@ -4,7 +4,7 @@ import dev.xfj.item.Item;
 import dev.xfj.item.ItemEquipment;
 import dev.xfj.item.ItemExp;
 import dev.xfj.lightcone.LightCone;
-import dev.xfj.lightcone.LightConeSkill;
+import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
 
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class Database {
     protected static Map<Integer, Item> normalItems;
     protected static Map<Integer, ItemEquipment> lightConeItems;
     protected static Map<Integer, ItemExp> expItems;
-    protected static Map<Integer, Map<Integer, LightConeSkill>> lightConeSkills;
+    protected static Map<Integer, Map<Integer, LightConePassive>> lightConePassives;
     protected static Map<Integer, Map<Integer, LightConeStats>> lightConeStats;
     protected static Map<Integer, LightCone> lightCones;
     protected static Map<Integer, Map<Integer, Integer>> lightConeExp;
@@ -30,7 +30,7 @@ public class Database {
         Database.normalItems = ItemData.loadNormalItems();
         Database.lightConeItems = ItemData.loadEquipmentItems();
         Database.expItems = ItemData.loadExpItems();
-        Database.lightConeSkills = EquipmentData.loadLightConeSkills();
+        Database.lightConePassives = EquipmentData.loadLightConePassives();
         Database.lightConeStats = EquipmentData.loadLightConeStats();
         Database.lightCones = EquipmentData.loadLightCones();
         Database.lightConeExp = EquipmentData.loadLightConeExp();
