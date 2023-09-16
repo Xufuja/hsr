@@ -43,24 +43,23 @@ public class EquipmentData {
         Map<Integer, LightCone> lightCones = new HashMap<>();
 
         for (Map.Entry<String, EquipmentConfigJson> entry : equipmentConfig.entrySet()) {
-            LightCone lightCone = new LightCone();
+            LightCone lightCone = new LightCone(entry.getValue().getEquipmentID(),
+                    TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()),
+                    Database.lightConeItems.get(entry.getValue().getEquipmentID()).getBackgroundDescription(),
+                    Database.lightConeItems.get(entry.getValue().getEquipmentID()).getDescription(),
+                    getRarity(entry.getValue().getRarity()),
+                    AvatarData.getPathName(entry.getValue().getAvatarBaseType()),
+                    entry.getValue().getMaxPromotion(),
+                    entry.getValue().getMaxRank(),
+                    entry.getValue().getExpType(),
+                    entry.getValue().getSkillID(),
+                    entry.getValue().getExpProvide(),
+                    entry.getValue().getCoinCost(),
+                    equipmentAtlas.get(String.valueOf(entry.getValue().getEquipmentID())).isDefaultUnlock(),
+                    Database.lightConePassives.get(entry.getValue().getEquipmentID()),
+                    Database.lightConeStats.get(entry.getValue().getEquipmentID()));
 
-            lightCone.setLightConeId(entry.getValue().getEquipmentID());
-            lightCone.setName(TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()));
-            lightCone.setBackgroundDescription(Database.lightConeItems.get(lightCone.getLightConeId()).getBackgroundDescription());
-            lightCone.setDescription(Database.lightConeItems.get(lightCone.getLightConeId()).getDescription());
-            lightCone.setRarity(getRarity(entry.getValue().getRarity()));
-            lightCone.setPath(AvatarData.getPathName(entry.getValue().getAvatarBaseType()));
-            lightCone.setMaxAscension(entry.getValue().getMaxPromotion());
-            lightCone.setMaxSuperimpose(entry.getValue().getMaxRank());
-            lightCone.setExpType(entry.getValue().getExpType());
-            lightCone.setSkillId(entry.getValue().getSkillID());
-            lightCone.setExpProvide(entry.getValue().getExpProvide());
-            lightCone.setCoinCost(entry.getValue().getCoinCost());
-            lightCone.setDefaultUnlock(equipmentAtlas.get(String.valueOf(lightCone.getLightConeId())).isDefaultUnlock());
-            lightCone.setSkills(Database.lightConePassives.get(lightCone.getLightConeId()));
-            lightCone.setStats(Database.lightConeStats.get(lightCone.getLightConeId()));
-            lightCones.put(lightCone.getLightConeId(), lightCone);
+            lightCones.put(entry.getValue().getEquipmentID(), lightCone);
         }
 
         return lightCones;
@@ -89,19 +88,20 @@ public class EquipmentData {
             Map<Integer, LightConeStats> statsPerAscension = new HashMap<>();
 
             for (Map.Entry<String, EquipmentPromotionConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
-                LightConeStats lightConeStats = new LightConeStats();
-                lightConeStats.setLightConeId(innerEntry.getValue().getEquipmentID());
-                lightConeStats.setAscension(innerEntry.getValue().getPromotion());
-                lightConeStats.setAscensionMaterials(innerEntry.getValue().getPromotionCostList().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()));
-                lightConeStats.setLevelRequirement(innerEntry.getValue().getPlayerLevelRequire());
-                lightConeStats.setEquilibriumLevelRequirement(innerEntry.getValue().getWorldLevelRequire());
-                lightConeStats.setMaxLevel(innerEntry.getValue().getMaxLevel());
-                lightConeStats.setBaseHp(innerEntry.getValue().getBaseHP().getValue());
-                lightConeStats.setHpPerLevel(innerEntry.getValue().getBaseHPAdd().getValue());
-                lightConeStats.setBaseAttack(innerEntry.getValue().getBaseAttack().getValue());
-                lightConeStats.setAttackPerLevel(innerEntry.getValue().getBaseAttackAdd().getValue());
-                lightConeStats.setBaseDefense(innerEntry.getValue().getBaseDefence().getValue());
-                lightConeStats.setDefensePerLevel(innerEntry.getValue().getBaseDefenceAdd().getValue());
+                EquipmentPromotionConfigJson entry = innerEntry.getValue();
+                LightConeStats lightConeStats = new LightConeStats(entry.getEquipmentID(),
+                        entry.getPromotion(),
+                        entry.getPromotionCostList().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()),
+                        entry.getPlayerLevelRequire(),
+                        entry.getWorldLevelRequire(),
+                        entry.getMaxLevel(),
+                        entry.getBaseHP().getValue(),
+                        entry.getBaseHPAdd().getValue(),
+                        entry.getBaseAttack().getValue(),
+                        entry.getBaseAttackAdd().getValue(),
+                        entry.getBaseDefence().getValue(),
+                        entry.getBaseDefenceAdd().getValue());
+
                 statsPerAscension.put(innerEntry.getValue().getPromotion(), lightConeStats);
             }
 
@@ -118,12 +118,7 @@ public class EquipmentData {
             Map<Integer, LightConePassive> passivePerSuperimpose = new HashMap<>();
 
             for (Map.Entry<String, EquipmentSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
-                LightConePassive passive = new LightConePassive();
-                passive.setSkillId(innerEntry.getValue().getSkillID());
-                passive.setName(TextMapData.getTranslation(innerEntry.getValue().getSkillName().getHash()));
-                passive.setDescription(TextMapData.getTranslation(innerEntry.getValue().getSkillDesc().getHash()));
-                passive.setAbilityName(innerEntry.getValue().getAbilityName());
-                passive.setParameters(innerEntry.getValue().getParamList().stream().map(Param::getValue).collect(Collectors.toList()));
+                EquipmentSkillConfigJson entry = innerEntry.getValue();
 
                 List<Map<String, Double>> properties = new ArrayList<>();
                 for (Object ability : innerEntry.getValue().getAbilityProperty()) {
@@ -131,18 +126,25 @@ public class EquipmentData {
                     String key = null;
                     double value = 0.0;
 
-                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) ability).entrySet()) {
+                    for (Map.Entry<String, Object> prop : ((Map<String, Object>) ability).entrySet()) {
                         if (key == null) {
-                            key = (String) entry.getValue();
+                            key = (String) prop.getValue();
                         } else {
-                            value = ((Map<String, Double>) entry.getValue()).get("Value");
+                            value = ((Map<String, Double>) prop.getValue()).get("Value");
                         }
                     }
 
                     map.put(key, value);
                     properties.add(map);
                 }
-                passive.setAbilityProperties(properties);
+
+                LightConePassive passive = new LightConePassive(entry.getSkillID(),
+                        TextMapData.getTranslation(entry.getSkillName().getHash()),
+                        TextMapData.getTranslation(entry.getSkillDesc().getHash()),
+                        entry.getAbilityName(),
+                        entry.getParamList().stream().map(Param::getValue).collect(Collectors.toList()),
+                        properties);
+
                 passivePerSuperimpose.put(innerEntry.getValue().getLevel(), passive);
             }
 
