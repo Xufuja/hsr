@@ -27,6 +27,14 @@ public record LightCone(
         DEFENSE
     }
 
+    public int expRequiredForLevel(int currentLevel, int expectedLevel) {
+        int expNeeded = 0;
+        for (int i = currentLevel; i < expectedLevel; i++) {
+            expNeeded += Database.getLightConeExp().get(expType).get(i);
+        }
+        return expNeeded;
+    }
+
     public double getBaseStatAtLevel(BaseStatCategory stat, int ascension, int level) {
         LightConeStats lc = stats.get(ascension);
         return switch (stat) {

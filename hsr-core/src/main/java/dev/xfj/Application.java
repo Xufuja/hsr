@@ -29,8 +29,9 @@ public class Application {
             System.out.println(String.format("Passive Name: %1$s\r\nDescription: %2$s\r\nParameters: %3$s\r\n", passive.name(), passive.description(), passive.parameters().stream().map(Object::toString).collect(Collectors.joining(", "))));
         }
         LightCone lightCone = Database.getLightCones().get(21000);
-        int[] lev = lightCone.addLevel(0, 1, 40);
+        int[] lev = lightCone.addLevel(0, 1, 21069);
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s", lev[0], lev[1]));
+        System.out.println(lightCone.expRequiredForLevel(1, lightCone.getStatsByAscension(0).maxLevel()));
     }
 
 
