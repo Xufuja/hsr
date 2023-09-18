@@ -26,7 +26,8 @@ public class Application {
             LightConeStats stats = lc.getStatsByAscension(lc.maxAscension());
             System.out.println(String.format("Max Level %1$s\r\nPlayer or Equilibrium Level Requirement: %2$s\r\nBase HP: %3$s\r\nBase Attack: %4$s\r\nBase Defense: %5$s\r\nCurrent HP: %6$s\r\nCurrent Attack: %7$s\r\nCurrent Defense %8$s", stats.maxLevel(), stats.levelRequirement() != 0 ? stats.levelRequirement() : stats.equilibriumLevelRequirement(), stats.baseHp(), stats.baseAttack(), stats.baseDefense(), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.HP, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.ATTACK, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.DEFENSE, lc.maxAscension(), level[0])));
             LightConePassive passive = lc.getPassiveBySuperimposition(3);
-            System.out.println(String.format("Passive Name: %1$s\r\nDescription: %2$s\r\nParameters: %3$s\r\n", passive.name(), passive.description(), passive.parameters().stream().map(Object::toString).collect(Collectors.joining(", "))));
+
+            System.out.println(String.format("Passive Name: %1$s\r\nDescription: %2$s\r\nParameters: %3$s\r\n", passive.name(), lc.getInterpolatedPassive(3), passive.parameters().stream().map(Object::toString).collect(Collectors.joining(", "))));
         }
         LightCone lightCone = Database.getLightCones().get(21000);
         int[] lev = lightCone.addLevel(0, 1, 21069);
