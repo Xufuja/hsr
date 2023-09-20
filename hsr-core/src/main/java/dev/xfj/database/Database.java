@@ -26,6 +26,7 @@ public class Database {
         AvatarData.init();
         ItemData.init();
         EquipmentData.init();
+        RelicData.init();
 
         Database.normalItems = ItemData.loadNormalItems();
         Database.lightConeItems = ItemData.loadEquipmentItems();
