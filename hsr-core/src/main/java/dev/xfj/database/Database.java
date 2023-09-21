@@ -6,6 +6,7 @@ import dev.xfj.item.ItemExp;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
+import dev.xfj.relic.Relic;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +20,7 @@ public class Database {
     protected static Map<Integer, Map<Integer, LightConeStats>> lightConeStats;
     protected static Map<Integer, LightCone> lightCones;
     protected static Map<Integer, Map<Integer, Integer>> lightConeExp;
+    protected static Map<Integer, Relic> relics;
 
     public static void init(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         TextMapData.languageCode = languageCode;
@@ -35,6 +37,7 @@ public class Database {
         Database.lightConeStats = EquipmentData.loadLightConeStats();
         Database.lightCones = EquipmentData.loadLightCones();
         Database.lightConeExp = EquipmentData.loadLightConeExp();
+        Database.relics = RelicData.loadRelics();
     }
 
     public static String getTranslation(int key) {

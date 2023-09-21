@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
 import dev.xfj.jsonschema2pojo.reliccomposeconfig.RelicComposeConfigJson;
 import dev.xfj.jsonschema2pojo.relicconfig.RelicConfigJson;
@@ -10,8 +11,11 @@ import dev.xfj.jsonschema2pojo.relicmainaffixconfig.RelicMainAffixConfigJson;
 import dev.xfj.jsonschema2pojo.relicsetconfig.RelicSetConfigJson;
 import dev.xfj.jsonschema2pojo.relicsetskillconfig.RelicSetSkillConfigJson;
 import dev.xfj.jsonschema2pojo.relicsubaffixconfig.RelicSubAffixConfigJson;
+import dev.xfj.lightcone.LightCone;
+import dev.xfj.relic.Relic;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RelicData {
@@ -41,5 +45,26 @@ public class RelicData {
         relicSetConfig = Loader.loadJSON(RelicSetConfigJson.class);
         relicSetSkillConfig = Loader.loadNestedJSON(RelicSetSkillConfigJson.class);
         relicSubAffixConfig = Loader.loadNestedJSON(RelicSubAffixConfigJson.class);
+    }
+
+    protected static Map<Integer, Relic> loadRelics() {
+        Map<Integer, Relic> relics = new HashMap<>();
+
+        for (Map.Entry<String, RelicConfigJson> entry : relicConfig.entrySet()) {
+            Relic relic = new Relic(entry.getValue().getId(),
+                    entry.getValue().getSetID(),
+                    entry.getValue().getType(),
+                    entry.getValue().getRarity(),
+                    entry.getValue().getMainAffixGroup(),
+                    entry.getValue().getSubAffixGroup(),
+                    entry.getValue().getMaxLevel(),
+                    entry.getValue().getExpType(),
+                    entry.getValue().getExpProvide(),
+                    entry.getValue().getCoinCost());
+
+            relics.put(entry.getValue().getId(), relic);
+        }
+
+        return relics;
     }
 }

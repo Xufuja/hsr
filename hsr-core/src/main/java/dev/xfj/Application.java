@@ -34,6 +34,24 @@ public class Application {
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s", lev[0], lev[1]));
         System.out.println(lightCone.expRequiredForLevel(1, lightCone.getStatsByAscension(0).maxLevel()));
     }
+    //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"
+    public static int getStableHash(String str) {
+        char[] chars = str.toCharArray();
+        int hash1 = 5381;
+        int hash2 = hash1;
+
+        for (int i = 0; i < chars.length && chars[i] != '\0'; i += 2) {
+            hash1 = ((hash1 << 5) + hash1) ^ chars[i];
+
+            if (i == chars.length - 1 || chars[i + 1] == '\0') {
+                break;
+            }
+
+            hash2 = ((hash2 << 5) + hash2) ^ chars[i + 1];
+        }
+
+        return (hash1 + (hash2 * 1566083941));
+    }
 
 
 }
