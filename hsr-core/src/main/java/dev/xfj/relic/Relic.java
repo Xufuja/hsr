@@ -2,6 +2,9 @@ package dev.xfj.relic;
 
 public record Relic(
         int relicId,
+        String name,
+        String backgroundDescription,
+        String backgroundStoryContent,
         int setId,
         String type,
         String rarity,

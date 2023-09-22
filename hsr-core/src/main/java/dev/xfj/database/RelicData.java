@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Application;
 import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
 import dev.xfj.jsonschema2pojo.reliccomposeconfig.RelicComposeConfigJson;
@@ -13,6 +14,7 @@ import dev.xfj.jsonschema2pojo.relicsetskillconfig.RelicSetSkillConfigJson;
 import dev.xfj.jsonschema2pojo.relicsubaffixconfig.RelicSubAffixConfigJson;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.relic.Relic;
+import dev.xfj.relic.RelicInfo;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class RelicData {
     private static Map<String, RelicBaseTypeJson> relicBaseType;
     private static Map<String, RelicComposeConfigJson> relicComposeConfig;
     private static Map<String, RelicConfigJson> relicConfig;
-    private static Map<String, Map<String, RelicDataInfoJson>> relicDataInfo;
+    private static Map<String, RelicDataInfoJson> relicDataInfo;
     private static Map<String, RelicExpItemJson> relicExpItem;
     private static Map<String, Map<String, RelicExpTypeJson>> relicExpType;
     private static Map<String, Map<String, RelicMainAffixConfigJson>> relicMainAffixConfig;
@@ -38,7 +40,7 @@ public class RelicData {
         relicBaseType = Loader.loadJSON(RelicBaseTypeJson.class);
         relicComposeConfig = Loader.loadJSON(RelicComposeConfigJson.class);
         relicConfig = Loader.loadJSON(RelicConfigJson.class);
-        relicDataInfo = Loader.loadNestedJSON(RelicDataInfoJson.class);
+        relicDataInfo = Loader.loadJSON(RelicDataInfoJson.class);
         relicExpItem = Loader.loadJSON(RelicExpItemJson.class);
         relicExpType = Loader.loadNestedJSON(RelicExpTypeJson.class);
         relicMainAffixConfig = Loader.loadNestedJSON(RelicMainAffixConfigJson.class);
@@ -51,7 +53,11 @@ public class RelicData {
         Map<Integer, Relic> relics = new HashMap<>();
 
         for (Map.Entry<String, RelicConfigJson> entry : relicConfig.entrySet()) {
+            RelicInfo relicInfo = getRelicInfo(relicDataInfo.get(String.valueOf(entry.getValue().getSetID())), entry.getValue().getType());
             Relic relic = new Relic(entry.getValue().getId(),
+                    relicInfo.name(),
+                    relicInfo.backgroundDescription(),
+                    relicInfo.backgroundStoryContent(),
                     entry.getValue().getSetID(),
                     entry.getValue().getType(),
                     entry.getValue().getRarity(),
@@ -66,5 +72,33 @@ public class RelicData {
         }
 
         return relics;
+    }
+
+    private static RelicInfo getRelicInfo(RelicDataInfoJson info, String type) {
+        Object relic = null;
+        RelicInfo relicInfo = null;
+
+        switch (type) {
+            case "HEAD" -> relic = info.getHead();
+            case "HAND" -> relic = info.getHand();
+            case "BODY" -> relic = info.getBody();
+            case "FOOT" -> relic = info.getFoot();
+            case "NECK" -> relic = info.getNeck();
+            case "OBJECT" -> relic = info.getObject();
+            default -> throw new RuntimeException("Unexpected value: " + type);
+        }
+
+        Class<?> clazz = relic.getClass();
+        try {
+            relicInfo = new RelicInfo((Integer) clazz.getMethod("getSetID").invoke(relic),
+                    type,
+                    Database.getTranslationNoHash((String) clazz.getMethod("getRelicName").invoke(relic)),
+                    Database.getTranslationNoHash((String) clazz.getMethod("getItemBGDesc").invoke(relic)),
+                    Database.getTranslationNoHash((String) clazz.getMethod("getBGStoryContent").invoke(relic)));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return relicInfo;
     }
 }

@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Application;
 import dev.xfj.item.Item;
 import dev.xfj.item.ItemEquipment;
 import dev.xfj.item.ItemExp;
@@ -42,6 +43,10 @@ public class Database {
 
     public static String getTranslation(int key) {
         return TextMapData.getTranslation(key);
+    }
+
+    public static String getTranslationNoHash(String key) {
+        return TextMapData.getTranslation(Application.getStableHash(key));
     }
 
     public static Map<Integer, Item> getNormalItems() {
