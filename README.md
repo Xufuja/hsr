@@ -176,3 +176,131 @@ After the change:
   }
 }
 ```
+
+### Relic Sets
+
+When loading Relic set data, Planar Sphere and Link Ropes are not included.
+
+To fix this:
+
+1. Open `StarRailData\ExcelOutput\RelicDataInfo.json`
+2. Go to the first set
+3. Add dummy entries for the Planer Sphere and Link Rope types
+
+For example, the first entry is as follows:
+
+```json
+{
+  "101": {
+    "HEAD": {
+      "SetID": 101,
+      "Type": "HEAD",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_1.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_1.png",
+      "RelicName": "RelicName_31011",
+      "ItemBGDesc": "ItemBGDesc_31011",
+      "BGStoryTitle": "RelicStoryTitle_31011",
+      "BGStoryContent": "RelicStoryContent_31011"
+    },
+    "HAND": {
+      "SetID": 101,
+      "Type": "HAND",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_2.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_2.png",
+      "RelicName": "RelicName_31012",
+      "ItemBGDesc": "ItemBGDesc_31012",
+      "BGStoryTitle": "RelicStoryTitle_31012",
+      "BGStoryContent": "RelicStoryContent_31012"
+    },
+    "BODY": {
+      "SetID": 101,
+      "Type": "BODY",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_3.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_3.png",
+      "RelicName": "RelicName_31013",
+      "ItemBGDesc": "ItemBGDesc_31013",
+      "BGStoryTitle": "RelicStoryTitle_31013",
+      "BGStoryContent": "RelicStoryContent_31013"
+    },
+    "FOOT": {
+      "SetID": 101,
+      "Type": "FOOT",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_4.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_4.png",
+      "RelicName": "RelicName_31014",
+      "ItemBGDesc": "ItemBGDesc_31014",
+      "BGStoryTitle": "RelicStoryTitle_31014",
+      "BGStoryContent": "RelicStoryContent_31014"
+    }
+  }
+}
+```
+
+After the change:
+
+```json
+{
+  "101": {
+    "HEAD": {
+      "SetID": 101,
+      "Type": "HEAD",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_1.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_1.png",
+      "RelicName": "RelicName_31011",
+      "ItemBGDesc": "ItemBGDesc_31011",
+      "BGStoryTitle": "RelicStoryTitle_31011",
+      "BGStoryContent": "RelicStoryContent_31011"
+    },
+    "HAND": {
+      "SetID": 101,
+      "Type": "HAND",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_2.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_2.png",
+      "RelicName": "RelicName_31012",
+      "ItemBGDesc": "ItemBGDesc_31012",
+      "BGStoryTitle": "RelicStoryTitle_31012",
+      "BGStoryContent": "RelicStoryContent_31012"
+    },
+    "BODY": {
+      "SetID": 101,
+      "Type": "BODY",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_3.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_3.png",
+      "RelicName": "RelicName_31013",
+      "ItemBGDesc": "ItemBGDesc_31013",
+      "BGStoryTitle": "RelicStoryTitle_31013",
+      "BGStoryContent": "RelicStoryContent_31013"
+    },
+    "FOOT": {
+      "SetID": 101,
+      "Type": "FOOT",
+      "IconPath": "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_4.png",
+      "ItemFigureIconPath": "SpriteOutput/RelicFigures/IconRelic_101_4.png",
+      "RelicName": "RelicName_31014",
+      "ItemBGDesc": "ItemBGDesc_31014",
+      "BGStoryTitle": "RelicStoryTitle_31014",
+      "BGStoryContent": "RelicStoryContent_31014"
+    },
+    "NECK": {
+      "SetID": 9999999,
+      "Type": "",
+      "IconPath": "",
+      "ItemFigureIconPath": "",
+      "RelicName": "",
+      "ItemBGDesc": "",
+      "BGStoryTitle": "",
+      "BGStoryContent": ""
+    },
+    "OBJECT": {
+      "SetID": 9999999,
+      "Type": "",
+      "IconPath": "",
+      "ItemFigureIconPath": "",
+      "RelicName": "",
+      "ItemBGDesc": "",
+      "BGStoryTitle": "",
+      "BGStoryContent": ""
+    }
+  }
+}
+```
