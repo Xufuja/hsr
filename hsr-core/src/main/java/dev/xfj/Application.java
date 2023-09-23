@@ -4,6 +4,9 @@ import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
+import dev.xfj.relic.Relic;
+import dev.xfj.relic.RelicSet;
+import dev.xfj.relic.RelicSetEffect;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
@@ -33,7 +36,18 @@ public class Application {
         int[] lev = lightCone.addLevel(0, 1, 21069);
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s", lev[0], lev[1]));
         System.out.println(lightCone.expRequiredForLevel(1, lightCone.getStatsByAscension(0).maxLevel()));
+
+        for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
+            Relic relic = entry.getValue();
+            System.out.println(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s", relic.relicId(), relic.name(), relic.type()));
+            RelicSet set = entry.getValue().setData();
+            System.out.println(String.format("\t\tSet ID: %1$s\r\n\t\tSet Name: %2$s", set.setId(), set.setName()));
+            for (Map.Entry<Integer, RelicSetEffect> effect: set.setEffects().entrySet()) {
+                System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), effect.getValue().setDescription()));
+            }
+        }
     }
+
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"
     public static int getStableHash(String str) {
         char[] chars = str.toCharArray();

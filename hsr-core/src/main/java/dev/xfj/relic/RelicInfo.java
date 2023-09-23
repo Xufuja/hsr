@@ -1,7 +1,7 @@
 package dev.xfj.relic;
 
 public record RelicInfo(
-        int set,
+        int setId,
         String type,
         String name,
         String backgroundDescription,

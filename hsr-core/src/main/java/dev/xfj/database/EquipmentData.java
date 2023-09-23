@@ -139,8 +139,8 @@ public class EquipmentData {
                 }
 
                 LightConePassive passive = new LightConePassive(entry.getSkillID(),
-                        TextMapData.getTranslation(entry.getSkillName().getHash()),
-                        TextMapData.getTranslation(entry.getSkillDesc().getHash()),
+                        Database.getTranslation(entry.getSkillName().getHash()),
+                        Database.getTranslation(entry.getSkillDesc().getHash()),
                         entry.getAbilityName(),
                         entry.getParamList().stream().map(Param::getValue).collect(Collectors.toList()),
                         properties);

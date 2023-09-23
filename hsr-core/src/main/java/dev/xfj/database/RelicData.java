@@ -1,7 +1,7 @@
 package dev.xfj.database;
 
-import dev.xfj.Application;
-import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
+import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
 import dev.xfj.jsonschema2pojo.reliccomposeconfig.RelicComposeConfigJson;
 import dev.xfj.jsonschema2pojo.relicconfig.RelicConfigJson;
@@ -10,15 +10,23 @@ import dev.xfj.jsonschema2pojo.relicexpitem.RelicExpItemJson;
 import dev.xfj.jsonschema2pojo.relicexptype.RelicExpTypeJson;
 import dev.xfj.jsonschema2pojo.relicmainaffixconfig.RelicMainAffixConfigJson;
 import dev.xfj.jsonschema2pojo.relicsetconfig.RelicSetConfigJson;
+import dev.xfj.jsonschema2pojo.relicsetskillconfig.AbilityParam;
+import dev.xfj.jsonschema2pojo.relicsetskillconfig.Property;
 import dev.xfj.jsonschema2pojo.relicsetskillconfig.RelicSetSkillConfigJson;
 import dev.xfj.jsonschema2pojo.relicsubaffixconfig.RelicSubAffixConfigJson;
-import dev.xfj.lightcone.LightCone;
+import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicInfo;
+import dev.xfj.relic.RelicSet;
+import dev.xfj.relic.RelicSetEffect;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RelicData {
     private static Map<String, RelicBaseTypeJson> relicBaseType;
@@ -66,7 +74,8 @@ public class RelicData {
                     entry.getValue().getMaxLevel(),
                     entry.getValue().getExpType(),
                     entry.getValue().getExpProvide(),
-                    entry.getValue().getCoinCost());
+                    entry.getValue().getCoinCost(),
+                    Database.relicSets.get(entry.getValue().getSetID()));
 
             relics.put(entry.getValue().getId(), relic);
         }
@@ -100,5 +109,75 @@ public class RelicData {
         }
 
         return relicInfo;
+    }
+
+    protected static Map<Integer, RelicSet> loadRelicSets() {
+        Map<Integer, RelicSet> relicSets = new HashMap<>();
+
+        for (Map.Entry<String, RelicSetConfigJson> entry : relicSetConfig.entrySet()) {
+
+            RelicSet relicSet = new RelicSet(entry.getValue().getSetID(),
+                    Database.getTranslation(entry.getValue().getSetName().getHash()),
+                    Database.relicSetEffects.get(entry.getValue().getSetID()));
+
+            relicSets.put(entry.getValue().getSetID(), relicSet);
+        }
+
+        return relicSets;
+    }
+
+    private static String obtainGetter(String input) {
+        char[] name = input.toCharArray();
+        name[0] = Character.toUpperCase(name[0]);
+        return "get".concat(new String(name));
+    }
+
+    protected static Map<Integer, Map<Integer, RelicSetEffect>> loadRelicSetEffects() {
+        Map<Integer, Map<Integer, RelicSetEffect>> effects = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, RelicSetSkillConfigJson>> outerEntry : relicSetSkillConfig.entrySet()) {
+            Map<Integer, RelicSetEffect> setCount = new HashMap<>();
+
+            for (Map.Entry<String, RelicSetSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                RelicSetSkillConfigJson entry = innerEntry.getValue();
+
+                List<Map<String, Double>> properties = new ArrayList<>();
+                for (Property ability : innerEntry.getValue().getPropertyList()) {
+                    Map<String, Double> map = new HashMap<>();
+                    String key = null;
+                    double value = 0.0;
+
+                    Field[] fields = Property.class.getDeclaredFields();
+                    for (Field field : fields) {
+                        try {
+                            if (field.getType() == String.class) {
+                                key = (String) Property.class.getMethod(obtainGetter(field.getName())).invoke(ability);
+                            } else {
+                                Object object = Property.class.getMethod(obtainGetter(field.getName())).invoke(ability);
+                                value = (double) object.getClass().getMethod("getValue").invoke(object);;
+                            }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e.getMessage());
+                        }
+                    }
+
+                    map.put(key, value);
+                    properties.add(map);
+                }
+
+                RelicSetEffect setEffect = new RelicSetEffect(entry.getSetID(),
+                        Database.getTranslationNoHash(entry.getSkillDesc()),
+                        properties,
+                        Database.getTranslationNoHash(entry.getAbilityName()),
+                        entry.getAbilityParamList().stream().map(AbilityParam::getValue).collect(Collectors.toList())
+                );
+
+                setCount.put(innerEntry.getValue().getRequireNum(), setEffect);
+            }
+
+            effects.put(Integer.valueOf(outerEntry.getKey()), setCount);
+        }
+
+        return effects;
     }
 }

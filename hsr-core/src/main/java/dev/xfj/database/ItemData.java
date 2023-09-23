@@ -5,6 +5,7 @@ import dev.xfj.jsonschema2pojo.itemconfig.ItemConfigJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ItemConfigEquipmentJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ReturnItemID;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -85,13 +86,13 @@ public class ItemData {
         item.getClass().getMethod("setRarity", String.class).invoke(item, itemConfig.getClass().getMethod("getRarity").invoke(itemConfig));
 
         Object name = itemConfig.getClass().getMethod("getItemName").invoke(itemConfig);
-        item.getClass().getMethod("setName", String.class).invoke(item, TextMapData.getTranslation((Integer) name.getClass().getMethod("getHash").invoke(name)));
+        item.getClass().getMethod("setName", String.class).invoke(item, Database.getTranslation((Integer) name.getClass().getMethod("getHash").invoke(name)));
 
         Object bg = itemConfig.getClass().getMethod("getItemBGDesc").invoke(itemConfig);
-        item.getClass().getMethod("setBackgroundDescription", String.class).invoke(item, TextMapData.getTranslation((Integer) bg.getClass().getMethod("getHash").invoke(bg)));
+        item.getClass().getMethod("setBackgroundDescription", String.class).invoke(item, Database.getTranslation((Integer) bg.getClass().getMethod("getHash").invoke(bg)));
 
         Object desc = itemConfig.getClass().getMethod("getItemDesc").invoke(itemConfig);
-        item.getClass().getMethod("setDescription", String.class).invoke(item, TextMapData.getTranslation((Integer) desc.getClass().getMethod("getHash").invoke(desc)));
+        item.getClass().getMethod("setDescription", String.class).invoke(item, Database.getTranslation((Integer) desc.getClass().getMethod("getHash").invoke(desc)));
 
         item.getClass().getMethod("setStackLimit", int.class).invoke(item, itemConfig.getClass().getMethod("getPileLimit").invoke(itemConfig));
 

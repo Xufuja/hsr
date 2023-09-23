@@ -89,6 +89,6 @@ public class AvatarData {
     }
 
     public static String getPathName(String id) {
-        return TextMapData.getTranslation(getAvatarBaseType().get(id).getBaseTypeText().getHash());
+        return Database.getTranslation(getAvatarBaseType().get(id).getBaseTypeText().getHash());
     }
 }
