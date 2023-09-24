@@ -43,9 +43,13 @@ public class Application {
             RelicSet set = entry.getValue().setData();
             System.out.println(String.format("\t\tSet ID: %1$s\r\n\t\tSet Name: %2$s", set.setId(), set.setName()));
             for (Map.Entry<Integer, RelicSetEffect> effect: set.setEffects().entrySet()) {
-                System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), effect.getValue().setDescription()));
+                System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), relic.getInterpolatedPassive(effect.getKey())));
             }
         }
+        Relic relic = Database.getRelics().get(61011);
+        int[] rLev = relic.addLevel(1, 75439);
+        System.out.println(String.format("Level: %1$s\r\nExp: %2$s", rLev[0], rLev[1]));
+        System.out.println(relic.expRequiredForLevel(1, relic.maxLevel()));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

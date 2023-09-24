@@ -26,6 +26,7 @@ public class Database {
     protected static Map<Integer, Map<Integer, RelicSetEffect>> relicSetEffects;
     protected static Map<Integer, RelicSet> relicSets;
     protected static Map<Integer, Relic> relics;
+    protected static Map<Integer, Map<Integer, Integer>> relicExp;
 
     public static void init(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         TextMapData.languageCode = languageCode;
@@ -45,6 +46,7 @@ public class Database {
         Database.relicSetEffects = RelicData.loadRelicSetEffects();
         Database.relicSets = RelicData.loadRelicSets();
         Database.relics = RelicData.loadRelics();
+        Database.relicExp = RelicData.loadRelicExp();
     }
 
     public static String getTranslation(int key) {
@@ -77,5 +79,9 @@ public class Database {
 
     public static Map<Integer, Relic> getRelics() {
         return relics;
+    }
+
+    public static Map<Integer, Map<Integer, Integer>> getRelicExp() {
+        return relicExp;
     }
 }

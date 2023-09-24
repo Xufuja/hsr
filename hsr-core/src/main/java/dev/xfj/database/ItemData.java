@@ -5,7 +5,6 @@ import dev.xfj.jsonschema2pojo.itemconfig.ItemConfigJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ItemConfigEquipmentJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ReturnItemID;
 
-import javax.xml.crypto.Data;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
@@ -179,5 +180,20 @@ public class RelicData {
         }
 
         return effects;
+    }
+    protected static Map<Integer, Map<Integer, Integer>> loadRelicExp() {
+        Map<Integer, Map<Integer, Integer>> exp = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, RelicExpTypeJson>> outerEntry : relicExpType.entrySet()) {
+            Map<Integer, Integer> expPerExpType = new HashMap<>();
+
+            for (Map.Entry<String, RelicExpTypeJson> innerEntry : outerEntry.getValue().entrySet()) {
+                expPerExpType.put(innerEntry.getValue().getLevel(), innerEntry.getValue().getExp());
+            }
+
+            exp.put(Integer.valueOf(outerEntry.getKey()), expPerExpType);
+        }
+
+        return exp;
     }
 }
