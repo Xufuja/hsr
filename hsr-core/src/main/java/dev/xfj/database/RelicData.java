@@ -68,7 +68,7 @@ public class RelicData {
                     relicInfo.backgroundDescription(),
                     relicInfo.backgroundStoryContent(),
                     entry.getValue().getSetID(),
-                    entry.getValue().getType(),
+                    Database.getTranslation(relicBaseType.get(entry.getValue().getType()).getBaseTypeText().getHash()),
                     entry.getValue().getRarity(),
                     entry.getValue().getMainAffixGroup(),
                     entry.getValue().getSubAffixGroup(),
