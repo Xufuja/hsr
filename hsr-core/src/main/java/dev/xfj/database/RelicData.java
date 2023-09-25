@@ -1,6 +1,8 @@
 package dev.xfj.database;
 
+import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
+import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
 import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
@@ -16,10 +18,8 @@ import dev.xfj.jsonschema2pojo.relicsetskillconfig.Property;
 import dev.xfj.jsonschema2pojo.relicsetskillconfig.RelicSetSkillConfigJson;
 import dev.xfj.jsonschema2pojo.relicsubaffixconfig.RelicSubAffixConfigJson;
 import dev.xfj.lightcone.LightConePassive;
-import dev.xfj.relic.Relic;
-import dev.xfj.relic.RelicInfo;
-import dev.xfj.relic.RelicSet;
-import dev.xfj.relic.RelicSetEffect;
+import dev.xfj.lightcone.LightConeStats;
+import dev.xfj.relic.*;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
@@ -76,7 +76,8 @@ public class RelicData {
                     entry.getValue().getExpType(),
                     entry.getValue().getExpProvide(),
                     entry.getValue().getCoinCost(),
-                    Database.relicSets.get(entry.getValue().getSetID()));
+                    Database.relicSets.get(entry.getValue().getSetID()),
+                    Database.relicMainStats.get(entry.getValue().getMainAffixGroup()));
 
             relics.put(entry.getValue().getId(), relic);
         }
@@ -110,6 +111,29 @@ public class RelicData {
         }
 
         return relicInfo;
+    }
+
+    protected static Map<Integer, Map<Integer, RelicMainStats>> loadRelicMainStats() {
+        Map<Integer, Map<Integer, RelicMainStats>> stats = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, RelicMainAffixConfigJson>> outerEntry : relicMainAffixConfig.entrySet()) {
+            Map<Integer, RelicMainStats> statsPerAffix = new HashMap<>();
+
+            for (Map.Entry<String, RelicMainAffixConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                RelicMainAffixConfigJson entry = innerEntry.getValue();
+                RelicMainStats relicMainStats = new RelicMainStats(entry.getGroupID(),
+                        entry.getAffixID(),
+                        entry.getProperty(),
+                        entry.getBaseValue().getValue(),
+                        entry.getLevelAdd().getValue());
+
+                statsPerAffix.put(innerEntry.getValue().getAffixID(), relicMainStats);
+            }
+
+            stats.put(Integer.valueOf(outerEntry.getKey()), statsPerAffix);
+        }
+
+        return stats;
     }
 
     protected static Map<Integer, RelicSet> loadRelicSets() {

@@ -39,17 +39,20 @@ public class Application {
 
         for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
             Relic relic = entry.getValue();
-            System.out.println(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s", relic.relicId(), relic.name(), relic.type()));
+            System.out.println(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s\r\n\t\tMax Level: %4$s", relic.relicId(), relic.name(), relic.type(), relic.maxLevel()));
             RelicSet set = entry.getValue().setData();
             System.out.println(String.format("\t\tSet ID: %1$s\r\n\t\tSet Name: %2$s", set.setId(), set.setName()));
             for (Map.Entry<Integer, RelicSetEffect> effect: set.setEffects().entrySet()) {
                 System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), relic.getInterpolatedPassive(effect.getKey())));
             }
         }
-        Relic relic = Database.getRelics().get(61011);
-        int[] rLev = relic.addLevel(1, 75439);
-        System.out.println(String.format("Level: %1$s\r\nExp: %2$s", rLev[0], rLev[1]));
+        Relic relic = Database.getRelics().get(61143);
+        int[] rLev = relic.addLevel(1, 75440);
+        System.out.println(String.format("Level: %1$s\r\nExp: %2$s\r\nMain: %3$s\r\nSub:%4$s", rLev[0], rLev[1], relic.mainAffixGroup(), relic.subAffixGroup()));
         System.out.println(relic.expRequiredForLevel(1, relic.maxLevel()));
+        System.out.println(relic.type());
+        relic.getPossibleMainStats().stream().forEach(System.out::println);
+        System.out.println(relic.getBaseStatAtLevel(relic.getPossibleMainStats().get(0), relic.maxLevel()));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

@@ -4,6 +4,10 @@ import dev.xfj.database.Database;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public record Relic(
         int relicId,
         String name,
@@ -18,7 +22,8 @@ public record Relic(
         int expType,
         int expProvide,
         int coinCost,
-        RelicSet setData
+        RelicSet setData,
+        Map<Integer, RelicMainStats> mainStats
 ) {
 
     public RelicSetEffect getSetEffect(int pieceCount) {
@@ -35,6 +40,30 @@ public record Relic(
             expNeeded += Database.getRelicExp().get(expType).get(i);
         }
         return expNeeded;
+    }
+
+    public List<String> getPossibleMainStats() {
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<Integer, RelicMainStats> entry : mainStats.entrySet()) {
+            result.add(entry.getValue().property());
+        }
+        return result;
+    }
+
+    public int getAffixIdByStat(String mainStat) {
+        int result = -1;
+        for (Map.Entry<Integer, RelicMainStats> entry : mainStats.entrySet()) {
+            if (entry.getValue().property().equals(mainStat)) {
+                result = entry.getKey();
+                break;
+            }
+        }
+        return result;
+    }
+
+    public double getBaseStatAtLevel(String mainStat, int level) {
+        RelicMainStats relic = mainStats.get(getAffixIdByStat(mainStat));
+        return relic.baseValue() + (level  * relic.valuePerLevel());
     }
 
     public String getInterpolatedPassive(int pieceCount) {

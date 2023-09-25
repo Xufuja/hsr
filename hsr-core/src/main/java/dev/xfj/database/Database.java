@@ -8,6 +8,7 @@ import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
 import dev.xfj.relic.Relic;
+import dev.xfj.relic.RelicMainStats;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
 
@@ -25,6 +26,7 @@ public class Database {
     protected static Map<Integer, Map<Integer, Integer>> lightConeExp;
     protected static Map<Integer, Map<Integer, RelicSetEffect>> relicSetEffects;
     protected static Map<Integer, RelicSet> relicSets;
+    protected static Map<Integer, Map<Integer, RelicMainStats>> relicMainStats;
     protected static Map<Integer, Relic> relics;
     protected static Map<Integer, Map<Integer, Integer>> relicExp;
 
@@ -45,6 +47,7 @@ public class Database {
         Database.lightConeExp = EquipmentData.loadLightConeExp();
         Database.relicSetEffects = RelicData.loadRelicSetEffects();
         Database.relicSets = RelicData.loadRelicSets();
+        Database.relicMainStats = RelicData.loadRelicMainStats();
         Database.relics = RelicData.loadRelics();
         Database.relicExp = RelicData.loadRelicExp();
     }
