@@ -51,8 +51,12 @@ public class Application {
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s\r\nMain: %3$s\r\nSub:%4$s", rLev[0], rLev[1], relic.mainAffixGroup(), relic.subAffixGroup()));
         System.out.println(relic.expRequiredForLevel(1, relic.maxLevel()));
         System.out.println(relic.type());
-        relic.getPossibleMainStats().stream().forEach(System.out::println);
-        System.out.println(relic.getBaseStatAtLevel(relic.getPossibleMainStats().get(0), relic.maxLevel()));
+        relic.getPossibleMainStats().forEach(System.out::println);
+        System.out.println(relic.getBaseMainStatAtLevel(relic.getPossibleMainStats().get(0), relic.maxLevel()));
+        relic.getPossibleSubStats().forEach(System.out::println);
+        System.out.println("High Roll: " + relic.rollSubStat(relic.getPossibleSubStats().get(7), "HIGH"));
+        relic.getPossibleSubStats().forEach(s -> System.out.println(String.format("Stat: %1$S\r\n\t\tMax Value: %2$s", s, relic.getBaseStatAtRoll(s,relic.maxLevel() / 3))));
+        System.out.println(relic.getBaseStatAtRoll(relic.getPossibleSubStats().get(7), 5));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

@@ -1,10 +1,5 @@
 package dev.xfj.database;
 
-import dev.xfj.item.ItemCount;
-import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
-import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
-import dev.xfj.jsonschema2pojo.equipmentskillconfig.EquipmentSkillConfigJson;
-import dev.xfj.jsonschema2pojo.equipmentskillconfig.Param;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
 import dev.xfj.jsonschema2pojo.reliccomposeconfig.RelicComposeConfigJson;
 import dev.xfj.jsonschema2pojo.relicconfig.RelicConfigJson;
@@ -17,8 +12,6 @@ import dev.xfj.jsonschema2pojo.relicsetskillconfig.AbilityParam;
 import dev.xfj.jsonschema2pojo.relicsetskillconfig.Property;
 import dev.xfj.jsonschema2pojo.relicsetskillconfig.RelicSetSkillConfigJson;
 import dev.xfj.jsonschema2pojo.relicsubaffixconfig.RelicSubAffixConfigJson;
-import dev.xfj.lightcone.LightConePassive;
-import dev.xfj.lightcone.LightConeStats;
 import dev.xfj.relic.*;
 
 import java.io.FileNotFoundException;
@@ -77,7 +70,8 @@ public class RelicData {
                     entry.getValue().getExpProvide(),
                     entry.getValue().getCoinCost(),
                     Database.relicSets.get(entry.getValue().getSetID()),
-                    Database.relicMainStats.get(entry.getValue().getMainAffixGroup()));
+                    Database.relicMainStats.get(entry.getValue().getMainAffixGroup()),
+                    Database.relicSubStats.get(entry.getValue().getSubAffixGroup()));
 
             relics.put(entry.getValue().getId(), relic);
         }
@@ -128,6 +122,30 @@ public class RelicData {
                         entry.getLevelAdd().getValue());
 
                 statsPerAffix.put(innerEntry.getValue().getAffixID(), relicMainStats);
+            }
+
+            stats.put(Integer.valueOf(outerEntry.getKey()), statsPerAffix);
+        }
+
+        return stats;
+    }
+
+    protected static Map<Integer, Map<Integer, RelicSubStats>> loadRelicSubStats() {
+        Map<Integer, Map<Integer, RelicSubStats>> stats = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, RelicSubAffixConfigJson>> outerEntry : relicSubAffixConfig.entrySet()) {
+            Map<Integer, RelicSubStats> statsPerAffix = new HashMap<>();
+
+            for (Map.Entry<String, RelicSubAffixConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                RelicSubAffixConfigJson entry = innerEntry.getValue();
+                RelicSubStats relicSubStats = new RelicSubStats(entry.getGroupID(),
+                        entry.getAffixID(),
+                        entry.getProperty(),
+                        entry.getBaseValue().getValue(),
+                        entry.getStepValue().getValue(),
+                        entry.getStepNum());
+
+                statsPerAffix.put(innerEntry.getValue().getAffixID(), relicSubStats);
             }
 
             stats.put(Integer.valueOf(outerEntry.getKey()), statsPerAffix);

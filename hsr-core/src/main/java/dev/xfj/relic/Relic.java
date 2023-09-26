@@ -23,7 +23,8 @@ public record Relic(
         int expProvide,
         int coinCost,
         RelicSet setData,
-        Map<Integer, RelicMainStats> mainStats
+        Map<Integer, RelicMainStats> mainStats,
+        Map<Integer, RelicSubStats> subStats
 ) {
 
     public RelicSetEffect getSetEffect(int pieceCount) {
@@ -50,7 +51,15 @@ public record Relic(
         return result;
     }
 
-    public int getAffixIdByStat(String mainStat) {
+    public List<String> getPossibleSubStats() {
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<Integer, RelicSubStats> entry : subStats.entrySet()) {
+            result.add(entry.getValue().property());
+        }
+        return result;
+    }
+
+    public int getAffixIdByMainStat(String mainStat) {
         int result = -1;
         for (Map.Entry<Integer, RelicMainStats> entry : mainStats.entrySet()) {
             if (entry.getValue().property().equals(mainStat)) {
@@ -61,9 +70,41 @@ public record Relic(
         return result;
     }
 
-    public double getBaseStatAtLevel(String mainStat, int level) {
-        RelicMainStats relic = mainStats.get(getAffixIdByStat(mainStat));
-        return relic.baseValue() + (level  * relic.valuePerLevel());
+    public int getAffixIdBySubStat(String subStat) {
+        int result = -1;
+        for (Map.Entry<Integer, RelicSubStats> entry : subStats.entrySet()) {
+            if (entry.getValue().property().equals(subStat)) {
+                result = entry.getKey();
+                break;
+            }
+        }
+        return result;
+    }
+
+    public double getBaseMainStatAtLevel(String mainStat, int level) {
+        RelicMainStats relic = mainStats.get(getAffixIdByMainStat(mainStat));
+        return relic.baseValue() + (level * relic.valuePerLevel());
+    }
+
+    public double getBaseStatAtRoll(String subStat, int roll) {
+        if (roll > maxLevel() / 3) {
+            throw new RuntimeException("Maximum amount of rolls: " + maxLevel() / 3);
+        }
+        double result = rollSubStat(subStat, "HIGH");
+        for (int i = 0; i < roll; i++) {
+            result += rollSubStat(subStat, "HIGH");
+        }
+        return result;
+    }
+
+    public double rollSubStat(String subStat, String step) {
+        RelicSubStats relic = subStats.get(getAffixIdBySubStat(subStat));
+        return switch (step) {
+            case "LOW" -> relic.baseValue();
+            case "MED" -> relic.baseValue() + relic.valuePerStep();
+            case "HIGH" -> relic.baseValue() + (relic.valuePerStep() * 2);
+            default -> throw new RuntimeException("Invalid roll!");
+        };
     }
 
     public String getInterpolatedPassive(int pieceCount) {

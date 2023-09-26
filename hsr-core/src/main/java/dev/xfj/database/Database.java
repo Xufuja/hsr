@@ -7,10 +7,7 @@ import dev.xfj.item.ItemExp;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
-import dev.xfj.relic.Relic;
-import dev.xfj.relic.RelicMainStats;
-import dev.xfj.relic.RelicSet;
-import dev.xfj.relic.RelicSetEffect;
+import dev.xfj.relic.*;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +24,7 @@ public class Database {
     protected static Map<Integer, Map<Integer, RelicSetEffect>> relicSetEffects;
     protected static Map<Integer, RelicSet> relicSets;
     protected static Map<Integer, Map<Integer, RelicMainStats>> relicMainStats;
+    protected static Map<Integer, Map<Integer, RelicSubStats>> relicSubStats;
     protected static Map<Integer, Relic> relics;
     protected static Map<Integer, Map<Integer, Integer>> relicExp;
 
@@ -48,6 +46,7 @@ public class Database {
         Database.relicSetEffects = RelicData.loadRelicSetEffects();
         Database.relicSets = RelicData.loadRelicSets();
         Database.relicMainStats = RelicData.loadRelicMainStats();
+        Database.relicSubStats = RelicData.loadRelicSubStats();
         Database.relics = RelicData.loadRelics();
         Database.relicExp = RelicData.loadRelicExp();
     }
