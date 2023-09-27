@@ -1,5 +1,6 @@
 package dev.xfj;
 
+import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
@@ -42,7 +43,7 @@ public class Application {
             System.out.println(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s\r\n\t\tMax Level: %4$s", relic.relicId(), relic.name(), relic.type(), relic.maxLevel()));
             RelicSet set = entry.getValue().setData();
             System.out.println(String.format("\t\tSet ID: %1$s\r\n\t\tSet Name: %2$s", set.setId(), set.setName()));
-            for (Map.Entry<Integer, RelicSetEffect> effect: set.setEffects().entrySet()) {
+            for (Map.Entry<Integer, RelicSetEffect> effect : set.setEffects().entrySet()) {
                 System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), relic.getInterpolatedPassive(effect.getKey())));
             }
         }
@@ -55,8 +56,10 @@ public class Application {
         System.out.println(relic.getBaseMainStatAtLevel(relic.getPossibleMainStats().get(0), relic.maxLevel()));
         relic.getPossibleSubStats().forEach(System.out::println);
         System.out.println("High Roll: " + relic.rollSubStat(relic.getPossibleSubStats().get(7), "HIGH"));
-        relic.getPossibleSubStats().forEach(s -> System.out.println(String.format("Stat: %1$S\r\n\t\tMax Value: %2$s", s, relic.getBaseStatAtRoll(s,relic.maxLevel() / 3))));
+        relic.getPossibleSubStats().forEach(s -> System.out.println(String.format("Stat: %1$S\r\n\t\tMax Value: %2$s", s, relic.getBaseStatAtRoll(s, relic.maxLevel() / 3))));
         System.out.println(relic.getBaseStatAtRoll(relic.getPossibleSubStats().get(7), 5));
+        Avatar avatar = Database.getAvatars().get(1001);
+        System.out.println(String.format("Name: %1$s\r\nPath: %2$s\r\nPath Description: %3$s\r\nType: %4$s", avatar.avatarName(), Database.getAvatarPaths().get(avatar.avatarBaseType()).name(), Database.getAvatarPaths().get(avatar.avatarBaseType()).description(), avatar.damageType()));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

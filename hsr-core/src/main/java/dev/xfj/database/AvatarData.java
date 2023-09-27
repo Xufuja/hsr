@@ -1,10 +1,15 @@
 package dev.xfj.database;
 
+import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarPath;
+import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.avataratlas.AvatarAtlasJson;
 import dev.xfj.jsonschema2pojo.avatarbasetype.AvatarBaseTypeJson;
 import dev.xfj.jsonschema2pojo.avatarbreakdamage.AvatarBreakDamageJson;
 import dev.xfj.jsonschema2pojo.avatarcamp.AvatarCampJson;
 import dev.xfj.jsonschema2pojo.avatarconfig.AvatarConfigJson;
+import dev.xfj.jsonschema2pojo.avatarconfig.Reward;
+import dev.xfj.jsonschema2pojo.avatarconfig.RewardListMax;
 import dev.xfj.jsonschema2pojo.avatarconfigtrial.AvatarConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatardemoconfig.AvatarDemoConfigJson;
 import dev.xfj.jsonschema2pojo.avatardemoguide.AvatarDemoGuideJson;
@@ -26,6 +31,9 @@ import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigT
 import dev.xfj.jsonschema2pojo.avatarvo.AvatarVOJson;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AvatarData {
@@ -84,11 +92,56 @@ public class AvatarData {
         avatarVOJsonMap = Loader.loadJSON(AvatarVOJson.class);
     }
 
-    public static Map<String, AvatarBaseTypeJson> getAvatarBaseType() {
-        return avatarBaseType;
+    protected static Map<String, AvatarPath> loadAvatarPaths() {
+        Map<String, AvatarPath> paths = new HashMap<>();
+
+        for (Map.Entry<String, AvatarBaseTypeJson> entry : avatarBaseType.entrySet()) {
+            AvatarPath avatarPath = new AvatarPath(entry.getValue().getId(),
+                    Database.getTranslation(entry.getValue().getBaseTypeText().getHash()),
+                    Database.getTranslation(entry.getValue().getBaseTypeDesc().getHash())
+            );
+            paths.put(entry.getValue().getId(), avatarPath);
+        }
+        return paths;
     }
 
-    public static String getPathName(String id) {
-        return Database.getTranslation(getAvatarBaseType().get(id).getBaseTypeText().getHash());
+    protected static Map<Integer, Avatar> loadAvatars() {
+        Map<Integer, Avatar> avatars = new HashMap<>();
+
+        for (Map.Entry<String, AvatarConfigJson> entry : avatarConfig.entrySet()) {
+            List<ItemCount> rewards = new ArrayList<>();
+            List<ItemCount> rewardsMax = new ArrayList<>();
+
+            for (Reward itemEntry : entry.getValue().getRewardList()) {
+                ItemCount itemReturn = new ItemCount(itemEntry.getItemID(), itemEntry.getItemNum());
+                rewards.add(itemReturn);
+            }
+
+            for (RewardListMax itemEntry : entry.getValue().getRewardListMax()) {
+                ItemCount itemReturn = new ItemCount(itemEntry.getItemID(), itemEntry.getItemNum());
+                rewardsMax.add(itemReturn);
+            }
+
+            Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
+                    Database.getTranslation(entry.getValue().getAvatarName().getHash()),
+                    Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
+                    entry.getValue().getDamageType(),
+                    entry.getValue().getSPNeed().getValue(),
+                    entry.getValue().getExpGroup(),
+                    entry.getValue().getMaxPromotion(),
+                    entry.getValue().getMaxRank(),
+                    entry.getValue().getRankIDList(),
+                    rewards,
+                    rewardsMax,
+                    entry.getValue().getSkillList(),
+                    entry.getValue().getAvatarBaseType(),
+                    Database.getTranslation(entry.getValue().getAvatarDesc().getHash())
+            );
+
+            avatars.put(entry.getValue().getAvatarID(), avatar);
+        }
+
+        return avatars;
     }
+
 }

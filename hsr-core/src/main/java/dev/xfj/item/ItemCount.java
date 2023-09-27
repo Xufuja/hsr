@@ -1,7 +1,5 @@
 package dev.xfj.item;
 
-import dev.xfj.database.Database;
-
 public class ItemCount {
     private int itemId;
     private int ItemNumber;

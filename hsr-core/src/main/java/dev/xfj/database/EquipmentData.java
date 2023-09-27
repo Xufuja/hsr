@@ -48,7 +48,7 @@ public class EquipmentData {
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getBackgroundDescription(),
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getDescription(),
                     getRarity(entry.getValue().getRarity()),
-                    AvatarData.getPathName(entry.getValue().getAvatarBaseType()),
+                    Database.getAvatarPaths().get(entry.getValue().getAvatarBaseType()).name(),
                     entry.getValue().getMaxPromotion(),
                     entry.getValue().getMaxRank(),
                     entry.getValue().getExpType(),

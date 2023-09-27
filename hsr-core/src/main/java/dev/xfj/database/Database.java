@@ -1,6 +1,8 @@
 package dev.xfj.database;
 
 import dev.xfj.Application;
+import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarPath;
 import dev.xfj.item.Item;
 import dev.xfj.item.ItemEquipment;
 import dev.xfj.item.ItemExp;
@@ -17,6 +19,8 @@ public class Database {
     protected static Map<Integer, Item> normalItems;
     protected static Map<Integer, ItemEquipment> lightConeItems;
     protected static Map<Integer, ItemExp> expItems;
+    protected static Map<String, AvatarPath> avatarPaths;
+    protected static Map<Integer, Avatar> avatars;
     protected static Map<Integer, Map<Integer, LightConePassive>> lightConePassives;
     protected static Map<Integer, Map<Integer, LightConeStats>> lightConeStats;
     protected static Map<Integer, LightCone> lightCones;
@@ -31,14 +35,16 @@ public class Database {
     public static void init(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         TextMapData.languageCode = languageCode;
         TextMapData.init();
-        AvatarData.init();
         ItemData.init();
+        AvatarData.init();
         EquipmentData.init();
         RelicData.init();
 
         Database.normalItems = ItemData.loadNormalItems();
         Database.lightConeItems = ItemData.loadEquipmentItems();
         Database.expItems = ItemData.loadExpItems();
+        Database.avatarPaths = AvatarData.loadAvatarPaths();
+        Database.avatars = AvatarData.loadAvatars();
         Database.lightConePassives = EquipmentData.loadLightConePassives();
         Database.lightConeStats = EquipmentData.loadLightConeStats();
         Database.lightCones = EquipmentData.loadLightCones();
@@ -69,6 +75,14 @@ public class Database {
 
     public static Map<Integer, ItemExp> getExpItems() {
         return expItems;
+    }
+
+    public static Map<String, AvatarPath> getAvatarPaths() {
+        return avatarPaths;
+    }
+
+    public static Map<Integer, Avatar> getAvatars() {
+        return avatars;
     }
 
     public static Map<Integer, LightCone> getLightCones() {
