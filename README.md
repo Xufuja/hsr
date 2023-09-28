@@ -304,3 +304,124 @@ After the change:
   }
 }
 ```
+
+### Character Stats
+
+Just like with Light Cones, the Equilibrium level requirement is not present for the ascension 0 entries and thus is excluded.
+
+To fix this:
+
+1. Open `StarRailData\ExcelOutput\AvatarPromotionConfig.json`
+2. Go to the first `PlayerLevelRequire` property you see
+3. Add a new line and set it to `"WorldLevelRequire": 0,`
+
+For example, the first entry is as follows:
+
+```json
+{
+  "1001": {
+    "0": {
+      "AvatarID": 1001,
+      "Promotion": 0,
+      "PromotionCostList": [
+        {
+          "ItemID": 2,
+          "ItemNum": 3200
+        },
+        {
+          "ItemID": 111011,
+          "ItemNum": 4
+        }
+      ],
+      "MaxLevel": 20,
+      "PlayerLevelRequire": 15,
+      "AttackBase": {
+        "Value": 69.6000000005588
+      },
+      "AttackAdd": {
+        "Value": 3.480000000447035
+      },
+      "DefenceBase": {
+        "Value": 78
+      },
+      "DefenceAdd": {
+        "Value": 3.9000000008381903
+      },
+      "HPBase": {
+        "Value": 144
+      },
+      "HPAdd": {
+        "Value": 7.2000000001862645
+      },
+      "SpeedBase": {
+        "Value": 101
+      },
+      "CriticalChance": {
+        "Value": 0.05000000004656613
+      },
+      "CriticalDamage": {
+        "Value": 0.5000000004656613
+      },
+      "BaseAggro": {
+        "Value": 150
+      }
+    }
+  }
+}
+```
+
+After the change:
+
+```json
+{
+  "1001": {
+    "0": {
+      "AvatarID": 1001,
+      "Promotion": 0,
+      "PromotionCostList": [
+        {
+          "ItemID": 2,
+          "ItemNum": 3200
+        },
+        {
+          "ItemID": 111011,
+          "ItemNum": 4
+        }
+      ],
+      "MaxLevel": 20,
+      "PlayerLevelRequire": 15,
+      "WorldLevelRequire": 0,
+      "AttackBase": {
+        "Value": 69.6000000005588
+      },
+      "AttackAdd": {
+        "Value": 3.480000000447035
+      },
+      "DefenceBase": {
+        "Value": 78
+      },
+      "DefenceAdd": {
+        "Value": 3.9000000008381903
+      },
+      "HPBase": {
+        "Value": 144
+      },
+      "HPAdd": {
+        "Value": 7.2000000001862645
+      },
+      "SpeedBase": {
+        "Value": 101
+      },
+      "CriticalChance": {
+        "Value": 0.05000000004656613
+      },
+      "CriticalDamage": {
+        "Value": 0.5000000004656613
+      },
+      "BaseAggro": {
+        "Value": 150
+      }
+    }
+  }
+}
+```

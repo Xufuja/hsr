@@ -2,6 +2,7 @@ package dev.xfj.database;
 
 import dev.xfj.avatar.Avatar;
 import dev.xfj.avatar.AvatarPath;
+import dev.xfj.avatar.AvatarStats;
 import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.avataratlas.AvatarAtlasJson;
 import dev.xfj.jsonschema2pojo.avatarbasetype.AvatarBaseTypeJson;
@@ -29,12 +30,15 @@ import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarvo.AvatarVOJson;
+import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
+import dev.xfj.lightcone.LightConeStats;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AvatarData {
     private static Map<String, AvatarAtlasJson> avatarAtlas;
@@ -142,6 +146,41 @@ public class AvatarData {
         }
 
         return avatars;
+    }
+
+    protected static Map<Integer, Map<Integer, AvatarStats>> loadAvatarStats() {
+        Map<Integer, Map<Integer, AvatarStats>> stats = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, AvatarPromotionConfigJson>> outerEntry : avatarPromotionConfig.entrySet()) {
+            Map<Integer, AvatarStats> statsPerAscension = new HashMap<>();
+
+            for (Map.Entry<String, AvatarPromotionConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                AvatarPromotionConfigJson entry = innerEntry.getValue();
+                AvatarStats avatarStats = new AvatarStats(entry.getAvatarID(),
+                        entry.getPromotion(),
+                        entry.getPromotionCostList().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()),
+                        entry.getMaxLevel(),
+                        entry.getPlayerLevelRequire(),
+                        entry.getWorldLevelRequire(),
+                        entry.getAttackBase().getValue(),
+                        entry.getAttackAdd().getValue(),
+                        entry.getDefenceBase().getValue(),
+                        entry.getDefenceAdd().getValue(),
+                        entry.getHPBase().getValue(),
+                        entry.getHPAdd().getValue(),
+                        entry.getSpeedBase().getValue(),
+                        entry.getCriticalChance().getValue(),
+                        entry.getCriticalDamage().getValue(),
+                        entry.getBaseAggro().getValue()
+                );
+
+                statsPerAscension.put(innerEntry.getValue().getPromotion(), avatarStats);
+            }
+
+            stats.put(Integer.valueOf(outerEntry.getKey()), statsPerAscension);
+        }
+
+        return stats;
     }
 
 }
