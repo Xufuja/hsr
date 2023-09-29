@@ -21,22 +21,22 @@ import java.util.stream.Collectors;
 
 public class EquipmentData {
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
-    private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfigJson;
-    private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfigJson;
+    private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfig;
+    private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfig;
     private static Map<String, EquipmentConfigJson> equipmentConfig;
-    private static Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfigJson;
-    private static Map<String, Map<String, EquipmentExpTypeJson>> equipmentExpTypeJson;
+    private static Map<String, EquipmentExpItemConfigJson> equipmentExpItemConfig;
+    private static Map<String, Map<String, EquipmentExpTypeJson>> equipmentExpType ;
 
     private EquipmentData() {
     }
 
     public static void init() throws FileNotFoundException {
         equipmentAtlas = Loader.loadJSON(EquipmentAtlasJson.class);
-        equipmentSkillConfigJson = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
-        equipmentPromotionConfigJson = Loader.loadNestedJSON(EquipmentPromotionConfigJson.class);
+        equipmentSkillConfig = Loader.loadNestedJSON(EquipmentSkillConfigJson.class);
+        equipmentPromotionConfig = Loader.loadNestedJSON(EquipmentPromotionConfigJson.class);
         equipmentConfig = Loader.loadJSON(EquipmentConfigJson.class);
-        equipmentExpItemConfigJson = Loader.loadJSON(EquipmentExpItemConfigJson.class);
-        equipmentExpTypeJson = Loader.loadNestedJSON(EquipmentExpTypeJson.class);
+        equipmentExpItemConfig = Loader.loadJSON(EquipmentExpItemConfigJson.class);
+        equipmentExpType = Loader.loadNestedJSON(EquipmentExpTypeJson.class);
     }
 
     protected static Map<Integer, LightCone> loadLightCones() {
@@ -68,7 +68,7 @@ public class EquipmentData {
     protected static Map<Integer, Map<Integer, Integer>> loadLightConeExp() {
         Map<Integer, Map<Integer, Integer>> exp = new HashMap<>();
 
-        for (Map.Entry<String, Map<String, EquipmentExpTypeJson>> outerEntry : equipmentExpTypeJson.entrySet()) {
+        for (Map.Entry<String, Map<String, EquipmentExpTypeJson>> outerEntry : equipmentExpType.entrySet()) {
             Map<Integer, Integer> expPerExpType = new HashMap<>();
 
             for (Map.Entry<String, EquipmentExpTypeJson> innerEntry : outerEntry.getValue().entrySet()) {
@@ -84,7 +84,7 @@ public class EquipmentData {
     protected static Map<Integer, Map<Integer, LightConeStats>> loadLightConeStats() {
         Map<Integer, Map<Integer, LightConeStats>> stats = new HashMap<>();
 
-        for (Map.Entry<String, Map<String, EquipmentPromotionConfigJson>> outerEntry : equipmentPromotionConfigJson.entrySet()) {
+        for (Map.Entry<String, Map<String, EquipmentPromotionConfigJson>> outerEntry : equipmentPromotionConfig.entrySet()) {
             Map<Integer, LightConeStats> statsPerAscension = new HashMap<>();
 
             for (Map.Entry<String, EquipmentPromotionConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
@@ -114,7 +114,7 @@ public class EquipmentData {
     protected static Map<Integer, Map<Integer, LightConePassive>> loadLightConePassives() {
         Map<Integer, Map<Integer, LightConePassive>> passives = new HashMap<>();
 
-        for (Map.Entry<String, Map<String, EquipmentSkillConfigJson>> outerEntry : equipmentSkillConfigJson.entrySet()) {
+        for (Map.Entry<String, Map<String, EquipmentSkillConfigJson>> outerEntry : equipmentSkillConfig.entrySet()) {
             Map<Integer, LightConePassive> passivePerSuperimpose = new HashMap<>();
 
             for (Map.Entry<String, EquipmentSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
@@ -167,19 +167,19 @@ public class EquipmentData {
         return equipmentConfig;
     }
 
-    public static Map<String, EquipmentExpItemConfigJson> getEquipmentExpItemConfigJson() {
-        return equipmentExpItemConfigJson;
+    public static Map<String, EquipmentExpItemConfigJson> getEquipmentExpItemConfig() {
+        return equipmentExpItemConfig;
     }
 
-    public static Map<String, Map<String, EquipmentExpTypeJson>> getEquipmentExpTypeJson() {
-        return equipmentExpTypeJson;
+    public static Map<String, Map<String, EquipmentExpTypeJson>> getEquipmentExpType() {
+        return equipmentExpType;
     }
 
-    public static Map<String, Map<String, EquipmentPromotionConfigJson>> getEquipmentPromotionConfigJson() {
-        return equipmentPromotionConfigJson;
+    public static Map<String, Map<String, EquipmentPromotionConfigJson>> getEquipmentPromotionConfig() {
+        return equipmentPromotionConfig;
     }
 
-    public static Map<String, Map<String, EquipmentSkillConfigJson>> getEquipmentSkillConfigJson() {
-        return equipmentSkillConfigJson;
+    public static Map<String, Map<String, EquipmentSkillConfigJson>> getEquipmentSkillConfig() {
+        return equipmentSkillConfig;
     }
 }

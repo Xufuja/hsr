@@ -30,8 +30,7 @@ import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarvo.AvatarVOJson;
-import dev.xfj.jsonschema2pojo.equipmentpromotionconfig.EquipmentPromotionConfigJson;
-import dev.xfj.lightcone.LightConeStats;
+import dev.xfj.jsonschema2pojo.exptype.ExpTypeJson;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class AvatarData {
     private static Map<String, AvatarDemoGuideJson> avatarDemoGuide;
     private static Map<String, AvatarDetailTabConfigJson> avatarDetailTabConfig;
     private static Map<String, AvatarExpItemConfigJson> avatarExpItemConfig;
+    private static Map<String, Map<String, ExpTypeJson>> avatarExpTypeConfig;
     private static Map<String, AvatarPlayerIconJson> avatarPlayerIcon;
     private static Map<String, Map<String, AvatarPromotionConfigJson>> avatarPromotionConfig;
     private static Map<String, Map<String, AvatarPromotionConfigTrialJson>> avatarPromotionConfigTrial;

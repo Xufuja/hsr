@@ -64,10 +64,10 @@ public class ItemData {
     protected static Map<Integer, ItemExp> loadExpItems() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         Map<Integer, ItemExp> items = new HashMap<>();
 
-        for (String key : EquipmentData.getEquipmentExpItemConfigJson().keySet()) {
+        for (String key : EquipmentData.getEquipmentExpItemConfig().keySet()) {
             ItemExp item = createBaseItem(ItemExp.class, itemConfig.get(key));
-            item.setExpProvide(EquipmentData.getEquipmentExpItemConfigJson().get(key).getExpProvide());
-            item.setCoinCost(EquipmentData.getEquipmentExpItemConfigJson().get(key).getCoinCost());
+            item.setExpProvide(EquipmentData.getEquipmentExpItemConfig().get(key).getExpProvide());
+            item.setCoinCost(EquipmentData.getEquipmentExpItemConfig().get(key).getCoinCost());
             items.put(item.getItemId(), item);
         }
 
