@@ -1,5 +1,6 @@
 package dev.xfj.lightcone;
 
+import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,12 +24,6 @@ public record LightCone(
         Map<Integer, LightConePassive> passives,
         Map<Integer, LightConeStats> stats) {
 
-    public enum BaseStatCategory {
-        HP,
-        ATTACK,
-        DEFENSE
-    }
-
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
         int expNeeded = 0;
         for (int i = currentLevel; i < expectedLevel; i++) {
@@ -37,7 +32,7 @@ public record LightCone(
         return expNeeded;
     }
 
-    public double getBaseStatAtLevel(BaseStatCategory stat, int ascension, int level) {
+    public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
         LightConeStats lc = stats.get(ascension);
         return switch (stat) {
             case HP -> lc.baseHp() + ((level - 1) * lc.hpPerLevel());

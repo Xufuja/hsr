@@ -1,6 +1,7 @@
 package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
+import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
@@ -28,7 +29,7 @@ public class Application {
             int[] level = lc.addLevel(lc.maxAscension(), 70, 350000);
             System.out.println(String.format("Level: %1$s, Exp: %2$s", level[0], level[1]));
             LightConeStats stats = lc.getStatsByAscension(lc.maxAscension());
-            System.out.println(String.format("Max Level %1$s\r\nPlayer or Equilibrium Level Requirement: %2$s\r\nBase HP: %3$s\r\nBase Attack: %4$s\r\nBase Defense: %5$s\r\nCurrent HP: %6$s\r\nCurrent Attack: %7$s\r\nCurrent Defense %8$s", stats.maxLevel(), stats.levelRequirement() != 0 ? stats.levelRequirement() : stats.equilibriumLevelRequirement(), stats.baseHp(), stats.baseAttack(), stats.baseDefense(), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.HP, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.ATTACK, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(LightCone.BaseStatCategory.DEFENSE, lc.maxAscension(), level[0])));
+            System.out.println(String.format("Max Level %1$s\r\nPlayer or Equilibrium Level Requirement: %2$s\r\nBase HP: %3$s\r\nBase Attack: %4$s\r\nBase Defense: %5$s\r\nCurrent HP: %6$s\r\nCurrent Attack: %7$s\r\nCurrent Defense %8$s", stats.maxLevel(), stats.levelRequirement() != 0 ? stats.levelRequirement() : stats.equilibriumLevelRequirement(), stats.baseHp(), stats.baseAttack(), stats.baseDefense(), lc.getBaseStatAtLevel(Enums.BaseStatCategory.HP, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(Enums.BaseStatCategory.ATTACK, lc.maxAscension(), level[0]), lc.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, lc.maxAscension(), level[0])));
             LightConePassive passive = lc.getPassiveBySuperimposition(3);
 
             System.out.println(String.format("Passive Name: %1$s\r\nDescription: %2$s\r\nParameters: %3$s\r\n", passive.name(), lc.getInterpolatedPassive(3), passive.parameters().stream().map(Object::toString).collect(Collectors.joining(", "))));
@@ -60,6 +61,10 @@ public class Application {
         System.out.println(relic.getBaseStatAtRoll(relic.getPossibleSubStats().get(7), 5));
         Avatar avatar = Database.getAvatars().get(1001);
         System.out.println(String.format("Name: %1$s\r\nPath: %2$s\r\nPath Description: %3$s\r\nType: %4$s", avatar.avatarName(), Database.getAvatarPaths().get(avatar.avatarBaseType()).name(), Database.getAvatarPaths().get(avatar.avatarBaseType()).description(), avatar.damageType()));
+
+        int[] up = avatar.addLevel(0, 1, 112509);
+        System.out.println(String.format("Level: %1$s\r\nExp: %2$s", up[0], up[1]));
+        System.out.println(avatar.expRequiredForLevel(1, avatar.getStatsByAscension(0).maxLevel()));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

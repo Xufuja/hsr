@@ -30,6 +30,7 @@ import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarvo.AvatarVOJson;
+import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
 import dev.xfj.jsonschema2pojo.exptype.ExpTypeJson;
 
 import java.io.FileNotFoundException;
@@ -80,6 +81,7 @@ public class AvatarData {
         avatarDemoGuide = Loader.loadJSON(AvatarDemoGuideJson.class);
         avatarDetailTabConfig = Loader.loadJSON(AvatarDetailTabConfigJson.class);
         avatarExpItemConfig = Loader.loadJSON(AvatarExpItemConfigJson.class);
+        avatarExpTypeConfig = Loader.loadNestedJSON(ExpTypeJson.class);
         avatarPlayerIcon = Loader.loadJSON(AvatarPlayerIconJson.class);
         avatarPromotionConfig = Loader.loadNestedJSON(AvatarPromotionConfigJson.class);
         avatarPromotionConfigTrial = Loader.loadNestedJSON(AvatarPromotionConfigTrialJson.class);
@@ -139,13 +141,30 @@ public class AvatarData {
                     rewardsMax,
                     entry.getValue().getSkillList(),
                     entry.getValue().getAvatarBaseType(),
-                    Database.getTranslation(entry.getValue().getAvatarDesc().getHash())
+                    Database.getTranslation(entry.getValue().getAvatarDesc().getHash()),
+                    Database.getAvatarStats().get(entry.getValue().getAvatarID())
             );
 
             avatars.put(entry.getValue().getAvatarID(), avatar);
         }
 
         return avatars;
+    }
+
+    protected static Map<Integer, Map<Integer, Integer>> loadAvatarExp() {
+        Map<Integer, Map<Integer, Integer>> exp = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, ExpTypeJson>> outerEntry : avatarExpTypeConfig.entrySet()) {
+            Map<Integer, Integer> expPerExpType = new HashMap<>();
+
+            for (Map.Entry<String, ExpTypeJson> innerEntry : outerEntry.getValue().entrySet()) {
+                expPerExpType.put(innerEntry.getValue().getLevel(), innerEntry.getValue().getExp());
+            }
+
+            exp.put(Integer.valueOf(outerEntry.getKey()), expPerExpType);
+        }
+
+        return exp;
     }
 
     protected static Map<Integer, Map<Integer, AvatarStats>> loadAvatarStats() {
