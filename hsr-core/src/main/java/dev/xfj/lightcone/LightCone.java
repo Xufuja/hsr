@@ -1,6 +1,7 @@
 package dev.xfj.lightcone;
 
 import dev.xfj.common.Enums;
+import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,11 +26,7 @@ public record LightCone(
         Map<Integer, LightConeStats> stats) {
 
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
-        int expNeeded = 0;
-        for (int i = currentLevel; i < expectedLevel; i++) {
-            expNeeded += Database.getLightConeExp().get(expType).get(i);
-        }
-        return expNeeded;
+        return Utils.expRequiredForLevel(currentLevel, expectedLevel, Database.getLightConeExp(), expType);
     }
 
     public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
@@ -51,68 +48,11 @@ public record LightCone(
 
     public String getInterpolatedPassive(int superimposition) {
         LightConePassive passive = getPassiveBySuperimposition(superimposition);
-        Document document = Jsoup.parse(passive.description());
-        String description = document.select("body").text();
-
-        for (int i = 0; i < passive.parameters().size(); i++) {
-            String toReplace = String.format("#%1$d", i + 1);
-            String replacer = "";
-            int currentIndex = description.indexOf(toReplace);
-
-            if (currentIndex != -1) {
-                boolean found = false;
-                int nextIndex = -1;
-
-                for (int j = currentIndex; !found; j++) {
-                    if (description.charAt(j) == ']') {
-                        found = true;
-                        nextIndex = j;
-                    }
-                }
-
-                toReplace = description.substring(currentIndex, nextIndex + 1);
-                replacer = String.valueOf(passive.parameters().get(i).intValue());
-
-                if (description.charAt(description.indexOf(toReplace) + toReplace.length()) == '%') {
-                    replacer = String.format("%1$.0f", passive.parameters().get(i) * 100);
-                }
-
-                if (description.charAt(currentIndex + 3) == 'f') {
-                    String decimals = "%1$." + String.format("%1$sf", description.charAt(currentIndex + 4));
-                    replacer = String.format(decimals, passive.parameters().get(i) * 100);
-                }
-            }
-
-            description = description.replace(toReplace, replacer);
-        }
-        return description;
+        return Utils.getInterpolatedPassive(passive.description(), passive.parameters());
     }
 
     public int[] addLevel(int ascension, int level, int exp) {
         int maxLevel = stats.get(ascension).maxLevel();
-
-        if (level == maxLevel) {
-            return new int[]{level, 0};
-        }
-
-        int expRemainder = exp - Database.getLightConeExp().get(expType).get(level);
-
-        if (expRemainder < 0) {
-            return new int[]{level, exp};
-        }
-
-        if (expRemainder > 0) {
-            exp = expRemainder;
-        }
-
-        level++;
-
-        if (exp >= Database.getLightConeExp().get(expType).get(level)) {
-            int[] additional = addLevel(ascension, level, exp);
-            level = additional[0];
-            exp = additional[1];
-        }
-
-        return new int[]{level, exp};
+        return Utils.addLevel(maxLevel, level, exp, Database.getLightConeExp(), expType);
     }
 }

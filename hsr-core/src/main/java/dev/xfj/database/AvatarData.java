@@ -30,7 +30,6 @@ import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarvo.AvatarVOJson;
-import dev.xfj.jsonschema2pojo.equipmentexptype.EquipmentExpTypeJson;
 import dev.xfj.jsonschema2pojo.exptype.ExpTypeJson;
 
 import java.io.FileNotFoundException;

@@ -1,6 +1,7 @@
 package dev.xfj.avatar;
 
 import dev.xfj.common.Enums;
+import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 import dev.xfj.item.ItemCount;
 
@@ -25,11 +26,7 @@ public record Avatar(
         Map<Integer, AvatarStats> stats
 ) {
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
-        int expNeeded = 0;
-        for (int i = currentLevel; i < expectedLevel; i++) {
-            expNeeded += Database.getAvatarExp().get(expGroup).get(i);
-        }
-        return expNeeded;
+        return Utils.expRequiredForLevel(currentLevel, expectedLevel, Database.getAvatarExp(), expGroup);
     }
 
     public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
@@ -47,30 +44,6 @@ public record Avatar(
 
     public int[] addLevel(int ascension, int level, int exp) {
         int maxLevel = stats.get(ascension).maxLevel();
-
-        if (level == maxLevel) {
-            return new int[]{level, 0};
-        }
-
-        int expRemainder = exp - Database.getAvatarExp().get(expGroup).get(level);
-
-        if (expRemainder < 0) {
-            return new int[]{level, exp};
-        }
-
-        if (expRemainder > 0) {
-            exp = expRemainder;
-        }
-
-        level++;
-
-        if (exp >= Database.getAvatarExp().get(expGroup).get(level)) {
-            int[] additional = addLevel(ascension, level, exp);
-            level = additional[0];
-            exp = additional[1];
-        }
-
-        return new int[]{level, exp};
+        return Utils.addLevel(maxLevel, level, exp, Database.getAvatarExp(), expGroup);
     }
-
 }
