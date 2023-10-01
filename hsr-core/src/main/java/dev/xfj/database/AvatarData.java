@@ -1,6 +1,7 @@
 package dev.xfj.database;
 
 import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarAbility;
 import dev.xfj.avatar.AvatarPath;
 import dev.xfj.avatar.AvatarStats;
 import dev.xfj.item.ItemCount;
@@ -127,6 +128,12 @@ public class AvatarData {
                 rewardsMax.add(itemReturn);
             }
 
+            Map<Integer, Map<Integer, AvatarAbility>> abilities = new HashMap<>();
+
+            for (Integer ability : entry.getValue().getSkillList()) {
+                abilities.put(ability, Database.getAvatarAbilities().get(ability));
+            }
+
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     Database.getTranslation(entry.getValue().getAvatarName().getHash()),
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
@@ -138,7 +145,7 @@ public class AvatarData {
                     entry.getValue().getRankIDList(),
                     rewards,
                     rewardsMax,
-                    entry.getValue().getSkillList(),
+                    abilities,
                     entry.getValue().getAvatarBaseType(),
                     Database.getTranslation(entry.getValue().getAvatarDesc().getHash()),
                     Database.getAvatarStats().get(entry.getValue().getAvatarID())
@@ -199,6 +206,31 @@ public class AvatarData {
         }
 
         return stats;
+    }
+
+    protected static Map<Integer, Map<Integer, AvatarAbility>> loadAvatarAbilities() {
+        Map<Integer, Map<Integer, AvatarAbility>> abilities = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, AvatarSkillConfigJson>> outerEntry : avatarSkillConfig.entrySet()) {
+            Map<Integer, AvatarAbility> abilityPerLevel = new HashMap<>();
+
+            for (Map.Entry<String, AvatarSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                AvatarSkillConfigJson entry = innerEntry.getValue();
+                AvatarAbility ability = new AvatarAbility(entry.getSkillID(),
+                        Database.getTranslation(entry.getSkillName().getHash()),
+                        Database.getTranslation(entry.getSkillTag().getHash()),
+                        Database.getTranslation(entry.getSkillTypeDesc().getHash()),
+                        entry.getMaxLevel(),
+                        entry.getSkillTriggerKey(),
+                        Database.getTranslation(entry.getSkillDesc().getHash()),
+                        Database.getTranslation(entry.getSimpleSkillDesc().getHash()));
+                abilityPerLevel.put(innerEntry.getValue().getLevel(), ability);
+            }
+
+            abilities.put(Integer.valueOf(outerEntry.getKey()), abilityPerLevel);
+        }
+
+        return abilities;
     }
 
 }

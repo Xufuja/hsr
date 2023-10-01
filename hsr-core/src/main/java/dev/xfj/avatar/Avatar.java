@@ -20,7 +20,7 @@ public record Avatar(
         List<Integer> rankIds,
         List<ItemCount> rewards,
         List<ItemCount> maxRewards,
-        List<Integer> skills,
+        Map<Integer, Map<Integer, AvatarAbility>> skills,
         String avatarBaseType,
         String avatarDescription,
         Map<Integer, AvatarStats> stats

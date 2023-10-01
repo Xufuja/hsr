@@ -2,6 +2,7 @@ package dev.xfj.database;
 
 import dev.xfj.Application;
 import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarAbility;
 import dev.xfj.avatar.AvatarPath;
 import dev.xfj.avatar.AvatarStats;
 import dev.xfj.item.Item;
@@ -22,6 +23,7 @@ public class Database {
     protected static Map<Integer, ItemExp> expItems;
     protected static Map<String, AvatarPath> avatarPaths;
     protected static Map<Integer, Map<Integer, AvatarStats>> avatarStats;
+    protected static Map<Integer, Map<Integer, AvatarAbility>> avatarAbilities;
     protected static Map<Integer, Avatar> avatars;
     protected static Map<Integer, Map<Integer, Integer>> avatarExp;
     protected static Map<Integer, Map<Integer, LightConePassive>> lightConePassives;
@@ -48,6 +50,7 @@ public class Database {
         Database.expItems = ItemData.loadExpItems();
         Database.avatarPaths = AvatarData.loadAvatarPaths();
         Database.avatarStats = AvatarData.loadAvatarStats();
+        Database.avatarAbilities = AvatarData.loadAvatarAbilities();
         Database.avatars = AvatarData.loadAvatars();
         Database.avatarExp = AvatarData.loadAvatarExp();
         Database.lightConePassives = EquipmentData.loadLightConePassives();
@@ -88,6 +91,10 @@ public class Database {
 
     public static Map<Integer, Map<Integer, AvatarStats>> getAvatarStats() {
         return avatarStats;
+    }
+
+    public static Map<Integer, Map<Integer, AvatarAbility>> getAvatarAbilities() {
+        return avatarAbilities;
     }
 
     public static Map<Integer, Avatar> getAvatars() {
