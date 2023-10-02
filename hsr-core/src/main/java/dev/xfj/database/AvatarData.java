@@ -28,6 +28,7 @@ import dev.xfj.jsonschema2pojo.avatarrarity.AvatarRarityJson;
 import dev.xfj.jsonschema2pojo.avatarrelicrecommend.AvatarRelicRecommendJson;
 import dev.xfj.jsonschema2pojo.avatarskillconfig.AvatarSkillConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskillconfig.Param;
+import dev.xfj.jsonschema2pojo.avatarskillconfig.ShowStance;
 import dev.xfj.jsonschema2pojo.avatarskillconfig.SimpleParam;
 import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
@@ -218,8 +219,6 @@ public class AvatarData {
 
             for (Map.Entry<String, AvatarSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
                 AvatarSkillConfigJson entry = innerEntry.getValue();
-                List<Integer> stanceList = new ArrayList<>();
-                entry.getShowStanceList().forEach(s -> stanceList.add(s.getValue()));
 
                 AvatarAbility ability = new AvatarAbility(entry.getSkillID(),
                         Database.getTranslation(entry.getSkillName().getHash()),
@@ -233,7 +232,7 @@ public class AvatarData {
                         (List<Integer>) (List<?>) entry.getRatedRankID(),
                         (List<Integer>) (List<?>) entry.getExtraEffectIDList(),
                         (List<Integer>) (List<?>) entry.getSimpleExtraEffectIDList(),
-                        stanceList,
+                        entry.getShowStanceList().stream().map(ShowStance::getValue).collect(Collectors.toList()),
                         entry.getParamList().stream().map(Param::getValue).collect(Collectors.toList()),
                         entry.getSimpleParamList().stream().map(SimpleParam::getValue).collect(Collectors.toList()),
                         entry.getStanceDamageType(),
