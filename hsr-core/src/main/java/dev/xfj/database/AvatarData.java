@@ -27,6 +27,8 @@ import dev.xfj.jsonschema2pojo.avatarrankconfigtrial.AvatarRankConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarrarity.AvatarRarityJson;
 import dev.xfj.jsonschema2pojo.avatarrelicrecommend.AvatarRelicRecommendJson;
 import dev.xfj.jsonschema2pojo.avatarskillconfig.AvatarSkillConfigJson;
+import dev.xfj.jsonschema2pojo.avatarskillconfig.Param;
+import dev.xfj.jsonschema2pojo.avatarskillconfig.SimpleParam;
 import dev.xfj.jsonschema2pojo.avatarskillconfigtrial.AvatarSkillConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfig.AvatarSkillTreeConfigJson;
 import dev.xfj.jsonschema2pojo.avatarskilltreeconfigtrial.AvatarSkillTreeConfigTrialJson;
@@ -216,6 +218,9 @@ public class AvatarData {
 
             for (Map.Entry<String, AvatarSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
                 AvatarSkillConfigJson entry = innerEntry.getValue();
+                List<Integer> stanceList = new ArrayList<>();
+                entry.getShowStanceList().forEach(s -> stanceList.add(s.getValue()));
+
                 AvatarAbility ability = new AvatarAbility(entry.getSkillID(),
                         Database.getTranslation(entry.getSkillName().getHash()),
                         Database.getTranslation(entry.getSkillTag().getHash()),
@@ -223,7 +228,19 @@ public class AvatarData {
                         entry.getMaxLevel(),
                         entry.getSkillTriggerKey(),
                         Database.getTranslation(entry.getSkillDesc().getHash()),
-                        Database.getTranslation(entry.getSimpleSkillDesc().getHash()));
+                        Database.getTranslation(entry.getSimpleSkillDesc().getHash()),
+                        (List<Integer>) (List<?>) entry.getRatedSkillTreeID(),
+                        (List<Integer>) (List<?>) entry.getRatedRankID(),
+                        (List<Integer>) (List<?>) entry.getExtraEffectIDList(),
+                        (List<Integer>) (List<?>) entry.getSimpleExtraEffectIDList(),
+                        stanceList,
+                        entry.getParamList().stream().map(Param::getValue).collect(Collectors.toList()),
+                        entry.getSimpleParamList().stream().map(SimpleParam::getValue).collect(Collectors.toList()),
+                        entry.getStanceDamageType(),
+                        entry.getAttackType(),
+                        entry.getSkillEffect()
+                );
+
                 abilityPerLevel.put(innerEntry.getValue().getLevel(), ability);
             }
 
