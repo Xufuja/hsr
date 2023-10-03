@@ -1,9 +1,6 @@
 package dev.xfj.database;
 
-import dev.xfj.avatar.Avatar;
-import dev.xfj.avatar.AvatarAbility;
-import dev.xfj.avatar.AvatarPath;
-import dev.xfj.avatar.AvatarStats;
+import dev.xfj.avatar.*;
 import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.avataratlas.AvatarAtlasJson;
 import dev.xfj.jsonschema2pojo.avatarbasetype.AvatarBaseTypeJson;
@@ -209,6 +206,40 @@ public class AvatarData {
         }
 
         return stats;
+    }
+
+    protected static Map<Integer, Map<Integer, AvatarTrace>> loadAvatarTraces() {
+        Map<Integer, Map<Integer, AvatarTrace>> traces = new HashMap<>();
+
+        for (Map.Entry<String, Map<String, AvatarSkillTreeConfigJson>> outerEntry : avatarSkillTreeConfig.entrySet()) {
+            Map<Integer, AvatarTrace> tracesPerLevel = new HashMap<>();
+
+            for (Map.Entry<String, AvatarSkillTreeConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
+                AvatarSkillTreeConfigJson entry = innerEntry.getValue();
+                AvatarTrace avatarStats = new AvatarTrace(entry.getPointID(),
+                        entry.getAvatarID(),
+                        entry.getPointType(),
+                        entry.getAnchor(),
+                        entry.getMaxLevel(),
+                        entry.isDefaultUnlock(),
+                        (List<Integer>) (List<?>) entry.getPrePoint(),
+                        (List<Integer>) (List<?>) entry.getStatusAddList(),
+                        (List<ItemCount>) (List<?>) entry.getMaterialList(),
+                        entry.getLevelUpSkillID(),
+                        Database.getTranslationNoHash(entry.getPointName()),
+                        Database.getTranslationNoHash(entry.getPointDesc()),
+                        Database.getTranslationNoHash(entry.getAbilityName()),
+                        Database.getTranslation(entry.getPointTriggerKey().getHash()),
+                        (List<Double>) (List<?>)entry.getParamList()
+                );
+
+                tracesPerLevel.put(innerEntry.getValue().getLevel(), avatarStats);
+            }
+
+            traces.put(Integer.valueOf(outerEntry.getKey()), tracesPerLevel);
+        }
+
+        return traces;
     }
 
     protected static Map<Integer, Map<Integer, AvatarAbility>> loadAvatarAbilities() {
