@@ -3,6 +3,7 @@ package dev.xfj.avatar;
 import dev.xfj.item.ItemCount;
 
 import java.util.List;
+import java.util.Map;
 
 public record AvatarTrace(
         int traceId,
@@ -12,7 +13,7 @@ public record AvatarTrace(
         int maxLevel,
         boolean defaultUnlock,
         List<Integer> prePoints,
-        List<Integer> statusAddList,
+        List<Map<String, Double>> statusAddList,
         List<ItemCount> materials,
         List<Integer> levelUpSkillIds,
         String traceName,

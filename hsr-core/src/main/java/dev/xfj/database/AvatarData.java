@@ -216,6 +216,47 @@ public class AvatarData {
 
             for (Map.Entry<String, AvatarSkillTreeConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
                 AvatarSkillTreeConfigJson entry = innerEntry.getValue();
+
+                List<Map<String, Double>> statuses = new ArrayList<>();
+                for (Object status : innerEntry.getValue().getStatusAddList()) {
+                    Map<String, Double> map = new HashMap<>();
+                    String key = null;
+                    double value = 0.0;
+
+                    for (Map.Entry<String, Object> prop : ((Map<String, Object>) status).entrySet()) {
+                        if (key == null) {
+                            key = (String) prop.getValue();
+                        } else {
+                            value = ((Map<String, Double>) prop.getValue()).get("Value");
+                        }
+                    }
+
+                    map.put(key, value);
+                    statuses.add(map);
+                }
+
+                List<ItemCount> materials = new ArrayList<>();
+                for (Object material : entry.getMaterialList()) {
+                    int id = 0;
+                    int count = 0;
+
+                    for (Map.Entry<String, Object> prop : ((Map<String, Object>) material).entrySet()) {
+                        if (id == 0) {
+                            id = ((Double)prop.getValue()).intValue();
+                        } else {
+                            count = ((Double)prop.getValue()).intValue();
+                        }
+                    }
+                    materials.add(new ItemCount(id, count));
+                }
+
+                List<Double> parameters = new ArrayList<>();
+                for (Object parameter : entry.getParamList()) {
+                    for (Map.Entry<String, Object> prop : ((Map<String, Object>) parameter).entrySet()) {
+                      parameters.add((Double) prop.getValue());
+                    }
+                }
+
                 AvatarTrace avatarStats = new AvatarTrace(entry.getPointID(),
                         entry.getAvatarID(),
                         entry.getPointType(),
@@ -223,14 +264,14 @@ public class AvatarData {
                         entry.getMaxLevel(),
                         entry.isDefaultUnlock(),
                         (List<Integer>) (List<?>) entry.getPrePoint(),
-                        (List<Integer>) (List<?>) entry.getStatusAddList(),
-                        (List<ItemCount>) (List<?>) entry.getMaterialList(),
+                        statuses,
+                        materials,
                         entry.getLevelUpSkillID(),
                         Database.getTranslationNoHash(entry.getPointName()),
                         Database.getTranslationNoHash(entry.getPointDesc()),
                         Database.getTranslationNoHash(entry.getAbilityName()),
                         Database.getTranslation(entry.getPointTriggerKey().getHash()),
-                        (List<Double>) (List<?>)entry.getParamList()
+                        parameters
                 );
 
                 tracesPerLevel.put(innerEntry.getValue().getLevel(), avatarStats);
