@@ -96,6 +96,10 @@ public class Database {
         return avatarAbilities;
     }
 
+    public static Map<Integer, Map<Integer, AvatarTrace>> getAvatarTraces() {
+        return avatarTraces;
+    }
+
     public static Map<Integer, Avatar> getAvatars() {
         return avatars;
     }

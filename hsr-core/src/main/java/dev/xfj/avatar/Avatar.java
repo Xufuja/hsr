@@ -20,10 +20,11 @@ public record Avatar(
         List<Integer> rankIds,
         List<ItemCount> rewards,
         List<ItemCount> maxRewards,
-        Map<Integer, Map<Integer, AvatarAbility>> skills,
+        Map<Integer, Map<Integer, AvatarAbility>> abilities,
         String avatarBaseType,
         String avatarDescription,
-        Map<Integer, AvatarStats> stats
+        Map<Integer, AvatarStats> stats,
+        Map<Integer, Map<Integer, AvatarTrace>> traces
 ) {
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
         return Utils.expRequiredForLevel(currentLevel, expectedLevel, Database.getAvatarExp(), expGroup);

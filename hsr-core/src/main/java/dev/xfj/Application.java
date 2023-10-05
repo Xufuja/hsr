@@ -1,6 +1,7 @@
 package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarTrace;
 import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
@@ -65,6 +66,12 @@ public class Application {
         int[] up = avatar.addLevel(0, 1, 112509);
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s", up[0], up[1]));
         System.out.println(avatar.expRequiredForLevel(1, avatar.getStatsByAscension(0).maxLevel()));
+
+        for (Map.Entry<Integer, Map<Integer, AvatarTrace>> trace: avatar.traces().entrySet()) {
+            for (Map.Entry<Integer, AvatarTrace> level : trace.getValue().entrySet()) {
+                System.out.println(level.getValue().traceName());
+            }
+        }
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

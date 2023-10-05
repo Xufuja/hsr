@@ -1,5 +1,7 @@
 package dev.xfj.item;
 
+import dev.xfj.database.Database;
+
 public class ItemCount {
     private int itemId;
     private int ItemNumber;
@@ -23,5 +25,9 @@ public class ItemCount {
 
     public void setItemNumber(int itemNumber) {
         ItemNumber = itemNumber;
+    }
+
+    public String getName() {
+        return Database.getNormalItems().get(itemId).getName();
     }
 }

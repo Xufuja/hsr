@@ -134,6 +134,12 @@ public class AvatarData {
                 abilities.put(ability, Database.getAvatarAbilities().get(ability));
             }
 
+            Map<Integer, Map<Integer, AvatarTrace>> traces = Database.getAvatarTraces().entrySet()
+                    .stream()
+                    .filter(trace -> Integer.parseInt(String.valueOf(trace.getKey()).substring(0, 4)) == entry.getValue().getAvatarID())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     Database.getTranslation(entry.getValue().getAvatarName().getHash()),
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
@@ -148,7 +154,8 @@ public class AvatarData {
                     abilities,
                     entry.getValue().getAvatarBaseType(),
                     Database.getTranslation(entry.getValue().getAvatarDesc().getHash()),
-                    Database.getAvatarStats().get(entry.getValue().getAvatarID())
+                    Database.getAvatarStats().get(entry.getValue().getAvatarID()),
+                    traces
             );
 
             avatars.put(entry.getValue().getAvatarID(), avatar);
@@ -242,9 +249,9 @@ public class AvatarData {
 
                     for (Map.Entry<String, Object> prop : ((Map<String, Object>) material).entrySet()) {
                         if (id == 0) {
-                            id = ((Double)prop.getValue()).intValue();
+                            id = ((Double) prop.getValue()).intValue();
                         } else {
-                            count = ((Double)prop.getValue()).intValue();
+                            count = ((Double) prop.getValue()).intValue();
                         }
                     }
                     materials.add(new ItemCount(id, count));
@@ -253,7 +260,7 @@ public class AvatarData {
                 List<Double> parameters = new ArrayList<>();
                 for (Object parameter : entry.getParamList()) {
                     for (Map.Entry<String, Object> prop : ((Map<String, Object>) parameter).entrySet()) {
-                      parameters.add((Double) prop.getValue());
+                        parameters.add((Double) prop.getValue());
                     }
                 }
 
