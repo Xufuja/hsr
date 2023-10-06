@@ -20,6 +20,7 @@ import dev.xfj.jsonschema2pojo.avatarpromotionconfigtrial.AvatarPromotionConfigT
 import dev.xfj.jsonschema2pojo.avatarpromotionreward.AvatarPromotionRewardJson;
 import dev.xfj.jsonschema2pojo.avatarpropertyconfig.AvatarPropertyConfigJson;
 import dev.xfj.jsonschema2pojo.avatarrankconfig.AvatarRankConfigJson;
+import dev.xfj.jsonschema2pojo.avatarrankconfig.UnlockCost;
 import dev.xfj.jsonschema2pojo.avatarrankconfigtrial.AvatarRankConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarrarity.AvatarRarityJson;
 import dev.xfj.jsonschema2pojo.avatarrelicrecommend.AvatarRelicRecommendJson;
@@ -139,6 +140,11 @@ public class AvatarData {
                     .filter(trace -> Integer.parseInt(String.valueOf(trace.getKey()).substring(0, 4)) == entry.getValue().getAvatarID())
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+            Map<Integer, AvatarEidolon> eidolons = new HashMap<>();
+            for (Integer eidolon : entry.getValue().getRankIDList()) {
+                AvatarEidolon current = Database.avatarEidolons.get(eidolon);
+                eidolons.put(current.eidolon(), current);
+            }
 
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     Database.getTranslation(entry.getValue().getAvatarName().getHash()),
@@ -148,7 +154,7 @@ public class AvatarData {
                     entry.getValue().getExpGroup(),
                     entry.getValue().getMaxPromotion(),
                     entry.getValue().getMaxRank(),
-                    entry.getValue().getRankIDList(),
+                    eidolons,
                     rewards,
                     rewardsMax,
                     abilities,
@@ -327,5 +333,21 @@ public class AvatarData {
 
         return abilities;
     }
+    protected static Map<Integer, AvatarEidolon> loadAvatarEidolons() {
+        Map<Integer, AvatarEidolon> paths = new HashMap<>();
 
+        for (Map.Entry<String, AvatarRankConfigJson> entry : avatarRankConfig.entrySet()) {
+
+            AvatarEidolon avatarEidolon = new AvatarEidolon(entry.getValue().getRankID(),
+                    entry.getValue().getRank(),
+                    Database.getTranslationNoHash(entry.getValue().getName()),
+                    Database.getTranslationNoHash(entry.getValue().getDesc()),
+                    entry.getValue().getUnlockCost().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()),
+                    entry.getValue().getParam().stream().map(dev.xfj.jsonschema2pojo.avatarrankconfig.Param::getValue).collect(Collectors.toList())
+
+            );
+            paths.put(entry.getValue().getRankID(), avatarEidolon);
+        }
+        return paths;
+    }
 }

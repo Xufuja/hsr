@@ -17,7 +17,7 @@ public record Avatar(
         int expGroup,
         int maxAscension,
         int maxEidolon,
-        List<Integer> rankIds,
+        Map<Integer, AvatarEidolon> eidolons,
         List<ItemCount> rewards,
         List<ItemCount> maxRewards,
         Map<Integer, Map<Integer, AvatarAbility>> abilities,

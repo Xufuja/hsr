@@ -425,3 +425,75 @@ After the change:
   }
 }
 ```
+
+### Character Eidolons
+
+Eidolon parameters always get interpreted as `Integer` while they need to be `Double`.
+
+To fix this:
+
+1. Open `StarRailData\ExcelOutput\AvatarRankConfig.json`
+2. Go to the first `Param` array you see
+3. Add a `.0` to any value without a decimal
+
+For example, the first entry is as follows:
+
+```json
+{
+  "100101": {
+    "RankID": 100101,
+    "Rank": 1,
+    "Trigger": {
+      "Hash": 2089636447
+    },
+    "Name": "AvatarRankName_100101",
+    "Desc": "AvatarRankDesc_100101",
+    "IconPath": "SpriteOutput/SkillIcons/1001/SkillIcon_1001_Rank1.png",
+    "SkillAddLevelList": {},
+    "RankAbility": [],
+    "UnlockCost": [
+      {
+        "ItemID": 11001,
+        "ItemNum": 1
+      }
+    ],
+    "Param": [
+      {
+        "Value": 6
+      }
+    ]
+  }
+}
+```
+
+Change the `6` -> `6.0`:
+
+```json
+{
+  "100101": {
+    "RankID": 100101,
+    "Rank": 1,
+    "Trigger": {
+      "Hash": 2089636447
+    },
+    "Name": "AvatarRankName_100101",
+    "Desc": "AvatarRankDesc_100101",
+    "IconPath": "SpriteOutput/SkillIcons/1001/SkillIcon_1001_Rank1.png",
+    "SkillAddLevelList": {},
+    "RankAbility": [],
+    "UnlockCost": [
+      {
+        "ItemID": 11001,
+        "ItemNum": 1
+      }
+    ],
+    "Param": [
+      {
+        "Value": 6.0
+      }
+    ]
+  }
+}
+```
+
+If you now run the generator, it will be treated as a `Double`.
