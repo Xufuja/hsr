@@ -9,6 +9,7 @@ public record AvatarEidolon(
         int eidolon,
         String name,
         String description,
+        List<String> eidolonAbility,
         List<ItemCount> unlockCost,
         List<Double> parameters
 ) {

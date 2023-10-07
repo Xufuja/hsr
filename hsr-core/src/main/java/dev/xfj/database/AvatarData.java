@@ -337,11 +337,11 @@ public class AvatarData {
         Map<Integer, AvatarEidolon> paths = new HashMap<>();
 
         for (Map.Entry<String, AvatarRankConfigJson> entry : avatarRankConfig.entrySet()) {
-
             AvatarEidolon avatarEidolon = new AvatarEidolon(entry.getValue().getRankID(),
                     entry.getValue().getRank(),
                     Database.getTranslationNoHash(entry.getValue().getName()),
                     Database.getTranslationNoHash(entry.getValue().getDesc()),
+                    entry.getValue().getRankAbility().stream().map(ability -> (String) ability).collect(Collectors.toList()),
                     entry.getValue().getUnlockCost().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()),
                     entry.getValue().getParam().stream().map(dev.xfj.jsonschema2pojo.avatarrankconfig.Param::getValue).collect(Collectors.toList())
 
