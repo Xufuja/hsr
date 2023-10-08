@@ -2,8 +2,6 @@ package dev.xfj.relic;
 
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,9 +102,9 @@ public record Relic(
         };
     }
 
-    public String getInterpolatedPassive(int pieceCount) {
+    public String getInterpolatedDescription(int pieceCount) {
         RelicSetEffect effect = getSetEffect(pieceCount);
-        return Utils.getInterpolatedPassive(effect.setDescription(), effect.abilityParameters());
+        return Utils.getInterpolatedString(effect.setDescription(), effect.abilityParameters());
     }
 
     public int[] addLevel(int level, int exp) {

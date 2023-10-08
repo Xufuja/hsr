@@ -42,7 +42,14 @@ public record Avatar(
     public AvatarStats getStatsByAscension(int ascension) {
         return stats.get(ascension);
     }
+    public AvatarEidolon getEidolonByLevel(int eidolonLevel){
+        return eidolons.get(eidolonLevel);
+    }
 
+    public String getInterpolatedDescription(int eidolonLevel) {
+        AvatarEidolon eidolon = getEidolonByLevel(eidolonLevel);
+        return Utils.getInterpolatedString(eidolon.description(), eidolon.parameters());
+    }
     public int[] addLevel(int ascension, int level, int exp) {
         int maxLevel = stats.get(ascension).maxLevel();
         return Utils.addLevel(maxLevel, level, exp, Database.getAvatarExp(), expGroup);

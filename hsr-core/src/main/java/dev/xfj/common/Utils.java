@@ -1,6 +1,5 @@
 package dev.xfj.common;
 
-import dev.xfj.database.Database;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -43,7 +42,7 @@ public class Utils {
         return new int[]{level, exp};
     }
 
-    public static String getInterpolatedPassive(String text, List<Double> parameters) {
+    public static String getInterpolatedString(String text, List<Double> parameters) {
         Document document = Jsoup.parse(text);
         String description = document.select("body").text();
 

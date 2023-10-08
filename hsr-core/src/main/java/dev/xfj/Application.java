@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Application {
     public Application(String languageCode) throws FileNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
@@ -46,7 +47,7 @@ public class Application {
             RelicSet set = entry.getValue().setData();
             System.out.println(String.format("\t\tSet ID: %1$s\r\n\t\tSet Name: %2$s", set.setId(), set.setName()));
             for (Map.Entry<Integer, RelicSetEffect> effect : set.setEffects().entrySet()) {
-                System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), relic.getInterpolatedPassive(effect.getKey())));
+                System.out.println(String.format("\t\tBonus: %1$s piece\r\n\t\tEffect Description: %2$s", effect.getKey(), relic.getInterpolatedDescription(effect.getKey())));
             }
         }
         Relic relic = Database.getRelics().get(61143);
@@ -72,6 +73,8 @@ public class Application {
                 System.out.println(level.getValue().traceName());
             }
         }
+        IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedDescription).forEach(System.out::println);
+
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

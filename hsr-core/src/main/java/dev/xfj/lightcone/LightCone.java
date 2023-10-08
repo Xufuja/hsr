@@ -3,8 +3,6 @@ package dev.xfj.lightcone;
 import dev.xfj.common.Enums;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.Map;
 
@@ -48,7 +46,7 @@ public record LightCone(
 
     public String getInterpolatedPassive(int superimposition) {
         LightConePassive passive = getPassiveBySuperimposition(superimposition);
-        return Utils.getInterpolatedPassive(passive.description(), passive.parameters());
+        return Utils.getInterpolatedString(passive.description(), passive.parameters());
     }
 
     public int[] addLevel(int ascension, int level, int exp) {
