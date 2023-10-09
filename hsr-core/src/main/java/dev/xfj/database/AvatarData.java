@@ -276,7 +276,7 @@ public class AvatarData {
                         entry.getAnchor(),
                         entry.getMaxLevel(),
                         entry.isDefaultUnlock(),
-                        (List<Integer>) (List<?>) entry.getPrePoint(),
+                        entry.getPrePoint().stream().map(object -> ((Double) object).intValue()).collect(Collectors.toList()),
                         statuses,
                         materials,
                         entry.getLevelUpSkillID(),
@@ -286,6 +286,10 @@ public class AvatarData {
                         Database.getTranslation(entry.getPointTriggerKey().getHash()),
                         parameters
                 );
+
+                if (avatarStats.traceName() == null) {
+                    continue;
+                }
 
                 tracesPerLevel.put(innerEntry.getValue().getLevel(), avatarStats);
             }
@@ -333,6 +337,7 @@ public class AvatarData {
 
         return abilities;
     }
+
     protected static Map<Integer, AvatarEidolon> loadAvatarEidolons() {
         Map<Integer, AvatarEidolon> paths = new HashMap<>();
 

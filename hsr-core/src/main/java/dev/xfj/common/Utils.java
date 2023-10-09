@@ -43,6 +43,9 @@ public class Utils {
     }
 
     public static String getInterpolatedString(String text, List<Double> parameters) {
+        if (text == null) {
+            return null;
+        }
         Document document = Jsoup.parse(text);
         String description = document.select("body").text();
 

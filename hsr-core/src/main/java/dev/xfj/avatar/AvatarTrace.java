@@ -12,7 +12,7 @@ public record AvatarTrace(
         String anchor,
         int maxLevel,
         boolean defaultUnlock,
-        List<Integer> prePoints,
+        List<Integer> prerequisites,
         List<Map<String, Double>> statusAddList,
         List<ItemCount> materials,
         List<Integer> levelUpSkillIds,

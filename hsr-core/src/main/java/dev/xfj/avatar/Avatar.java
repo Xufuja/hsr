@@ -46,9 +46,12 @@ public record Avatar(
         return eidolons.get(eidolonLevel);
     }
 
-    public String getInterpolatedDescription(int eidolonLevel) {
+    public String getInterpolatedEidolonDescription(int eidolonLevel) {
         AvatarEidolon eidolon = getEidolonByLevel(eidolonLevel);
         return Utils.getInterpolatedString(eidolon.description(), eidolon.parameters());
+    }
+    public String getInterpolatedTraceDescription(AvatarTrace trace) {
+        return Utils.getInterpolatedString(trace.traceDescription(), trace.parameters());
     }
     public int[] addLevel(int ascension, int level, int exp) {
         int maxLevel = stats.get(ascension).maxLevel();

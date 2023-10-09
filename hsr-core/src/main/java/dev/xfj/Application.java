@@ -13,6 +13,7 @@ import dev.xfj.relic.RelicSetEffect;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -68,12 +69,15 @@ public class Application {
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s", up[0], up[1]));
         System.out.println(avatar.expRequiredForLevel(1, avatar.getStatsByAscension(0).maxLevel()));
 
-        for (Map.Entry<Integer, Map<Integer, AvatarTrace>> trace: avatar.traces().entrySet()) {
+        for (Map.Entry<Integer, Map<Integer, AvatarTrace>> trace : avatar.traces().entrySet()) {
             for (Map.Entry<Integer, AvatarTrace> level : trace.getValue().entrySet()) {
-                System.out.println(level.getValue().traceName());
+                StringBuilder adds = new StringBuilder();
+                level.getValue().statusAddList().forEach(additions -> additions.forEach((key, value) -> adds.append(key).append(" ").append(value).append("\r\n")));
+
+                System.out.println(String.format("Name: %1$s\r\n\t\tID: %2$s\r\n\t\tType: %3$s\r\n\t\tAnchor: %4$s\r\n\t\tRequirements: %5$s\r\n\t\tBonus: %6$s", level.getValue().traceName(), level.getValue().traceId(), level.getValue().pointType(), level.getValue().anchor(), level.getValue().prerequisites().toString(), level.getValue().pointType() == 1 ? adds : avatar.getInterpolatedTraceDescription(level.getValue())));
             }
         }
-        IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedDescription).forEach(System.out::println);
+        IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedEidolonDescription).forEach(System.out::println);
 
     }
 
