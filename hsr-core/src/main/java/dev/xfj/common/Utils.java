@@ -27,11 +27,13 @@ public class Utils {
             return new int[]{level, exp};
         }
 
-        if (expRemainder > 0) {
-            exp = expRemainder;
-        }
-
         level++;
+
+        if (level != maxLevel) {
+            exp = expRemainder;
+        } else {
+            exp = 0;
+        }
 
         if (exp >= expMap.get(type).get(level)) {
             int[] additional = addLevel(maxLevel, level, exp, expMap, type);

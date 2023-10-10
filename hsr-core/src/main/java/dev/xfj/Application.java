@@ -7,6 +7,7 @@ import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
+import dev.xfj.player.Player;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
@@ -78,6 +79,41 @@ public class Application {
             }
         }
         IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedEidolonDescription).forEach(System.out::println);
+        Player player = new Player(1001);
+        System.out.println(player.playerData);
+        System.out.println(player.playerData.getAvatar().expGroup());
+        System.out.println(player.playerData.getAvatar().expRequiredForLevel(1, 20));
+
+        if (player.playerData.levelUp(112509)) {
+            System.out.println("Leveled up!");
+        }
+        System.out.println(player.playerData);
+        if (player.playerData.levelUp(2)) {
+            System.out.println("Leveled up!");
+        }
+        System.out.println(player.playerData);
+
+        if (player.playerData.levelUp(1)) {
+            System.out.println("Leveled up!");
+        } else {
+            System.out.println("Max level!");
+        }
+
+        player.playerData.ascend();
+
+        System.out.println(player.playerData.getAvatar().expRequiredForLevel(20, 30));
+
+        if (player.playerData.levelUp(177910)) {
+            System.out.println("Leveled up!");
+        }
+
+        System.out.println(player.playerData);
+
+        if (player.playerData.levelUp(1)) {
+            System.out.println("Leveled up!");
+        } else {
+            System.out.println("Max level!");
+        }
 
     }
 
