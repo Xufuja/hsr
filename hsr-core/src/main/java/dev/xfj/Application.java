@@ -79,7 +79,7 @@ public class Application {
             }
         }
         IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedEidolonDescription).forEach(System.out::println);
-        Player player = new Player(1001);
+        Player player = new Player(1001, 21002);
         System.out.println(player.playerData);
         System.out.println(player.playerData.getAvatar().expGroup());
         System.out.println(player.playerData.getAvatar().expRequiredForLevel(1, 20));
@@ -114,6 +114,9 @@ public class Application {
         } else {
             System.out.println("Max level!");
         }
+
+        System.out.println(player.lightConeData.getLightCone().name());
+        System.out.println(player.lightConeData);
 
     }
 

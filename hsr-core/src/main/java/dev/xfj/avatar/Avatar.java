@@ -31,11 +31,11 @@ public record Avatar(
     }
 
     public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
-        AvatarStats lc = stats.get(ascension);
+        AvatarStats avatarStats = stats.get(ascension);
         return switch (stat) {
-            case HP -> lc.baseHp() + ((level - 1) * lc.hpPerLevel());
-            case ATTACK -> lc.baseAttack() + ((level - 1) * lc.attackPerLevel());
-            case DEFENSE -> lc.baseDefense() + ((level - 1) * lc.defensePerLevel());
+            case HP -> avatarStats.baseHp() + ((level - 1) * avatarStats.hpPerLevel());
+            case ATTACK -> avatarStats.baseAttack() + ((level - 1) * avatarStats.attackPerLevel());
+            case DEFENSE -> avatarStats.baseDefense() + ((level - 1) * avatarStats.defensePerLevel());
         };
     }
 

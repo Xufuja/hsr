@@ -1,6 +1,7 @@
 package dev.xfj.player;
 
 import dev.xfj.avatar.Avatar;
+import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 
 public class PlayerData {
@@ -53,6 +54,18 @@ public class PlayerData {
         }
 
         return true;
+    }
+
+    public double getMaxHP() {
+        return avatar.getBaseStatAtLevel(Enums.BaseStatCategory.HP, currentAscension, currentLevel);
+    }
+
+    public double getMaxAttack() {
+        return avatar.getBaseStatAtLevel(Enums.BaseStatCategory.ATTACK, currentAscension, currentLevel);
+    }
+
+    public double getMaxDefense() {
+        return avatar.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, currentAscension, currentLevel);
     }
 
     @Override
