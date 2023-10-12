@@ -1,5 +1,6 @@
 package dev.xfj.player;
 
+import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 
@@ -53,6 +54,18 @@ public class LightConeData {
         }
 
         return true;
+    }
+
+    public double getMaxHP() {
+        return lightCone.getBaseStatAtLevel(Enums.BaseStatCategory.HP, currentAscension, currentLevel);
+    }
+
+    public double getMaxAttack() {
+        return lightCone.getBaseStatAtLevel(Enums.BaseStatCategory.ATTACK, currentAscension, currentLevel);
+    }
+
+    public double getMaxDefense() {
+        return lightCone.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, currentAscension, currentLevel);
     }
 
     @Override
