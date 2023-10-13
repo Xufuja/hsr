@@ -1,5 +1,6 @@
 package dev.xfj.avatar;
 
+import dev.xfj.common.Stats;
 import dev.xfj.item.ItemCount;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public record AvatarStats(
         double critRate,
         double critDamage,
         int taunt
-) {
+) implements Stats {
+    @Override
+    public int getMaxLevel() {
+        return maxLevel;
+    }
 }

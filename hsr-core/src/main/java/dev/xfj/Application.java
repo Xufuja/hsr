@@ -117,7 +117,12 @@ public class Application {
 
         System.out.println(player.lightConeData.getLightCone().name());
         System.out.println(player.lightConeData);
-
+        player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
+        player.lightConeData.ascend();
+        player.lightConeData.unlockSuperimpose();
+        System.out.println(player.lightConeData);
+        player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
+        System.out.println(player.lightConeData);
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

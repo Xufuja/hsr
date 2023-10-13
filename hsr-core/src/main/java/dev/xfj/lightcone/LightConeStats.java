@@ -1,5 +1,6 @@
 package dev.xfj.lightcone;
 
+import dev.xfj.common.Stats;
 import dev.xfj.item.ItemCount;
 
 import java.util.List;
@@ -16,6 +17,10 @@ public record LightConeStats(
         double baseAttack,
         double attackPerLevel,
         double baseDefense,
-        double defensePerLevel) {
+        double defensePerLevel) implements Stats {
+    @Override
+    public int getMaxLevel() {
+        return maxLevel;
+    }
 }
 

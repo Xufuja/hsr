@@ -1,6 +1,7 @@
 package dev.xfj.lightcone;
 
 import dev.xfj.common.Enums;
+import dev.xfj.common.Levelable;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 
@@ -21,12 +22,15 @@ public record LightCone(
         int coinCost,
         boolean defaultUnlock,
         Map<Integer, LightConePassive> passives,
-        Map<Integer, LightConeStats> stats) {
+        Map<Integer, LightConeStats> stats)
+        implements Levelable {
 
+    @Override
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
         return Utils.expRequiredForLevel(currentLevel, expectedLevel, Database.getLightConeExp(), expType);
     }
 
+    @Override
     public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
         LightConeStats lc = stats.get(ascension);
         return switch (stat) {
@@ -36,6 +40,23 @@ public record LightCone(
         };
     }
 
+    @Override
+    public int[] addLevel(int ascension, int level, int exp) {
+        int maxLevel = stats.get(ascension).maxLevel();
+        return Utils.addLevel(maxLevel, level, exp, Database.getLightConeExp(), expType);
+    }
+
+    @Override
+    public int getMaxAscension() {
+        return maxAscension;
+    }
+
+    @Override
+    public int getMaxDupe() {
+        return maxSuperimpose;
+    }
+
+    @Override
     public LightConeStats getStatsByAscension(int ascension) {
         return stats.get(ascension);
     }
@@ -47,10 +68,5 @@ public record LightCone(
     public String getInterpolatedPassive(int superimposition) {
         LightConePassive passive = getPassiveBySuperimposition(superimposition);
         return Utils.getInterpolatedString(passive.description(), passive.parameters());
-    }
-
-    public int[] addLevel(int ascension, int level, int exp) {
-        int maxLevel = stats.get(ascension).maxLevel();
-        return Utils.addLevel(maxLevel, level, exp, Database.getLightConeExp(), expType);
     }
 }
