@@ -5,10 +5,12 @@ import dev.xfj.lightcone.LightCone;
 
 public class LightConeData extends Data {
     private final LightCone lightCone;
+    private boolean locked;
 
     public LightConeData(int lightConeId) {
         super();
         this.lightCone = Database.getLightCones().get(lightConeId);
+        this.locked = false;
     }
 
     public boolean ascend() {
@@ -37,6 +39,14 @@ public class LightConeData extends Data {
 
     public LightCone getLightCone() {
         return lightCone;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override

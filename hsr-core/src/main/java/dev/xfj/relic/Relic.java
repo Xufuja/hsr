@@ -1,5 +1,8 @@
 package dev.xfj.relic;
 
+import dev.xfj.common.Enums;
+import dev.xfj.common.Levelable;
+import dev.xfj.common.Stats;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 
@@ -24,7 +27,7 @@ public record Relic(
         RelicSet setData,
         Map<Integer, RelicMainStats> mainStats,
         Map<Integer, RelicSubStats> subStats
-) {
+) implements Levelable {
 
     public RelicSetEffect getSetEffect(int pieceCount) {
         return switch (pieceCount) {
@@ -107,7 +110,28 @@ public record Relic(
         return Utils.getInterpolatedString(effect.setDescription(), effect.abilityParameters());
     }
 
-    public int[] addLevel(int level, int exp) {
+    @Override
+    public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
+        return 0;
+    }
+
+    @Override
+    public int[] addLevel(int ascension, int level, int exp) {
         return Utils.addLevel(maxLevel, level, exp, Database.getRelicExp(), expType);
+    }
+
+    @Override
+    public int getMaxAscension() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxDupe() {
+        return 0;
+    }
+
+    @Override
+    public Stats getStatsByAscension(int ascension) {
+        return null;
     }
 }
