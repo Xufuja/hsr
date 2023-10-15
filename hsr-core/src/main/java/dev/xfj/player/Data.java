@@ -2,6 +2,7 @@ package dev.xfj.player;
 
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
+import dev.xfj.common.Upgradable;
 
 public abstract class Data {
     private int currentLevel;
@@ -18,12 +19,12 @@ public abstract class Data {
         this.currentDupe = 0;
     }
 
-    public boolean ascend(Levelable levelable) {
+    public boolean ascend(Upgradable upgradable) {
         if (!isMaxLevel) {
             return false;
         }
 
-        if (currentAscension < levelable.getMaxAscension()) {
+        if (currentAscension < upgradable.getMaxAscension()) {
             currentAscension++;
         }
 
@@ -31,8 +32,8 @@ public abstract class Data {
         return true;
     }
 
-    public void unlockDupe(Levelable levelable) {
-        if (currentDupe < levelable.getMaxDupe()) {
+    public void unlockDupe(Upgradable upgradable) {
+        if (currentDupe < upgradable.getMaxDupe()) {
             currentDupe++;
         }
     }
@@ -46,23 +47,23 @@ public abstract class Data {
         currentLevel = data[0];
         currentExp = data[1];
 
-        if (currentLevel == levelable.getStatsByAscension(currentAscension).getMaxLevel()) {
+        if (currentLevel == levelable.getMaxLevel(currentAscension)) {
             isMaxLevel = true;
         }
 
         return true;
     }
 
-    public double getMaxHP(Levelable levelable) {
-        return levelable.getBaseStatAtLevel(Enums.BaseStatCategory.HP, currentAscension, currentLevel);
+    public double getMaxHP(Upgradable upgradable) {
+        return upgradable.getBaseStatAtLevel(Enums.BaseStatCategory.HP, currentAscension, currentLevel);
     }
 
-    public double getMaxAttack(Levelable levelable) {
-        return levelable.getBaseStatAtLevel(Enums.BaseStatCategory.ATTACK, currentAscension, currentLevel);
+    public double getMaxAttack(Upgradable upgradable) {
+        return upgradable.getBaseStatAtLevel(Enums.BaseStatCategory.ATTACK, currentAscension, currentLevel);
     }
 
-    public double getMaxDefense(Levelable levelable) {
-        return levelable.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, currentAscension, currentLevel);
+    public double getMaxDefense(Upgradable upgradable) {
+        return upgradable.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, currentAscension, currentLevel);
     }
 
     @Override

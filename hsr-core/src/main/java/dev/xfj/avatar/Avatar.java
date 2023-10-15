@@ -2,6 +2,7 @@ package dev.xfj.avatar;
 
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
+import dev.xfj.common.Upgradable;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 import dev.xfj.item.ItemCount;
@@ -26,7 +27,7 @@ public record Avatar(
         String avatarDescription,
         Map<Integer, AvatarStats> stats,
         Map<Integer, Map<Integer, AvatarTrace>> traces
-) implements Levelable {
+) implements Levelable, Upgradable {
 
     @Override
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
@@ -62,6 +63,11 @@ public record Avatar(
     @Override
     public AvatarStats getStatsByAscension(int ascension) {
         return stats.get(ascension);
+    }
+
+    @Override
+    public int getMaxLevel(int ascension) {
+        return getStatsByAscension(ascension).getMaxLevel();
     }
 
     public AvatarEidolon getEidolonByLevel(int eidolonLevel) {

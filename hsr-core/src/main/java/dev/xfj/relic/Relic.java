@@ -110,10 +110,6 @@ public record Relic(
         return Utils.getInterpolatedString(effect.setDescription(), effect.abilityParameters());
     }
 
-    @Override
-    public double getBaseStatAtLevel(Enums.BaseStatCategory stat, int ascension, int level) {
-        return 0;
-    }
 
     @Override
     public int[] addLevel(int ascension, int level, int exp) {
@@ -121,17 +117,7 @@ public record Relic(
     }
 
     @Override
-    public int getMaxAscension() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxDupe() {
-        return 0;
-    }
-
-    @Override
-    public Stats getStatsByAscension(int ascension) {
-        return null;
+    public int getMaxLevel(int ascension) {
+        return maxLevel;
     }
 }

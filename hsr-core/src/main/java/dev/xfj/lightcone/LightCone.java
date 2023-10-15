@@ -2,6 +2,7 @@ package dev.xfj.lightcone;
 
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
+import dev.xfj.common.Upgradable;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 
@@ -23,7 +24,7 @@ public record LightCone(
         boolean defaultUnlock,
         Map<Integer, LightConePassive> passives,
         Map<Integer, LightConeStats> stats)
-        implements Levelable {
+        implements Levelable, Upgradable {
 
     @Override
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
@@ -59,6 +60,11 @@ public record LightCone(
     @Override
     public LightConeStats getStatsByAscension(int ascension) {
         return stats.get(ascension);
+    }
+
+    @Override
+    public int getMaxLevel(int ascension) {
+        return getStatsByAscension(ascension).getMaxLevel();
     }
 
     public LightConePassive getPassiveBySuperimposition(int superimposition) {

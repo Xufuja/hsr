@@ -53,7 +53,7 @@ public class Application {
             }
         }
         Relic relic = Database.getRelics().get(61143);
-        int[] rLev = relic.addLevel(1, 75440);
+        int[] rLev = relic.addLevel(-1, 1, 75440);
         System.out.println(String.format("Level: %1$s\r\nExp: %2$s\r\nMain: %3$s\r\nSub:%4$s", rLev[0], rLev[1], relic.mainAffixGroup(), relic.subAffixGroup()));
         System.out.println(relic.expRequiredForLevel(1, relic.maxLevel()));
         System.out.println(relic.type());
