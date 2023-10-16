@@ -18,4 +18,13 @@ public class RelicPiece extends Data {
     public Relic getRelic() {
         return relic;
     }
+
+    @Override
+    public String toString() {
+        return "RelicPiece{" +
+                "currentLevel=" + getCurrentLevel() +
+                ", isMaxLevel=" + isMaxLevel() +
+                ", currentExp=" + getCurrentExp() +
+                '}';
+    }
 }

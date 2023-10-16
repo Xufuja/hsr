@@ -8,6 +8,7 @@ import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
 import dev.xfj.player.Player;
+import dev.xfj.player.RelicPiece;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
@@ -123,6 +124,19 @@ public class Application {
         System.out.println(player.lightConeData);
         player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
         System.out.println(player.lightConeData);
+
+        player.relicData.setHead(new RelicPiece(61021));
+        player.relicData.setHand(new RelicPiece(61022));
+        player.relicData.setBody(new RelicPiece(61023));
+        player.relicData.setFeet(new RelicPiece(61024));
+        player.relicData.setPlanarSphere(new RelicPiece(63015));
+        player.relicData.setLinkRope(new RelicPiece(63016));
+
+        System.out.println(player.relicData);
+
+        player.relicData.getBody().levelUp(player.relicData.getBody().getRelic().expRequiredForLevel(1, player.relicData.getBody().getRelic().maxLevel()));
+
+        System.out.println(player.relicData);
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

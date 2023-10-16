@@ -1,8 +1,6 @@
 package dev.xfj.relic;
 
-import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
-import dev.xfj.common.Stats;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
 
@@ -37,6 +35,7 @@ public record Relic(
         };
     }
 
+    @Override
     public int expRequiredForLevel(int currentLevel, int expectedLevel) {
         return Utils.expRequiredForLevel(currentLevel, expectedLevel, Database.getRelicExp(), expType);
     }

@@ -13,7 +13,7 @@ public class RelicData {
     }
 
     public void setHead(RelicPiece head) {
-        if (head.getRelic().type().equals("HEAD")) {
+        if (head.getRelic().type().equals("Head")) {
             this.head = head;
         }
     }
@@ -23,7 +23,7 @@ public class RelicData {
     }
 
     public void setHand(RelicPiece hand) {
-        if (head.getRelic().type().equals("HAND")) {
+        if (hand.getRelic().type().equals("Hands")) {
             this.hand = hand;
         }
     }
@@ -33,7 +33,7 @@ public class RelicData {
     }
 
     public void setBody(RelicPiece body) {
-        if (head.getRelic().type().equals("BODY")) {
+        if (body.getRelic().type().equals("Body")) {
             this.body = body;
         }
     }
@@ -43,7 +43,7 @@ public class RelicData {
     }
 
     public void setFeet(RelicPiece feet) {
-        if (head.getRelic().type().equals("FEET")) {
+        if (feet.getRelic().type().equals("Feet")) {
             this.feet = feet;
         }
     }
@@ -53,7 +53,7 @@ public class RelicData {
     }
 
     public void setPlanarSphere(RelicPiece planarSphere) {
-        if (head.getRelic().type().equals("NECK")) {
+        if (planarSphere.getRelic().type().equals("Planar Sphere")) {
             this.planarSphere = planarSphere;
         }
     }
@@ -63,8 +63,20 @@ public class RelicData {
     }
 
     public void setLinkRope(RelicPiece linkRope) {
-        if (head.getRelic().type().equals("NECK")) {
+        if (linkRope.getRelic().type().equals("Link Rope")) {
             this.linkRope = linkRope;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "RelicData{" +
+                "head=" + head +
+                ", hand=" + hand +
+                ", body=" + body +
+                ", feet=" + feet +
+                ", planarSphere=" + planarSphere +
+                ", linkRope=" + linkRope +
+                '}';
     }
 }

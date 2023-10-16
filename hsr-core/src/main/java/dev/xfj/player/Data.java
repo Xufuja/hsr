@@ -66,16 +66,6 @@ public abstract class Data {
         return upgradable.getBaseStatAtLevel(Enums.BaseStatCategory.DEFENSE, currentAscension, currentLevel);
     }
 
-    @Override
-    public String toString() {
-        return "Data{" +
-                "currentLevel=" + currentLevel +
-                ", isMaxLevel=" + isMaxLevel +
-                ", currentExp=" + currentExp +
-                ", currentAscension=" + currentAscension +
-                ", currentDupe=" + currentDupe +
-                '}';
-    }
 
     public int getCurrentLevel() {
         return currentLevel;
