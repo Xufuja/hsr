@@ -12,6 +12,7 @@ import dev.xfj.player.RelicPiece;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
+import dev.xfj.system.RelicGen;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
@@ -61,7 +62,7 @@ public class Application {
         relic.getPossibleMainStats().forEach(System.out::println);
         System.out.println(relic.getBaseMainStatAtLevel(relic.getPossibleMainStats().get(0), relic.maxLevel()));
         relic.getPossibleSubStats().forEach(System.out::println);
-        System.out.println("High Roll: " + relic.rollSubStat(relic.getPossibleSubStats().get(7), "HIGH"));
+        System.out.println("High Roll: " + relic.rollSubStat(relic.getPossibleSubStats().get(7), 2));
         relic.getPossibleSubStats().forEach(s -> System.out.println(String.format("Stat: %1$S\r\n\t\tMax Value: %2$s", s, relic.getBaseStatAtRoll(s, relic.maxLevel() / 3))));
         System.out.println(relic.getBaseStatAtRoll(relic.getPossibleSubStats().get(7), 5));
         Avatar avatar = Database.getAvatars().get(1001);
@@ -132,11 +133,19 @@ public class Application {
         player.relicData.setPlanarSphere(new RelicPiece(63015));
         player.relicData.setLinkRope(new RelicPiece(63016));
 
-        System.out.println(player.relicData);
+        //System.out.println(player.relicData);
 
         player.relicData.getBody().levelUp(player.relicData.getBody().getRelic().expRequiredForLevel(1, player.relicData.getBody().getRelic().maxLevel()));
 
-        System.out.println(player.relicData);
+        //System.out.println(player.relicData);
+
+        RelicGen relicGen = new RelicGen();
+        relicGen.getRelicsBySet("Musketeer of Wild Wheat");
+        RelicPiece piece = relicGen.createRelic(61024);
+        System.out.println(piece);
+        piece.levelUp(80000);
+        System.out.println(piece);
+
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"

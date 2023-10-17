@@ -87,19 +87,19 @@ public record Relic(
         if (roll > maxLevel() / 3) {
             throw new RuntimeException("Maximum amount of rolls: " + maxLevel() / 3);
         }
-        double result = rollSubStat(subStat, "HIGH");
+        double result = rollSubStat(subStat, 2);
         for (int i = 0; i < roll; i++) {
-            result += rollSubStat(subStat, "HIGH");
+            result += rollSubStat(subStat, 2);
         }
         return result;
     }
 
-    public double rollSubStat(String subStat, String step) {
+    public double rollSubStat(String subStat, int step) {
         RelicSubStats relic = subStats.get(getAffixIdBySubStat(subStat));
         return switch (step) {
-            case "LOW" -> relic.baseValue();
-            case "MED" -> relic.baseValue() + relic.valuePerStep();
-            case "HIGH" -> relic.baseValue() + (relic.valuePerStep() * 2);
+            case 0 -> relic.baseValue();
+            case 1 -> relic.baseValue() + relic.valuePerStep();
+            case 2 -> relic.baseValue() + (relic.valuePerStep() * 2);
             default -> throw new RuntimeException("Invalid roll!");
         };
     }
