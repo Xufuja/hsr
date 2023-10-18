@@ -3,10 +3,7 @@ package dev.xfj.player;
 import dev.xfj.database.Database;
 import dev.xfj.relic.Relic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RelicPiece extends Data {
     private final Relic relic;
@@ -20,7 +17,38 @@ public class RelicPiece extends Data {
     }
 
     public boolean levelUp(int exp) {
-        return super.levelUp(relic, exp);
+        int startingLevel = super.getCurrentLevel();
+        
+        if (super.levelUp(relic, exp)) {
+            for (int i = startingLevel; i < super.getCurrentLevel() + 1; i++) {
+                if (i == 3 || i == 6 || i == 9 || i == 12 || i == 15) {
+                    if (subStats.keySet().size() < 4) {
+                        List<String> possible = getRelic().getPossibleSubStats();
+                        Object[] used = subStats.keySet().toArray();
+
+                        for (Object stat : used) {
+                            possible.remove((String) stat);
+                        }
+
+                        String selected = possible.get(new Random().nextInt(possible.size()));
+                        List<Double> list = new ArrayList<>();
+                        list.add(doRoll(selected));
+                        subStats.put(selected, list);
+                    } else {
+                        Object[] possible = subStats.keySet().toArray();
+                        String selected = (String) possible[(new Random().nextInt(possible.length))];
+                        subStats.get(selected).add(doRoll(selected));
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public double doRoll(String selected) {
+        int rollLevel = new Random().nextInt(1, getRelic().subStats().get(getRelic().getAffixIdBySubStat(selected)).stepNumber() + 1);
+        return getRelic().rollSubStat(selected, rollLevel);
     }
 
     public Relic getRelic() {

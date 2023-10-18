@@ -31,8 +31,9 @@ public class RelicGen {
 
         for (int i = 0; i < subStatCount; i++) {
             String selected = possible.get(new Random().nextInt(possible.size()));
-            int rollLevel = new Random().nextInt(1, relicPiece.getRelic().subStats().get(relicPiece.getRelic().getAffixIdBySubStat(selected)).stepNumber() + 1);
-            subStats.put(selected, List.of(relicPiece.getRelic().rollSubStat(selected, rollLevel)));
+            List<Double> list = new ArrayList<>();
+            list.add(relicPiece.doRoll(selected));
+            subStats.put(selected, list);
             possible.remove(selected);
         }
 

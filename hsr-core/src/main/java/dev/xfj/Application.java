@@ -126,16 +126,16 @@ public class Application {
         player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
         System.out.println(player.lightConeData);
 
-        player.relicData.setHead(new RelicPiece(61021));
-        player.relicData.setHand(new RelicPiece(61022));
-        player.relicData.setBody(new RelicPiece(61023));
-        player.relicData.setFeet(new RelicPiece(61024));
-        player.relicData.setPlanarSphere(new RelicPiece(63015));
-        player.relicData.setLinkRope(new RelicPiece(63016));
+        //player.relicData.setHead(new RelicPiece(61021));
+        //player.relicData.setHand(new RelicPiece(61022));
+        //player.relicData.setBody(new RelicPiece(61023));
+        //player.relicData.setFeet(new RelicPiece(61024));
+        //player.relicData.setPlanarSphere(new RelicPiece(63015));
+        //player.relicData.setLinkRope(new RelicPiece(63016));
 
         //System.out.println(player.relicData);
 
-        player.relicData.getBody().levelUp(player.relicData.getBody().getRelic().expRequiredForLevel(1, player.relicData.getBody().getRelic().maxLevel()));
+        //player.relicData.getBody().levelUp(player.relicData.getBody().getRelic().expRequiredForLevel(1, player.relicData.getBody().getRelic().maxLevel()));
 
         //System.out.println(player.relicData);
 
