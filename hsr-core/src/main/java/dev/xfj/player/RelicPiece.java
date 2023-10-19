@@ -4,6 +4,9 @@ import dev.xfj.database.Database;
 import dev.xfj.relic.Relic;
 
 import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class RelicPiece extends Data {
     private final Relic relic;
@@ -18,22 +21,17 @@ public class RelicPiece extends Data {
 
     public boolean levelUp(int exp) {
         int startingLevel = super.getCurrentLevel();
-        
+
         if (super.levelUp(relic, exp)) {
-            for (int i = startingLevel; i < super.getCurrentLevel() + 1; i++) {
+            for (int i = startingLevel; i <= super.getCurrentLevel(); i++) {
                 if (i == 3 || i == 6 || i == 9 || i == 12 || i == 15) {
                     if (subStats.keySet().size() < 4) {
                         List<String> possible = getRelic().getPossibleSubStats();
-                        Object[] used = subStats.keySet().toArray();
 
-                        for (Object stat : used) {
-                            possible.remove((String) stat);
-                        }
+                        possible.removeAll(subStats.keySet());
 
                         String selected = possible.get(new Random().nextInt(possible.size()));
-                        List<Double> list = new ArrayList<>();
-                        list.add(doRoll(selected));
-                        subStats.put(selected, list);
+                        subStats.put(selected, Stream.of(doRoll(selected)).collect(toCollection(ArrayList::new)));
                     } else {
                         Object[] possible = subStats.keySet().toArray();
                         String selected = (String) possible[(new Random().nextInt(possible.length))];

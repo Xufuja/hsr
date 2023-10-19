@@ -5,6 +5,9 @@ import dev.xfj.player.RelicPiece;
 import dev.xfj.relic.Relic;
 
 import java.util.*;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class RelicGen {
     public List<Relic> getRelicsBySet(String set) {
@@ -31,9 +34,8 @@ public class RelicGen {
 
         for (int i = 0; i < subStatCount; i++) {
             String selected = possible.get(new Random().nextInt(possible.size()));
-            List<Double> list = new ArrayList<>();
-            list.add(relicPiece.doRoll(selected));
-            subStats.put(selected, list);
+
+            subStats.put(selected, Stream.of(relicPiece.doRoll(selected)).collect(toCollection(ArrayList::new)));
             possible.remove(selected);
         }
 
