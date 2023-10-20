@@ -10,7 +10,20 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toCollection;
 
 public class RelicGen {
-    public List<Relic> getRelicsBySet(String set) {
+    public static List<String> getRelicSets() {
+        List<String> relics = new ArrayList<>();
+
+        for (Map.Entry<Integer, Relic> relic : Database.getRelics().entrySet()) {
+            String setName = relic.getValue().setData().setName();
+            if (!relics.contains(setName)) {
+                relics.add(setName);
+            }
+        }
+
+        return relics;
+    }
+
+    public static List<Relic> getRelicsBySet(String set) {
         List<Relic> relics = new ArrayList<>();
 
         for (Map.Entry<Integer, Relic> relic : Database.getRelics().entrySet()) {
@@ -22,22 +35,27 @@ public class RelicGen {
         return relics;
     }
 
-    public RelicPiece createRelicFromSet(String set) {
+    public static RelicPiece createRelicFromSet(String set) {
         List<Relic> relics = getRelicsBySet(set);
         return createRelicFromList(relics);
     }
 
-    public RelicPiece createRelicFromSetWithType(String set, String type) {
+    public static RelicPiece createRelicFromSetWithType(String set, String type) {
         List<Relic> relics = getRelicsBySet(set).stream().filter(relic -> relic.type().equals(type)).toList();
         return createRelicFromList(relics);
     }
 
-    public RelicPiece createRelicFromList(List<Relic> relics) {
+    public static RelicPiece createRelicFromSetWithRarity(String set, String rarity) {
+        List<Relic> relics = getRelicsBySet(set).stream().filter(relic -> relic.rarity().equals(rarity)).toList();
+        return createRelicFromList(relics);
+    }
+
+    private static RelicPiece createRelicFromList(List<Relic> relics) {
         int selected = relics.get(new Random().nextInt(relics.size())).relicId();
         return createRelic(selected);
     }
 
-    public RelicPiece createRelic(int relicId) {
+    private static RelicPiece createRelic(int relicId) {
         RelicPiece relicPiece = new RelicPiece(relicId);
         relicPiece.setMainStat(relicPiece.getRelic().getPossibleMainStats().get(new Random().nextInt(relicPiece.getRelic().getPossibleMainStats().size())));
 

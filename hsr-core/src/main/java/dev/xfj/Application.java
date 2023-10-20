@@ -139,12 +139,15 @@ public class Application {
 
         //System.out.println(player.relicData);
 
-        RelicGen relicGen = new RelicGen();
-        relicGen.getRelicsBySet("Musketeer of Wild Wheat");
-        RelicPiece piece = relicGen.createRelic(61024);
+        RelicGen.getRelicsBySet("Musketeer of Wild Wheat");
+        RelicPiece piece = RelicGen.createRelicFromSetWithType("Musketeer of Wild Wheat", "Head");
         System.out.println(piece);
         piece.levelUp(80000);
         System.out.println(piece);
+
+        RelicGen.getRelicSets().stream().forEach(System.out::println);
+
+        System.out.println(RelicGen.createRelicFromSet("Space Sealing Station"));
 
     }
 

@@ -92,7 +92,8 @@ public class RelicPiece extends Data {
     @Override
     public String toString() {
         return "RelicPiece{" +
-                "currentLevel=" + getCurrentLevel() +
+                "name=" + getRelic().name() +
+                ", currentLevel=" + getCurrentLevel() +
                 ", isMaxLevel=" + isMaxLevel() +
                 ", currentExp=" + getCurrentExp() +
                 ", mainStat='" + mainStat + "': " + (!mainStat.contains("Delta") ? String.format("%.2f", getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel()) * 100) : getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel())) +
