@@ -22,6 +22,21 @@ public class RelicGen {
         return relics;
     }
 
+    public RelicPiece createRelicFromSet(String set) {
+        List<Relic> relics = getRelicsBySet(set);
+        return createRelicFromList(relics);
+    }
+
+    public RelicPiece createRelicFromSetWithType(String set, String type) {
+        List<Relic> relics = getRelicsBySet(set).stream().filter(relic -> relic.type().equals(type)).toList();
+        return createRelicFromList(relics);
+    }
+
+    public RelicPiece createRelicFromList(List<Relic> relics) {
+        int selected = relics.get(new Random().nextInt(relics.size())).relicId();
+        return createRelic(selected);
+    }
+
     public RelicPiece createRelic(int relicId) {
         RelicPiece relicPiece = new RelicPiece(relicId);
         relicPiece.setMainStat(relicPiece.getRelic().getPossibleMainStats().get(new Random().nextInt(relicPiece.getRelic().getPossibleMainStats().size())));
