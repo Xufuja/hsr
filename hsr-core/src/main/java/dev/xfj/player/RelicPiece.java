@@ -73,9 +73,9 @@ public class RelicPiece extends Data {
         List<String> result = new ArrayList<>();
         for (Map.Entry<String, List<Double>> entry : subStats.entrySet()) {
             if (!entry.getKey().contains("Delta")) {
-                result.add(String.format("%1$s: %2$s", entry.getKey(), convertToPercentage(entry.getValue())));
+                result.add(String.format("%1$s: %2$s", Database.getAvatarStatTypes().get(entry.getKey()).description(), convertToPercentage(entry.getValue())));
             } else {
-                result.add(String.format("%1$s: %2$s", entry.getKey(), sumUp(entry.getValue())));
+                result.add(String.format("%1$s: %2$s", Database.getAvatarStatTypes().get(entry.getKey()).description(), sumUp(entry.getValue())));
             }
         }
         return String.join(", ", result);
@@ -96,7 +96,7 @@ public class RelicPiece extends Data {
                 ", currentLevel=" + getCurrentLevel() +
                 ", isMaxLevel=" + isMaxLevel() +
                 ", currentExp=" + getCurrentExp() +
-                ", mainStat='" + mainStat + "': " + (!mainStat.contains("Delta") ? String.format("%.2f", getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel()) * 100) : getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel())) +
+                ", mainStat='" + Database.getAvatarStatTypes().get(mainStat).description() + "': " + (!mainStat.contains("Delta") ? String.format("%.2f", getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel()) * 100) : getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel())) +
                 ", subStats=" + subStatsToString() +
                 '}';
     }

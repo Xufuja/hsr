@@ -20,7 +20,6 @@ import dev.xfj.jsonschema2pojo.avatarpromotionconfigtrial.AvatarPromotionConfigT
 import dev.xfj.jsonschema2pojo.avatarpromotionreward.AvatarPromotionRewardJson;
 import dev.xfj.jsonschema2pojo.avatarpropertyconfig.AvatarPropertyConfigJson;
 import dev.xfj.jsonschema2pojo.avatarrankconfig.AvatarRankConfigJson;
-import dev.xfj.jsonschema2pojo.avatarrankconfig.UnlockCost;
 import dev.xfj.jsonschema2pojo.avatarrankconfigtrial.AvatarRankConfigTrialJson;
 import dev.xfj.jsonschema2pojo.avatarrarity.AvatarRarityJson;
 import dev.xfj.jsonschema2pojo.avatarrelicrecommend.AvatarRelicRecommendJson;
@@ -110,6 +109,22 @@ public class AvatarData {
             paths.put(entry.getValue().getId(), avatarPath);
         }
         return paths;
+    }
+
+    protected static Map<String, AvatarStatType> loadAvatarStatTypes() {
+        Map<String, AvatarStatType> types = new HashMap<>();
+
+        for (Map.Entry<String, AvatarPropertyConfigJson> entry : avatarPropertyConfig.entrySet()) {
+            AvatarStatType avatarStatType = new AvatarStatType(entry.getValue().getPropertyType(),
+                    Database.getTranslation(entry.getValue().getPropertyName().getHash()),
+                    Database.getTranslation(entry.getValue().getPropertyNameSkillTree().getHash()),
+                    Database.getTranslation(entry.getValue().getPropertyNameRelic().getHash()),
+                    Database.getTranslation(entry.getValue().getPropertyNameFilter().getHash())
+            );
+            types.put(entry.getValue().getPropertyType(), avatarStatType);
+        }
+
+        return types;
     }
 
     protected static Map<Integer, Avatar> loadAvatars() {

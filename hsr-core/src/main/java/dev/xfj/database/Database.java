@@ -23,6 +23,7 @@ public class Database {
     protected static Map<Integer, Map<Integer, AvatarAbility>> avatarAbilities;
     protected static Map<Integer, Map<Integer, AvatarTrace>> avatarTraces;
     protected static Map<Integer, AvatarEidolon> avatarEidolons;
+    protected static Map<String, AvatarStatType> avatarStatTypes;
     protected static Map<Integer, Avatar> avatars;
     protected static Map<Integer, Map<Integer, Integer>> avatarExp;
     protected static Map<Integer, Map<Integer, LightConePassive>> lightConePassives;
@@ -52,6 +53,7 @@ public class Database {
         Database.avatarAbilities = AvatarData.loadAvatarAbilities();
         Database.avatarTraces = AvatarData.loadAvatarTraces();
         Database.avatarEidolons = AvatarData.loadAvatarEidolons();
+        Database.avatarStatTypes = AvatarData.loadAvatarStatTypes();
         Database.avatars = AvatarData.loadAvatars();
         Database.avatarExp = AvatarData.loadAvatarExp();
         Database.lightConePassives = EquipmentData.loadLightConePassives();
@@ -104,6 +106,10 @@ public class Database {
 
     public static Map<Integer, AvatarEidolon> getAvatarEidolons() {
         return avatarEidolons;
+    }
+
+    public static Map<String, AvatarStatType> getAvatarStatTypes() {
+        return avatarStatTypes;
     }
 
     public static Map<Integer, Avatar> getAvatars() {
