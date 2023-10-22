@@ -1,12 +1,12 @@
-package dev.xfj.player;
+package dev.xfj.character;
 
 import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 
-public class PlayerData extends Data {
+public class CharacterData extends Data {
     private final Avatar avatar;
 
-    public PlayerData(int avatarId) {
+    public CharacterData(int avatarId) {
         super();
         this.avatar = Database.getAvatars().get(avatarId);
     }

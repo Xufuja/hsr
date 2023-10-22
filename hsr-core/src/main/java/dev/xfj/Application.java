@@ -7,8 +7,8 @@ import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
-import dev.xfj.player.Player;
-import dev.xfj.player.RelicPiece;
+import dev.xfj.character.Character;
+import dev.xfj.character.RelicPiece;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
@@ -16,7 +16,6 @@ import dev.xfj.system.RelicGen;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -81,50 +80,50 @@ public class Application {
             }
         }
         IntStream.rangeClosed(1, avatar.maxEidolon()).mapToObj(avatar::getInterpolatedEidolonDescription).forEach(System.out::println);
-        Player player = new Player(1001, 21002);
-        System.out.println(player.playerData);
-        System.out.println(player.playerData.getAvatar().expGroup());
-        System.out.println(player.playerData.getAvatar().expRequiredForLevel(1, 20));
+        Character character = new Character(1001, 21002);
+        System.out.println(character.characterData);
+        System.out.println(character.characterData.getAvatar().expGroup());
+        System.out.println(character.characterData.getAvatar().expRequiredForLevel(1, 20));
 
-        if (player.playerData.levelUp(112509)) {
+        if (character.characterData.levelUp(112509)) {
             System.out.println("Leveled up!");
         }
-        System.out.println(player.playerData);
-        if (player.playerData.levelUp(2)) {
+        System.out.println(character.characterData);
+        if (character.characterData.levelUp(2)) {
             System.out.println("Leveled up!");
         }
-        System.out.println(player.playerData);
+        System.out.println(character.characterData);
 
-        if (player.playerData.levelUp(1)) {
-            System.out.println("Leveled up!");
-        } else {
-            System.out.println("Max level!");
-        }
-
-        player.playerData.ascend();
-
-        System.out.println(player.playerData.getAvatar().expRequiredForLevel(20, 30));
-
-        if (player.playerData.levelUp(177910)) {
-            System.out.println("Leveled up!");
-        }
-
-        System.out.println(player.playerData);
-
-        if (player.playerData.levelUp(1)) {
+        if (character.characterData.levelUp(1)) {
             System.out.println("Leveled up!");
         } else {
             System.out.println("Max level!");
         }
 
-        System.out.println(player.lightConeData.getLightCone().name());
-        System.out.println(player.lightConeData);
-        player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
-        player.lightConeData.ascend();
-        player.lightConeData.unlockSuperimpose();
-        System.out.println(player.lightConeData);
-        player.lightConeData.levelUp(player.lightConeData.getLightCone().expRequiredForLevel(1, player.lightConeData.getLightCone().getStatsByAscension(player.lightConeData.getCurrentAscension()).getMaxLevel()));
-        System.out.println(player.lightConeData);
+        character.characterData.ascend();
+
+        System.out.println(character.characterData.getAvatar().expRequiredForLevel(20, 30));
+
+        if (character.characterData.levelUp(177910)) {
+            System.out.println("Leveled up!");
+        }
+
+        System.out.println(character.characterData);
+
+        if (character.characterData.levelUp(1)) {
+            System.out.println("Leveled up!");
+        } else {
+            System.out.println("Max level!");
+        }
+
+        System.out.println(character.lightConeData.getLightCone().name());
+        System.out.println(character.lightConeData);
+        character.lightConeData.levelUp(character.lightConeData.getLightCone().expRequiredForLevel(1, character.lightConeData.getLightCone().getStatsByAscension(character.lightConeData.getCurrentAscension()).getMaxLevel()));
+        character.lightConeData.ascend();
+        character.lightConeData.unlockSuperimpose();
+        System.out.println(character.lightConeData);
+        character.lightConeData.levelUp(character.lightConeData.getLightCone().expRequiredForLevel(1, character.lightConeData.getLightCone().getStatsByAscension(character.lightConeData.getCurrentAscension()).getMaxLevel()));
+        System.out.println(character.lightConeData);
 
         //player.relicData.setHead(new RelicPiece(61021));
         //player.relicData.setHand(new RelicPiece(61022));

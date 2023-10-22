@@ -1,4 +1,4 @@
-package dev.xfj.player;
+package dev.xfj.character;
 
 public class RelicData {
     private RelicPiece head;

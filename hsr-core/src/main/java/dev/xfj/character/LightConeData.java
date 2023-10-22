@@ -1,4 +1,4 @@
-package dev.xfj.player;
+package dev.xfj.character;
 
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;

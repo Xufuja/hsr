@@ -1,4 +1,4 @@
-package dev.xfj.player;
+package dev.xfj.character;
 
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;

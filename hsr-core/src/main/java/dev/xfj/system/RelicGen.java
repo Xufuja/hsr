@@ -1,7 +1,7 @@
 package dev.xfj.system;
 
 import dev.xfj.database.Database;
-import dev.xfj.player.RelicPiece;
+import dev.xfj.character.RelicPiece;
 import dev.xfj.relic.Relic;
 
 import java.util.*;
