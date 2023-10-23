@@ -1,5 +1,7 @@
 package dev.xfj.character;
 
+import java.util.Optional;
+
 public class RelicData {
     private RelicPiece head;
     private RelicPiece hand;
@@ -8,62 +10,64 @@ public class RelicData {
     private RelicPiece planarSphere;
     private RelicPiece linkRope;
 
-    public RelicPiece getHead() {
-        return head;
+    public enum PieceType {
+        HEAD("Head"),
+        HAND("Hands"),
+        BODY("Body"),
+        FEET("Feet"),
+        PLANAR_SPHERE("Planar Sphere"),
+        LINK_ROPE("Link Rope");
+
+        public final String type;
+
+        PieceType(String type){
+            this.type = type;
+        }
+    }
+
+    public Optional<RelicPiece> getPiece(PieceType type) {
+        return switch (type) {
+            case HEAD -> Optional.ofNullable(head);
+            case HAND -> Optional.ofNullable(hand);
+            case BODY -> Optional.ofNullable(body);
+            case FEET -> Optional.ofNullable(feet);
+            case PLANAR_SPHERE -> Optional.ofNullable(planarSphere);
+            case LINK_ROPE -> Optional.ofNullable(linkRope);
+        };
     }
 
     public void setHead(RelicPiece head) {
-        if (head.getRelic().type().equals("Head")) {
+        if (head.getRelic().type().equals(PieceType.HEAD.type)) {
             this.head = head;
         }
     }
 
-    public RelicPiece getHand() {
-        return hand;
-    }
-
     public void setHand(RelicPiece hand) {
-        if (hand.getRelic().type().equals("Hands")) {
+        if (hand.getRelic().type().equals(PieceType.HAND.type)) {
             this.hand = hand;
         }
     }
 
-    public RelicPiece getBody() {
-        return body;
-    }
-
     public void setBody(RelicPiece body) {
-        if (body.getRelic().type().equals("Body")) {
+        if (body.getRelic().type().equals(PieceType.BODY.type)) {
             this.body = body;
         }
     }
 
-    public RelicPiece getFeet() {
-        return feet;
-    }
-
     public void setFeet(RelicPiece feet) {
-        if (feet.getRelic().type().equals("Feet")) {
+        if (feet.getRelic().type().equals(PieceType.FEET.type)) {
             this.feet = feet;
         }
     }
 
-    public RelicPiece getPlanarSphere() {
-        return planarSphere;
-    }
-
     public void setPlanarSphere(RelicPiece planarSphere) {
-        if (planarSphere.getRelic().type().equals("Planar Sphere")) {
+        if (planarSphere.getRelic().type().equals(PieceType.PLANAR_SPHERE.type)) {
             this.planarSphere = planarSphere;
         }
     }
 
-    public RelicPiece getLinkRope() {
-        return linkRope;
-    }
-
     public void setLinkRope(RelicPiece linkRope) {
-        if (linkRope.getRelic().type().equals("Link Rope")) {
+        if (linkRope.getRelic().type().equals(PieceType.LINK_ROPE.type)) {
             this.linkRope = linkRope;
         }
     }

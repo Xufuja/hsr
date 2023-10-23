@@ -2,6 +2,7 @@ package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
 import dev.xfj.avatar.AvatarTrace;
+import dev.xfj.character.RelicData;
 import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
@@ -148,6 +149,11 @@ public class Application {
 
         System.out.println(RelicGen.createRelicFromSet("Space Sealing Station"));
 
+        character.relicData.getPiece(RelicData.PieceType.HEAD).ifPresentOrElse(System.out::println, () -> System.out.println("No Relic!"));
+
+        character.relicData.setHead(piece);
+
+        character.relicData.getPiece(RelicData.PieceType.HEAD).ifPresentOrElse(System.out::println, () -> System.out.println("No Relic!"));
     }
 
     //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"
