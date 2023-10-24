@@ -12,11 +12,13 @@ public class RelicPiece extends Data {
     private final Relic relic;
     private String mainStat;
     private Map<String, List<Double>> subStats;
+    private boolean locked;
 
     public RelicPiece(int relicId) {
         super();
         this.relic = Database.getRelics().get(relicId);
-        subStats = new HashMap<>();
+        this.subStats = new HashMap<>();
+        this.locked = false;
     }
 
     public boolean levelUp(int exp) {
@@ -87,6 +89,14 @@ public class RelicPiece extends Data {
 
     private int sumUp(List<Double> stats) {
         return ((Double) stats.stream().mapToDouble(Double::doubleValue).sum()).intValue();
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override
