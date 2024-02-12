@@ -12,6 +12,8 @@
     <modules>
         <module>hsr-generator</module>
         <module>hsr-core</module>
+        <module>hsr-app</module>
     </modules>
+
 
 </project>
