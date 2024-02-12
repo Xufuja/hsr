@@ -16,12 +16,16 @@ import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
 import dev.xfj.system.RelicGen;
 import imgui.ImGui;
+import imgui.flag.ImGuiInputTextFlags;
+import imgui.type.ImString;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class AppLayer implements Layer {
+    private static ImString hashBuffer = new ImString("", 512);
+    private static ImString lastHash = new ImString("");
 
     @Override
     public void onAttach() {
@@ -172,12 +176,16 @@ public class AppLayer implements Layer {
 
     @Override
     public void onUIRender() {
-        ImGui.begin("Hello");
-        ImGui.button("Button");
-        ImGui.end();
-        ;
+        ImGui.begin("Stable Hash");
+        ImGui.inputText("##Hash", hashBuffer, ImGuiInputTextFlags.None);
 
-        ImGui.showDemoWindow();
+        if (ImGui.button("Button")) {
+            lastHash = new ImString(String.valueOf(getStableHash(hashBuffer.get())));
+        }
+
+        ImGui.inputText("##Result", lastHash, ImGuiInputTextFlags.ReadOnly);
+
+        ImGui.end();
     }
 
     @Override
