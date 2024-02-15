@@ -20,6 +20,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTabBarFlags;
 import imgui.type.ImString;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,6 +28,7 @@ import java.util.stream.IntStream;
 public class AppLayer implements Layer {
     private static ImString hashBuffer = new ImString("", 512);
     private static ImString lastHash = new ImString("");
+    private int frameItemIndex = 0;
 
     @Override
     public void onAttach() {
@@ -52,6 +54,36 @@ public class AppLayer implements Layer {
     @Override
     public void onUIRender() {
         if (ImGui.beginTabBar("##TabBar", ImGuiTabBarFlags.None)) {
+            if (ImGui.beginTabItem("Relics")) {
+                if (ImGui.beginListBox("##Relics")) {
+                    Map<Integer, Integer> indexToId = new HashMap<>();
+                    int i = 0;
+                    
+                    for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
+                        indexToId.put(i, entry.getKey());
+                        i++;
+                    }
+
+                    for (int n = 0; n < indexToId.size(); n++) {
+                        boolean isSelected = (frameItemIndex == n);
+                        String name = Database.getRelics().get(indexToId.get(n)).name();
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            frameItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+
+
+
+                    ImGui.endListBox();
+                }
+                ImGui.endTabItem();
+            }
+
             if (ImGui.beginTabItem("Hash")) {
                 ImGui.inputText("##Hash", hashBuffer, ImGuiInputTextFlags.None);
 
