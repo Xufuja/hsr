@@ -55,15 +55,15 @@ public class AppLayer implements Layer {
     public void onUIRender() {
         if (ImGui.beginTabBar("##TabBar", ImGuiTabBarFlags.None)) {
             if (ImGui.beginTabItem("Relics")) {
-                if (ImGui.beginListBox("##Relics")) {
-                    Map<Integer, Integer> indexToId = new HashMap<>();
-                    int i = 0;
-                    
-                    for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
-                        indexToId.put(i, entry.getKey());
-                        i++;
-                    }
+                Map<Integer, Integer> indexToId = new HashMap<>();
+                int i = 0;
 
+                for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
+                    indexToId.put(i, entry.getKey());
+                    i++;
+                }
+
+                if (ImGui.beginListBox("##Relics")) {
                     for (int n = 0; n < indexToId.size(); n++) {
                         boolean isSelected = (frameItemIndex == n);
                         String name = Database.getRelics().get(indexToId.get(n)).name();
@@ -76,11 +76,16 @@ public class AppLayer implements Layer {
                             }
                         }
                     }
-
-
-
                     ImGui.endListBox();
                 }
+
+                Relic relic = Database.getRelics().get(indexToId.get(frameItemIndex));
+                RelicSet relicSet = relic.setData();
+
+                ImString buffer = new ImString(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s\r\n\t\tMax Level: %4$s\r\nSet ID: %5$s\r\n\t\tSet Name: %6$s", relic.relicId(), relic.name(), relic.type(), relic.maxLevel(), relicSet.setId(), relicSet.setName()));
+
+                ImGui.inputTextMultiline("##RelicDetails", buffer);
+
                 ImGui.endTabItem();
             }
 
