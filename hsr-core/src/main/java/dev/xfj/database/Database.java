@@ -128,6 +128,10 @@ public class Database {
         return lightConeExp;
     }
 
+    public static Map<Integer, RelicSet> getRelicSets() {
+        return relicSets;
+    }
+
     public static Map<Integer, Relic> getRelics() {
         return relics;
     }

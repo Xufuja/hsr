@@ -20,7 +20,9 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTabBarFlags;
 import imgui.type.ImString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -29,6 +31,7 @@ public class AppLayer implements Layer {
     private static ImString hashBuffer = new ImString("", 512);
     private static ImString lastHash = new ImString("");
     private int frameItemIndex = 0;
+    private int subFrameItemIndex = 0;
 
     @Override
     public void onAttach() {
@@ -58,15 +61,15 @@ public class AppLayer implements Layer {
                 Map<Integer, Integer> indexToId = new HashMap<>();
                 int i = 0;
 
-                for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
+                for (Map.Entry<Integer, RelicSet> entry : Database.getRelicSets().entrySet()) {
                     indexToId.put(i, entry.getKey());
                     i++;
                 }
 
-                if (ImGui.beginListBox("##Relics")) {
+                if (ImGui.beginListBox("##RelicSets")) {
                     for (int n = 0; n < indexToId.size(); n++) {
                         boolean isSelected = (frameItemIndex == n);
-                        String name = Database.getRelics().get(indexToId.get(n)).name();
+                        String name = Database.getRelicSets().get(indexToId.get(n)).setName();
 
                         if (ImGui.selectable(name, isSelected)) {
                             frameItemIndex = n;
@@ -79,12 +82,37 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
-                Relic relic = Database.getRelics().get(indexToId.get(frameItemIndex));
-                RelicSet relicSet = relic.setData();
+                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(frameItemIndex));
 
-                ImString buffer = new ImString(String.format("Relic ID: %1$s\r\n\t\tRelic Name: %2$s\r\n\t\tRelic Type: %3$s\r\n\t\tMax Level: %4$s\r\nSet ID: %5$s\r\n\t\tSet Name: %6$s", relic.relicId(), relic.name(), relic.type(), relic.maxLevel(), relicSet.setId(), relicSet.setName()));
+                List<Relic> relicsBySet = new ArrayList<>();
 
-                ImGui.inputTextMultiline("##RelicDetails", buffer);
+                for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
+                   if (entry.getValue().setData().equals(relicSet)) {
+                      relicsBySet.add(entry.getValue());
+                   }
+                }
+
+                ImGui.separator();
+
+                if (ImGui.beginListBox("##Relics")) {
+                    for (int n = 0; n < relicsBySet.size(); n++) {
+                        boolean isSelected = (subFrameItemIndex == n);
+                        String name = relicsBySet.get(n).name();
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            subFrameItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
+
+                ImGui.separator();
+
+                ImGui.inputTextMultiline("##RelicDetails", new ImString(relicsBySet.get(subFrameItemIndex).toString()));
 
                 ImGui.endTabItem();
             }
