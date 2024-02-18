@@ -32,6 +32,10 @@ public class AppLayer implements Layer {
     private static ImString lastHash = new ImString("");
     private int frameItemIndex = 0;
     private int subFrameItemIndex = 0;
+    private boolean add2Star = true;
+    private boolean add3Star = true;
+    private boolean add4Star = true;
+    private boolean add5Star = true;
 
     @Override
     public void onAttach() {
@@ -86,10 +90,48 @@ public class AppLayer implements Layer {
 
                 List<Relic> relicsBySet = new ArrayList<>();
 
+                if (ImGui.checkbox("2 Star", add2Star)) {
+                    add2Star = !add2Star;
+                }
+                ImGui.sameLine();
+                if (ImGui.checkbox("3 Star", add3Star)) {
+                    add3Star = !add3Star;
+                }
+                ImGui.sameLine();
+                if (ImGui.checkbox("4 Star", add4Star)) {
+                    add4Star = !add4Star;
+                }
+                ImGui.sameLine();
+                if (ImGui.checkbox("5 Star", add5Star)) {
+                    add5Star = !add5Star;
+                }
+
                 for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
-                   if (entry.getValue().setData().equals(relicSet)) {
-                      relicsBySet.add(entry.getValue());
-                   }
+                    if (entry.getValue().setData().equals(relicSet)) {
+                        switch (Integer.parseInt(entry.getValue().rarity().substring(entry.getValue().rarity().length() - 1))) {
+                            case 2: {
+                                if (!add2Star) {
+                                    continue;
+                                }
+                            }
+                            case 3: {
+                                if (!add3Star) {
+                                    continue;
+                                }
+                            }
+                            case 4: {
+                                if (!add4Star) {
+                                    continue;
+                                }
+                            }
+                            case 5: {
+                                if (!add5Star) {
+                                    continue;
+                                }
+                            }
+                        }
+                        relicsBySet.add(entry.getValue());
+                    }
                 }
 
                 ImGui.separator();
@@ -97,7 +139,7 @@ public class AppLayer implements Layer {
                 if (ImGui.beginListBox("##Relics")) {
                     for (int n = 0; n < relicsBySet.size(); n++) {
                         boolean isSelected = (subFrameItemIndex == n);
-                        String name = relicsBySet.get(n).name();
+                        String name = String.format("%1$s * | %2$s (%3$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type());
 
                         if (ImGui.selectable(name, isSelected)) {
                             subFrameItemIndex = n;
@@ -112,7 +154,7 @@ public class AppLayer implements Layer {
 
                 ImGui.separator();
 
-                ImGui.inputTextMultiline("##RelicDetails", new ImString(relicsBySet.get(subFrameItemIndex).toString()));
+                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(subFrameItemIndex).toString()) : new ImString());
 
                 ImGui.endTabItem();
             }
