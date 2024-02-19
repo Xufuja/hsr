@@ -20,10 +20,7 @@ import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTabBarFlags;
 import imgui.type.ImString;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -106,31 +103,28 @@ public class AppLayer implements Layer {
                     add5Star = !add5Star;
                 }
 
-                for (Map.Entry<Integer, Relic> entry : Database.getRelics().entrySet()) {
-                    if (entry.getValue().setData().equals(relicSet)) {
-                        switch (Integer.parseInt(entry.getValue().rarity().substring(entry.getValue().rarity().length() - 1))) {
-                            case 2: {
-                                if (!add2Star) {
-                                    continue;
-                                }
-                            }
-                            case 3: {
-                                if (!add3Star) {
-                                    continue;
-                                }
-                            }
-                            case 4: {
-                                if (!add4Star) {
-                                    continue;
-                                }
-                            }
-                            case 5: {
-                                if (!add5Star) {
-                                    continue;
-                                }
-                            }
+                int enabledRarity = 0;
+                if (add2Star) {
+                    enabledRarity |= 1 << 2;
+                }
+                if (add3Star) {
+                    enabledRarity |= 1 << 3;
+                }
+                if (add4Star) {
+                    enabledRarity |= 1 << 4;
+                }
+                if (add5Star) {
+                    enabledRarity |= 1 << 5;
+                }
+
+
+                for (Relic entry : Database.getRelics().values()) {
+                    if (entry.setData().equals(relicSet)) {
+                        if ((enabledRarity & (1 << Integer.parseInt(entry.rarity().substring(entry.rarity().length() - 1)))) == 0) {
+                            continue;
                         }
-                        relicsBySet.add(entry.getValue());
+
+                        relicsBySet.add(entry);
                     }
                 }
 
