@@ -25,17 +25,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class AppLayer implements Layer {
-    private static ImString hashBuffer = new ImString("", 512);
-    private static ImString lastHash = new ImString("");
-    private int frameItemIndex = 0;
-    private int subFrameItemIndex = 0;
-    private boolean add2Star = true;
-    private boolean add3Star = true;
-    private boolean add4Star = true;
-    private boolean add5Star = true;
+    private AppState appState;
 
     @Override
     public void onAttach() {
+        this.appState = new AppState();
+
         System.out.println("Loading Database...");
         try {
             Database.init("EN");
@@ -69,11 +64,11 @@ public class AppLayer implements Layer {
 
                 if (ImGui.beginListBox("##RelicSets")) {
                     for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (frameItemIndex == n);
+                        boolean isSelected = (appState.frameItemIndex == n);
                         String name = Database.getRelicSets().get(indexToId.get(n)).setName();
 
                         if (ImGui.selectable(name, isSelected)) {
-                            frameItemIndex = n;
+                            appState.frameItemIndex = n;
 
                             if (isSelected) {
                                 ImGui.setItemDefaultFocus();
@@ -83,37 +78,37 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
-                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(frameItemIndex));
+                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(appState.frameItemIndex));
 
                 List<Relic> relicsBySet = new ArrayList<>();
 
-                if (ImGui.checkbox("2 Star", add2Star)) {
-                    add2Star = !add2Star;
+                if (ImGui.checkbox("2 Star", appState.add2Star)) {
+                    appState.add2Star = !appState.add2Star;
                 }
                 ImGui.sameLine();
-                if (ImGui.checkbox("3 Star", add3Star)) {
-                    add3Star = !add3Star;
+                if (ImGui.checkbox("3 Star", appState.add3Star)) {
+                    appState.add3Star = !appState.add3Star;
                 }
                 ImGui.sameLine();
-                if (ImGui.checkbox("4 Star", add4Star)) {
-                    add4Star = !add4Star;
+                if (ImGui.checkbox("4 Star", appState.add4Star)) {
+                    appState.add4Star = !appState.add4Star;
                 }
                 ImGui.sameLine();
-                if (ImGui.checkbox("5 Star", add5Star)) {
-                    add5Star = !add5Star;
+                if (ImGui.checkbox("5 Star", appState.add5Star)) {
+                    appState.add5Star = !appState.add5Star;
                 }
 
                 int enabledRarity = 0;
-                if (add2Star) {
+                if (appState.add2Star) {
                     enabledRarity |= 1 << 2;
                 }
-                if (add3Star) {
+                if (appState.add3Star) {
                     enabledRarity |= 1 << 3;
                 }
-                if (add4Star) {
+                if (appState.add4Star) {
                     enabledRarity |= 1 << 4;
                 }
-                if (add5Star) {
+                if (appState.add5Star) {
                     enabledRarity |= 1 << 5;
                 }
 
@@ -132,11 +127,11 @@ public class AppLayer implements Layer {
 
                 if (ImGui.beginListBox("##Relics")) {
                     for (int n = 0; n < relicsBySet.size(); n++) {
-                        boolean isSelected = (subFrameItemIndex == n);
+                        boolean isSelected = (appState.subFrameItemIndex == n);
                         String name = String.format("%1$s * | %2$s (%3$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type());
 
                         if (ImGui.selectable(name, isSelected)) {
-                            subFrameItemIndex = n;
+                            appState.subFrameItemIndex = n;
 
                             if (isSelected) {
                                 ImGui.setItemDefaultFocus();
@@ -148,19 +143,19 @@ public class AppLayer implements Layer {
 
                 ImGui.separator();
 
-                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(subFrameItemIndex).toString()) : new ImString());
+                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subFrameItemIndex).toString()) : new ImString());
 
                 ImGui.endTabItem();
             }
 
             if (ImGui.beginTabItem("Hash")) {
-                ImGui.inputText("##Hash", hashBuffer, ImGuiInputTextFlags.None);
+                ImGui.inputText("##Hash", appState.hashBuffer, ImGuiInputTextFlags.None);
 
                 if (ImGui.button("Calculate")) {
-                    lastHash = new ImString(String.valueOf(getStableHash(hashBuffer.get())));
+                    appState.lastHash = new ImString(String.valueOf(getStableHash(appState.hashBuffer.get())));
                 }
 
-                ImGui.inputText("##Result", lastHash, ImGuiInputTextFlags.ReadOnly);
+                ImGui.inputText("##Result", appState.lastHash, ImGuiInputTextFlags.ReadOnly);
                 ImGui.endTabItem();
             }
 
