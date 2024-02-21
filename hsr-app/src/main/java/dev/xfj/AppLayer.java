@@ -64,11 +64,11 @@ public class AppLayer implements Layer {
 
                 if (ImGui.beginListBox("##RelicSets")) {
                     for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (appState.frameItemIndex == n);
+                        boolean isSelected = (appState.relicItemIndex == n);
                         String name = Database.getRelicSets().get(indexToId.get(n)).setName();
 
                         if (ImGui.selectable(name, isSelected)) {
-                            appState.frameItemIndex = n;
+                            appState.relicItemIndex = n;
 
                             if (isSelected) {
                                 ImGui.setItemDefaultFocus();
@@ -78,7 +78,7 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
-                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(appState.frameItemIndex));
+                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(appState.relicItemIndex));
 
                 List<Relic> relicsBySet = new ArrayList<>();
 
@@ -127,11 +127,11 @@ public class AppLayer implements Layer {
 
                 if (ImGui.beginListBox("##Relics")) {
                     for (int n = 0; n < relicsBySet.size(); n++) {
-                        boolean isSelected = (appState.subFrameItemIndex == n);
+                        boolean isSelected = (appState.subRelicItemIndex == n);
                         String name = String.format("%1$s * | %2$s (%3$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type());
 
                         if (ImGui.selectable(name, isSelected)) {
-                            appState.subFrameItemIndex = n;
+                            appState.subRelicItemIndex = n;
 
                             if (isSelected) {
                                 ImGui.setItemDefaultFocus();
@@ -143,7 +143,39 @@ public class AppLayer implements Layer {
 
                 ImGui.separator();
 
-                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subFrameItemIndex).toString()) : new ImString());
+                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).toString()) : new ImString());
+
+                ImGui.endTabItem();
+            }
+
+            if (ImGui.beginTabItem("Characters")) {
+                Map<Integer, Integer> indexToId = new HashMap<>();
+                int i = 0;
+
+                for (Map.Entry<Integer, Avatar> entry : Database.getAvatars().entrySet()) {
+                    indexToId.put(i, entry.getKey());
+                    i++;
+                }
+
+                if (ImGui.beginListBox("##Characters")) {
+                    for (int n = 0; n < indexToId.size(); n++) {
+                        boolean isSelected = (appState.characterItemIndex == n);
+                        String name = Database.getAvatars().get(indexToId.get(n)).avatarName();
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            appState.characterItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
+
+                ImGui.separator();
+
+                ImGui.inputTextMultiline("##CharacterDetails", indexToId.size() > 0 ? new ImString(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).toString()) : new ImString());
 
                 ImGui.endTabItem();
             }
