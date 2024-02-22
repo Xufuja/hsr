@@ -19,6 +19,7 @@ public record Avatar(
         int expGroup,
         int maxAscension,
         int maxEidolon,
+        String rarity,
         Map<Integer, AvatarEidolon> eidolons,
         List<ItemCount> rewards,
         List<ItemCount> maxRewards,

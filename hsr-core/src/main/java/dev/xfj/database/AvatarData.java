@@ -169,6 +169,7 @@ public class AvatarData {
                     entry.getValue().getExpGroup(),
                     entry.getValue().getMaxPromotion(),
                     entry.getValue().getMaxRank(),
+                    entry.getValue().getRarity(),
                     eidolons,
                     rewards,
                     rewardsMax,
