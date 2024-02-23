@@ -160,7 +160,7 @@ public class AppLayer implements Layer {
                 if (ImGui.beginListBox("##Characters")) {
                     for (int n = 0; n < indexToId.size(); n++) {
                         boolean isSelected = (appState.characterItemIndex == n);
-                        String name = String.format("%1$s * | %2$s", Database.getAvatars().get(indexToId.get(n)).rarity().substring(Database.getAvatars().get(indexToId.get(n)).rarity().length() - 1), Database.getAvatars().get(indexToId.get(n)).avatarName());
+                        String name = String.format("%1$s * | %2$s (%3$s)", Database.getAvatars().get(indexToId.get(n)).rarity().substring(Database.getAvatars().get(indexToId.get(n)).rarity().length() - 1), Database.getAvatars().get(indexToId.get(n)).avatarName(), Database.getAvatars().get(indexToId.get(n)).avatarId());
 
                         if (ImGui.selectable(name, isSelected)) {
                             appState.characterItemIndex = n;
