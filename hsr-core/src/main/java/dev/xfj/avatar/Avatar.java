@@ -1,5 +1,6 @@
 package dev.xfj.avatar;
 
+import dev.xfj.Image;
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
 import dev.xfj.common.Upgradable;
@@ -14,6 +15,7 @@ public record Avatar(
         int avatarId,
         String avatarName,
         String avatarFullName,
+        Image avatarIcon,
         String damageType,
         int ultimateCost,
         int expGroup,

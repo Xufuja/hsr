@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Image;
 import dev.xfj.avatar.*;
 import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.avataratlas.AvatarAtlasJson;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AvatarData {
+    private static final String RESOURCE_PATH = "C:\\Dev\\StarRailRes";
     private static Map<String, AvatarAtlasJson> avatarAtlas;
     private static Map<String, AvatarBaseTypeJson> avatarBaseType;
     private static Map<String, AvatarBreakDamageJson> avatarBreakDamage;
@@ -161,9 +163,14 @@ public class AvatarData {
                 eidolons.put(current.eidolon(), current);
             }
 
+            String icon = entry.getValue().getAvatarSideIconPath();
+            icon = RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1);
+
+
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     Database.getTranslation(entry.getValue().getAvatarName().getHash()),
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
+                    new Image(icon),
                     entry.getValue().getDamageType(),
                     entry.getValue().getSPNeed().getValue(),
                     entry.getValue().getExpGroup(),

@@ -32,10 +32,11 @@ public class Image {
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
-
-        ByteBuffer data = null;
+        ByteBuffer data;
 
         Path path = Path.of(filePath);
+
+        STBImage.stbi_set_flip_vertically_on_load(true);
 
         if (STBImage.stbi_is_hdr(filePath)) {
             data = STBImage.stbi_load(path.normalize().toString(), width, height, channels, 4);
@@ -94,5 +95,9 @@ public class Image {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getRendererId() {
+        return rendererId;
     }
 }
