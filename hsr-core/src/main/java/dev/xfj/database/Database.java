@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class Database {
+    protected static final String RESOURCE_PATH = "C:\\Dev\\StarRailRes";
     protected static Map<Integer, Item> normalItems;
     protected static Map<Integer, ItemEquipment> lightConeItems;
     protected static Map<Integer, ItemExp> expItems;

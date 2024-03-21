@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Image;
 import dev.xfj.jsonschema2pojo.relicbasetype.RelicBaseTypeJson;
 import dev.xfj.jsonschema2pojo.reliccomposeconfig.RelicComposeConfigJson;
 import dev.xfj.jsonschema2pojo.relicconfig.RelicConfigJson;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static dev.xfj.database.Database.RESOURCE_PATH;
 
 public class RelicData {
     private static Map<String, RelicBaseTypeJson> relicBaseType;
@@ -55,11 +58,20 @@ public class RelicData {
         Map<Integer, Relic> relics = new HashMap<>();
 
         for (Map.Entry<String, RelicConfigJson> entry : relicConfig.entrySet()) {
+            String icon = switch (entry.getValue().getType()) {
+                case "HEAD", "NECK" -> "0";
+                case "HAND", "OBJECT" -> "1";
+                case "BODY" -> "2";
+                case "FOOT" -> "3";
+                default -> throw new RuntimeException("Unexpected value: " + entry.getValue().getType());
+            };
+
             RelicInfo relicInfo = getRelicInfo(relicDataInfo.get(String.valueOf(entry.getValue().getSetID())), entry.getValue().getType());
             Relic relic = new Relic(entry.getValue().getId(),
                     relicInfo.name(),
                     relicInfo.backgroundDescription(),
                     relicInfo.backgroundStoryContent(),
+                    new Image(RESOURCE_PATH + "\\icon\\relic\\" + entry.getValue().getSetID() + "_" + icon + ".png"),
                     entry.getValue().getSetID(),
                     Database.getTranslation(relicBaseType.get(entry.getValue().getType()).getBaseTypeText().getHash()),
                     entry.getValue().getRarity(),
@@ -161,6 +173,7 @@ public class RelicData {
 
             RelicSet relicSet = new RelicSet(entry.getValue().getSetID(),
                     Database.getTranslation(entry.getValue().getSetName().getHash()),
+                    new Image(RESOURCE_PATH + "\\icon\\relic\\" + entry.getValue().getSetID() + ".png"),
                     Database.relicSetEffects.get(entry.getValue().getSetID()));
 
             relicSets.put(entry.getValue().getSetID(), relicSet);
@@ -197,7 +210,8 @@ public class RelicData {
                                 key = (String) Property.class.getMethod(obtainGetter(field.getName())).invoke(ability);
                             } else {
                                 Object object = Property.class.getMethod(obtainGetter(field.getName())).invoke(ability);
-                                value = (double) object.getClass().getMethod("getValue").invoke(object);;
+                                value = (double) object.getClass().getMethod("getValue").invoke(object);
+                                ;
                             }
                         } catch (Exception e) {
                             throw new RuntimeException(e.getMessage());
@@ -223,6 +237,7 @@ public class RelicData {
 
         return effects;
     }
+
     protected static Map<Integer, Map<Integer, Integer>> loadRelicExp() {
         Map<Integer, Map<Integer, Integer>> exp = new HashMap<>();
 

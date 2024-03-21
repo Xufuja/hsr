@@ -78,6 +78,10 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
+                ImGui.sameLine();
+
+                ImGui.image(Database.getRelicSets().get(indexToId.get(appState.relicItemIndex)).relicSetIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
                 RelicSet relicSet = Database.getRelicSets().get(indexToId.get(appState.relicItemIndex));
 
                 List<Relic> relicsBySet = new ArrayList<>();
@@ -140,6 +144,10 @@ public class AppLayer implements Layer {
                     }
                     ImGui.endListBox();
                 }
+
+                ImGui.sameLine();
+
+                ImGui.image(relicsBySet.get(appState.subRelicItemIndex).relicIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
 
                 ImGui.separator();
 

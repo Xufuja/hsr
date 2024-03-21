@@ -41,8 +41,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static dev.xfj.database.Database.RESOURCE_PATH;
+
 public class AvatarData {
-    private static final String RESOURCE_PATH = "C:\\Dev\\StarRailRes";
     private static Map<String, AvatarAtlasJson> avatarAtlas;
     private static Map<String, AvatarBaseTypeJson> avatarBaseType;
     private static Map<String, AvatarBreakDamageJson> avatarBreakDamage;
@@ -164,13 +165,11 @@ public class AvatarData {
             }
 
             String icon = entry.getValue().getAvatarSideIconPath();
-            icon = RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1);
-
 
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     Database.getTranslation(entry.getValue().getAvatarName().getHash()),
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
-                    new Image(icon),
+                    new Image(RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     entry.getValue().getDamageType(),
                     entry.getValue().getSPNeed().getValue(),
                     entry.getValue().getExpGroup(),

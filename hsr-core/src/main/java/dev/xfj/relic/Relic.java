@@ -1,5 +1,6 @@
 package dev.xfj.relic;
 
+import dev.xfj.Image;
 import dev.xfj.common.Levelable;
 import dev.xfj.common.Utils;
 import dev.xfj.database.Database;
@@ -13,6 +14,7 @@ public record Relic(
         String name,
         String backgroundDescription,
         String backgroundStoryContent,
+        Image relicIcon,
         int setId,
         String type,
         String rarity,
