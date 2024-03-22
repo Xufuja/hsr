@@ -192,6 +192,42 @@ public class AppLayer implements Layer {
                 ImGui.endTabItem();
             }
 
+            if (ImGui.beginTabItem("LightCones")) {
+                Map<Integer, Integer> indexToId = new HashMap<>();
+                int i = 0;
+
+                for (Map.Entry<Integer, LightCone> entry : Database.getLightCones().entrySet()) {
+                    indexToId.put(i, entry.getKey());
+                    i++;
+                }
+
+                if (ImGui.beginListBox("##LightCones")) {
+                    for (int n = 0; n < indexToId.size(); n++) {
+                        boolean isSelected = (appState.lightConeItemIndex == n);
+                        String name = String.format("%1$s * | %2$s (%3$s)", Database.getLightCones().get(indexToId.get(n)).rarity(), Database.getLightCones().get(indexToId.get(n)).name(), Database.getLightCones().get(indexToId.get(n)).lightConeId());
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            appState.lightConeItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
+
+                ImGui.sameLine();
+
+                ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
+                ImGui.separator();
+
+                ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
+
+                ImGui.endTabItem();
+            }
+
             if (ImGui.beginTabItem("Hash")) {
                 ImGui.inputText("##Hash", appState.hashBuffer, ImGuiInputTextFlags.None);
 

@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Image;
 import dev.xfj.item.ItemCount;
 import dev.xfj.jsonschema2pojo.equipmentatlas.EquipmentAtlasJson;
 import dev.xfj.jsonschema2pojo.equipmentconfig.EquipmentConfigJson;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EquipmentData {
+    private static final String RESOURCE_PATH = "C:\\Dev\\StarRailRes";
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
     private static Map<String, Map<String, EquipmentSkillConfigJson>> equipmentSkillConfig;
     private static Map<String, Map<String, EquipmentPromotionConfigJson>> equipmentPromotionConfig;
@@ -43,10 +45,13 @@ public class EquipmentData {
         Map<Integer, LightCone> lightCones = new HashMap<>();
 
         for (Map.Entry<String, EquipmentConfigJson> entry : equipmentConfig.entrySet()) {
+            String icon = entry.getValue().getImagePath();
+
             LightCone lightCone = new LightCone(entry.getValue().getEquipmentID(),
                     TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()),
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getBackgroundDescription(),
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getDescription(),
+                    new Image(RESOURCE_PATH + "\\icon\\light_cone\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     getRarity(entry.getValue().getRarity()),
                     Database.getAvatarPaths().get(entry.getValue().getAvatarBaseType()).name(),
                     entry.getValue().getMaxPromotion(),

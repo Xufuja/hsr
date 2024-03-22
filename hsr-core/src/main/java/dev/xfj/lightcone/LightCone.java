@@ -1,5 +1,6 @@
 package dev.xfj.lightcone;
 
+import dev.xfj.Image;
 import dev.xfj.common.Enums;
 import dev.xfj.common.Levelable;
 import dev.xfj.common.Upgradable;
@@ -13,6 +14,7 @@ public record LightCone(
         String name,
         String backgroundDescription,
         String description,
+        Image lightConeIcon,
         int rarity,
         String path,
         int maxAscension,
