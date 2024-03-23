@@ -46,11 +46,16 @@ public class Image {
             format = ImageFormat.RGBA;
         }
 
-        this.width = width.get(0);
-        this.height = height.get(0);
+        if (data != null) {
 
-        setData(data, channels);
-        STBImage.stbi_image_free(data);
+            this.width = width.get(0);
+            this.height = height.get(0);
+
+            setData(data, channels);
+            STBImage.stbi_image_free(data);
+        } else {
+            System.out.println("Image not found: " + filePath);
+        }
 
     }
 

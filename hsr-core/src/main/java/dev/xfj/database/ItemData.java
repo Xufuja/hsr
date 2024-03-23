@@ -1,5 +1,6 @@
 package dev.xfj.database;
 
+import dev.xfj.Image;
 import dev.xfj.item.*;
 import dev.xfj.jsonschema2pojo.itemconfig.ItemConfigJson;
 import dev.xfj.jsonschema2pojo.itemconfigequipment.ItemConfigEquipmentJson;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static dev.xfj.database.Database.RESOURCE_PATH;
 
 public class ItemData {
     private static Map<String, ItemConfigJson> itemConfig;
@@ -92,6 +95,9 @@ public class ItemData {
 
         Object desc = itemConfig.getClass().getMethod("getItemDesc").invoke(itemConfig);
         item.getClass().getMethod("setDescription", String.class).invoke(item, Database.getTranslation((Integer) desc.getClass().getMethod("getHash").invoke(desc)));
+
+        Object icon = itemConfig.getClass().getMethod("getItemIconPath").invoke(itemConfig);
+        item.getClass().getMethod("setItemIcon", Image.class).invoke(item, new Image(RESOURCE_PATH + "\\icon\\item\\" + ((String)icon).substring(((String)icon).lastIndexOf("/") + 1)));
 
         item.getClass().getMethod("setStackLimit", int.class).invoke(item, itemConfig.getClass().getMethod("getPileLimit").invoke(itemConfig));
 

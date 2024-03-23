@@ -13,4 +13,5 @@ public class AppState {
     public boolean add5Star = true;
     public int characterItemIndex = 0;
     public int lightConeItemIndex = 0;
+    public int normalItemIndex = 0;
 }

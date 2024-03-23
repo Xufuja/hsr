@@ -45,7 +45,7 @@ public class EquipmentData {
         Map<Integer, LightCone> lightCones = new HashMap<>();
 
         for (Map.Entry<String, EquipmentConfigJson> entry : equipmentConfig.entrySet()) {
-            String icon = entry.getValue().getImagePath();
+            String icon = entry.getValue().getThumbnailPath();
 
             LightCone lightCone = new LightCone(entry.getValue().getEquipmentID(),
                     TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()),

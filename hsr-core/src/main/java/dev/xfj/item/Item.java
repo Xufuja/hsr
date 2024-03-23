@@ -1,5 +1,7 @@
 package dev.xfj.item;
 
+import dev.xfj.Image;
+
 public abstract class Item {
     private int itemId;
     private String mainType;
@@ -9,6 +11,7 @@ public abstract class Item {
     private String name;
     private String backgroundDescription;
     private String description;
+    private Image itemIcon;
     private int stackLimit;
 
     public int getItemId() {
@@ -75,11 +78,35 @@ public abstract class Item {
         this.description = description;
     }
 
+    public Image getItemIcon() {
+        return itemIcon;
+    }
+
+    public void setItemIcon(Image itemIcon) {
+        this.itemIcon = itemIcon;
+    }
+
     public int getStackLimit() {
         return stackLimit;
     }
 
     public void setStackLimit(int stackLimit) {
         this.stackLimit = stackLimit;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemId=" + itemId +
+                ", mainType='" + mainType + '\'' +
+                ", subType='" + subType + '\'' +
+                ", inventoryDisplayTag=" + inventoryDisplayTag +
+                ", rarity='" + rarity + '\'' +
+                ", name='" + name + '\'' +
+                ", backgroundDescription='" + backgroundDescription + '\'' +
+                ", description='" + description + '\'' +
+                ", itemIcon=" + itemIcon +
+                ", stackLimit=" + stackLimit +
+                '}';
     }
 }

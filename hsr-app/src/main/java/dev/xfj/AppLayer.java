@@ -8,6 +8,8 @@ import dev.xfj.character.RelicPiece;
 import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.events.Event;
+import dev.xfj.item.Item;
+import dev.xfj.item.ItemNormal;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
@@ -224,6 +226,42 @@ public class AppLayer implements Layer {
                 ImGui.separator();
 
                 ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
+
+                ImGui.endTabItem();
+            }
+
+            if (ImGui.beginTabItem("Items")) {
+                Map<Integer, Integer> indexToId = new HashMap<>();
+                int i = 0;
+
+                for (Map.Entry<Integer, Item> entry : Database.getNormalItems().entrySet()) {
+                    indexToId.put(i, entry.getKey());
+                    i++;
+                }
+
+                if (ImGui.beginListBox("##Items")) {
+                    for (int n = 0; n < indexToId.size(); n++) {
+                        boolean isSelected = (appState.normalItemIndex == n);
+                        String name = String.format("%1$s (%2$s)", Database.getNormalItems().get(indexToId.get(n)).getName(), Database.getNormalItems().get(indexToId.get(n)).getItemId());
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            appState.normalItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
+
+                ImGui.sameLine();
+
+                ImGui.image(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).getItemIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
+                ImGui.separator();
+
+                ImGui.inputTextMultiline("##ItemDetails", indexToId.size() > 0 ? new ImString(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).toString()) : new ImString());
 
                 ImGui.endTabItem();
             }

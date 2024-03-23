@@ -10,4 +10,11 @@ public class ItemNormal extends Item {
     public void setPurposeType(int purposeType) {
         this.purposeType = purposeType;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\r\nItemNormal{" +
+                "purposeType=" + purposeType +
+                '}';
+    }
 }
