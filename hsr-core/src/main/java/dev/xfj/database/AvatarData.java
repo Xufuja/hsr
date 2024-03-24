@@ -166,8 +166,14 @@ public class AvatarData {
 
             String icon = entry.getValue().getAvatarSideIconPath();
 
+            String avatarName = switch (entry.getValue().getAvatarID()) {
+                case 8001, 8003 -> "Caelus";
+                case 8002, 8004 -> "Stelle";
+                default -> Database.getTranslation(entry.getValue().getAvatarName().getHash());
+            };
+
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
-                    Database.getTranslation(entry.getValue().getAvatarName().getHash()),
+                    avatarName,
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
                     new Image(RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     entry.getValue().getDamageType(),
