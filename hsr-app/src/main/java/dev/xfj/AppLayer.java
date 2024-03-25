@@ -187,6 +187,10 @@ public class AppLayer implements Layer {
 
                 ImGui.image(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
 
+                ImGui.sameLine();
+
+                ImGui.image(Database.getAvatarPaths().get(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarBaseType()).pathIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
                 ImGui.separator();
 
                 ImGui.inputTextMultiline("##CharacterDetails", indexToId.size() > 0 ? new ImString(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).toString()) : new ImString());

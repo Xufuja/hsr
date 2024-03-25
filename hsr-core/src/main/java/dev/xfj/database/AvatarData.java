@@ -105,9 +105,11 @@ public class AvatarData {
         Map<String, AvatarPath> paths = new HashMap<>();
 
         for (Map.Entry<String, AvatarBaseTypeJson> entry : avatarBaseType.entrySet()) {
+            String name = Database.getTranslation(entry.getValue().getBaseTypeText().getHash());
             AvatarPath avatarPath = new AvatarPath(entry.getValue().getId(),
-                    Database.getTranslation(entry.getValue().getBaseTypeText().getHash()),
-                    Database.getTranslation(entry.getValue().getBaseTypeDesc().getHash())
+                    name,
+                    Database.getTranslation(entry.getValue().getBaseTypeDesc().getHash()),
+                    new Image(RESOURCE_PATH + "\\icon\\path\\" + (name.equals("The Hunt") ? "Hunt" : name) + ".png")
             );
             paths.put(entry.getValue().getId(), avatarPath);
         }
