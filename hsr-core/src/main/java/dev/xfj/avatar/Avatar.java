@@ -17,6 +17,7 @@ public record Avatar(
         String avatarFullName,
         Image avatarIcon,
         String damageType,
+        Image damageTypeIcon,
         int ultimateCost,
         int expGroup,
         int maxAscension,

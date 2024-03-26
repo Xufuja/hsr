@@ -174,11 +174,14 @@ public class AvatarData {
                 default -> Database.getTranslation(entry.getValue().getAvatarName().getHash());
             };
 
+            String element = entry.getValue().getDamageType();
+
             Avatar avatar = new Avatar(entry.getValue().getAvatarID(),
                     avatarName,
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
                     new Image(RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1)),
-                    entry.getValue().getDamageType(),
+                    element,
+                    new Image(RESOURCE_PATH + "\\icon\\element\\" + (element.equals("Thunder") ? "Lightning" : element) + ".png"),
                     entry.getValue().getSPNeed().getValue(),
                     entry.getValue().getExpGroup(),
                     entry.getValue().getMaxPromotion(),
