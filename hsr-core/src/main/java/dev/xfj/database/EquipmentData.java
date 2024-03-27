@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static dev.xfj.database.Database.RESOURCE_PATH;
+
 public class EquipmentData {
     private static final String RESOURCE_PATH = "C:\\Dev\\StarRailRes";
     private static Map<String, EquipmentAtlasJson> equipmentAtlas;
@@ -45,7 +47,8 @@ public class EquipmentData {
         Map<Integer, LightCone> lightCones = new HashMap<>();
 
         for (Map.Entry<String, EquipmentConfigJson> entry : equipmentConfig.entrySet()) {
-            String icon = entry.getValue().getThumbnailPath();
+            String icon = entry.getValue().getImagePath();
+            String path = Database.getAvatarPaths().get(entry.getValue().getAvatarBaseType()).name();
 
             LightCone lightCone = new LightCone(entry.getValue().getEquipmentID(),
                     TextMapData.getTranslation(entry.getValue().getEquipmentName().getHash()),
@@ -53,7 +56,8 @@ public class EquipmentData {
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getDescription(),
                     new Image(RESOURCE_PATH + "\\icon\\light_cone\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     getRarity(entry.getValue().getRarity()),
-                    Database.getAvatarPaths().get(entry.getValue().getAvatarBaseType()).name(),
+                    path,
+                    new Image(RESOURCE_PATH + "\\icon\\path\\" + (path.equals("The Hunt") ? "Hunt" : path) + ".png"),
                     entry.getValue().getMaxPromotion(),
                     entry.getValue().getMaxRank(),
                     entry.getValue().getExpType(),

@@ -17,6 +17,7 @@ public record LightCone(
         Image lightConeIcon,
         int rarity,
         String path,
+        Image pathIcon,
         int maxAscension,
         int maxSuperimpose,
         int expType,

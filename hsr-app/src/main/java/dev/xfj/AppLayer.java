@@ -231,6 +231,10 @@ public class AppLayer implements Layer {
 
                 ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
 
+                ImGui.sameLine();
+
+                ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).pathIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
                 ImGui.separator();
 
                 ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
