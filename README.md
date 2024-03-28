@@ -4,6 +4,10 @@
 
 I recently discovered [Dimbreath's](https://github.com/Dimbreath) StarRailData's repository and figured it would be interesting to create a parser for it.
 
+[This](https://github.com/Mar-7th/StarRailRes/) repository contains the image assets.
+
+Latest version of HSR data tested: 2.1
+
 Heavily work in progress.
 
 ## Notes
