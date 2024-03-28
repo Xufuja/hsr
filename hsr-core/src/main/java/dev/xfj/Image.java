@@ -105,4 +105,9 @@ public class Image {
     public int getRendererId() {
         return rendererId;
     }
+
+    @Override
+    public String toString() {
+        return filePath;
+    }
 }
