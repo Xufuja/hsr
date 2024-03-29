@@ -14,4 +14,5 @@ public class AppState {
     public int characterItemIndex = 0;
     public int lightConeItemIndex = 0;
     public int normalItemIndex = 0;
+    public int abilityItemIndex = 0;
 }

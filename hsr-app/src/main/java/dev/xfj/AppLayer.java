@@ -1,6 +1,7 @@
 package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
+import dev.xfj.avatar.AvatarAbility;
 import dev.xfj.avatar.AvatarTrace;
 import dev.xfj.character.Character;
 import dev.xfj.character.RelicData;
@@ -198,6 +199,39 @@ public class AppLayer implements Layer {
                 ImGui.separator();
 
                 ImGui.inputTextMultiline("##CharacterDetails", indexToId.size() > 0 ? new ImString(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).toString()) : new ImString());
+
+                ImGui.separator();
+
+                List<AvatarAbility> abilities = new ArrayList<>();
+
+                for (Map.Entry<Integer, Map<Integer, AvatarAbility>> entry : Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).abilities().entrySet()) {
+                    AvatarAbility ability = entry.getValue().get(entry.getValue().size());
+                    
+                    if (ability.abilityTypeDescription() != null) {
+                        abilities.add(entry.getValue().get(entry.getValue().size()));
+                    }
+                }
+
+                if (ImGui.beginListBox("##Abilities")) {
+                    for (int n = 0; n < abilities.size(); n++) {
+                        boolean isSelected = (appState.abilityItemIndex == n);
+                        String name = String.format("%1$s - %2$s (%3$s)", abilities.get(n).abilityTypeDescription(), abilities.get(n).abilityName(), abilities.get(n).abilityId());
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            appState.abilityItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
+
+                ImGui.separator();
+
+                ImGui.inputTextMultiline("##AbilityDetails", abilities.size() > 0 ? new ImString(abilities.get(appState.abilityItemIndex).toString()) : new ImString());
+
 
                 ImGui.endTabItem();
             }
