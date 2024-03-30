@@ -2,6 +2,7 @@ package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
 import dev.xfj.avatar.AvatarAbility;
+import dev.xfj.avatar.AvatarEidolon;
 import dev.xfj.avatar.AvatarTrace;
 import dev.xfj.character.Character;
 import dev.xfj.character.RelicData;
@@ -206,7 +207,7 @@ public class AppLayer implements Layer {
 
                 for (Map.Entry<Integer, Map<Integer, AvatarAbility>> entry : Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).abilities().entrySet()) {
                     AvatarAbility ability = entry.getValue().get(entry.getValue().size());
-                    
+
                     if (ability.abilityTypeDescription() != null) {
                         abilities.add(entry.getValue().get(entry.getValue().size()));
                     }
@@ -228,10 +229,33 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
-                ImGui.separator();
+                ImGui.sameLine();
 
                 ImGui.inputTextMultiline("##AbilityDetails", abilities.size() > 0 ? new ImString(abilities.get(appState.abilityItemIndex).toString()) : new ImString());
 
+                ImGui.separator();
+
+                List<AvatarEidolon> eidolons = new ArrayList<>();
+
+                for (Map.Entry<Integer, AvatarEidolon> eidolon : Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).eidolons().entrySet()) {
+                    eidolons.add(eidolon.getValue());
+                }
+
+                if (ImGui.beginListBox("##Eidolons")) {
+                    for (int n = 0; n < eidolons.size(); n++) {
+                        boolean isSelected = (appState.eidolonItemIndex == n);
+                        String name = String.format("%1$s - %2$s (%3$s)", eidolons.get(n).eidolon(), eidolons.get(n).name(), eidolons.get(n).eidolonId());
+
+                        if (ImGui.selectable(name, isSelected)) {
+                            appState.eidolonItemIndex = n;
+
+                            if (isSelected) {
+                                ImGui.setItemDefaultFocus();
+                            }
+                        }
+                    }
+                    ImGui.endListBox();
+                }
 
                 ImGui.endTabItem();
             }

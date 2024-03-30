@@ -15,4 +15,5 @@ public class AppState {
     public int lightConeItemIndex = 0;
     public int normalItemIndex = 0;
     public int abilityItemIndex = 0;
+    public int eidolonItemIndex = 0;
 }
