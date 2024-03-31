@@ -11,7 +11,6 @@ import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.events.Event;
 import dev.xfj.item.Item;
-import dev.xfj.item.ItemNormal;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
@@ -228,6 +227,10 @@ public class AppLayer implements Layer {
                     }
                     ImGui.endListBox();
                 }
+
+                ImGui.sameLine();
+
+                ImGui.image(abilities.get(appState.abilityItemIndex).abilityIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
 
                 ImGui.sameLine();
 

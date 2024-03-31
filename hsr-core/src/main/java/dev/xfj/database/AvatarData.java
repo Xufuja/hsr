@@ -342,10 +342,21 @@ public class AvatarData {
             for (Map.Entry<String, AvatarSkillConfigJson> innerEntry : outerEntry.getValue().entrySet()) {
                 AvatarSkillConfigJson entry = innerEntry.getValue();
 
+                String type = Database.getTranslation(entry.getSkillTypeDesc().getHash());
+                String icon = type != null ? (entry.getSkillID() / 100) + switch (type) {
+                    case "Basic ATK" -> "_basic_atk.png";
+                    case "Skill" -> "_skill.png";
+                    case "Talent" -> "_talent.png";
+                    case "Ultimate" -> "_ultimate.png";
+                    case "Technique" -> "_technique.png";
+                    default -> "_not_found.png";
+                } : "_not_found.png";
+
                 AvatarAbility ability = new AvatarAbility(entry.getSkillID(),
                         Database.getTranslation(entry.getSkillName().getHash()),
                         Database.getTranslation(entry.getSkillTag().getHash()),
-                        Database.getTranslation(entry.getSkillTypeDesc().getHash()),
+                        type,
+                        new Image(RESOURCE_PATH + "\\icon\\skill\\" + icon),
                         entry.getMaxLevel(),
                         entry.getSkillTriggerKey(),
                         Database.getTranslation(entry.getSkillDesc().getHash()),

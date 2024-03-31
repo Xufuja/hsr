@@ -1,5 +1,7 @@
 package dev.xfj.avatar;
 
+import dev.xfj.Image;
+
 import java.util.List;
 
 public record AvatarAbility(
@@ -7,6 +9,7 @@ public record AvatarAbility(
         String abilityName,
         String abilityTag,
         String abilityTypeDescription,
+        Image abilityIcon,
         int maxLevel,
         String triggerKey,
         String abilityDescription,
