@@ -260,6 +260,10 @@ public class AppLayer implements Layer {
                     ImGui.endListBox();
                 }
 
+                ImGui.sameLine();
+
+                ImGui.inputTextMultiline("##EidolonDetails", eidolons.size() > 0 ? new ImString(eidolons.get(appState.eidolonItemIndex).toString()) : new ImString());
+
                 ImGui.endTabItem();
             }
 
