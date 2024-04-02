@@ -1,8 +1,6 @@
 package dev.xfj;
 
 import dev.xfj.avatar.Avatar;
-import dev.xfj.avatar.AvatarAbility;
-import dev.xfj.avatar.AvatarEidolon;
 import dev.xfj.avatar.AvatarTrace;
 import dev.xfj.character.Character;
 import dev.xfj.character.RelicData;
@@ -10,7 +8,6 @@ import dev.xfj.character.RelicPiece;
 import dev.xfj.common.Enums;
 import dev.xfj.database.Database;
 import dev.xfj.events.Event;
-import dev.xfj.item.Item;
 import dev.xfj.lightcone.LightCone;
 import dev.xfj.lightcone.LightConePassive;
 import dev.xfj.lightcone.LightConeStats;
@@ -18,21 +15,33 @@ import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
 import dev.xfj.system.RelicGen;
+import dev.xfj.tabs.CharacterTab;
+import dev.xfj.tabs.ItemTab;
+import dev.xfj.tabs.LightConeTab;
+import dev.xfj.tabs.RelicTab;
 import imgui.ImGui;
 import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTabBarFlags;
 import imgui.type.ImString;
 
-import java.util.*;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class AppLayer implements Layer {
     private AppState appState;
+    private RelicTab relicTab;
+    private CharacterTab characterTab;
+    private LightConeTab lightConeTab;
+    private ItemTab itemTab;
 
     @Override
     public void onAttach() {
         this.appState = new AppState();
+        this.relicTab = new RelicTab(appState);
+        this.characterTab = new CharacterTab(appState);
+        this.lightConeTab = new LightConeTab(appState);
+        this.itemTab = new ItemTab(appState);
 
         System.out.println("Loading Database...");
         try {
@@ -56,292 +65,10 @@ public class AppLayer implements Layer {
     @Override
     public void onUIRender() {
         if (ImGui.beginTabBar("##TabBar", ImGuiTabBarFlags.None)) {
-            if (ImGui.beginTabItem("Relics")) {
-                Map<Integer, Integer> indexToId = new HashMap<>();
-                int i = 0;
-
-                for (Map.Entry<Integer, RelicSet> entry : Database.getRelicSets().entrySet()) {
-                    indexToId.put(i, entry.getKey());
-                    i++;
-                }
-
-                if (ImGui.beginListBox("##RelicSets")) {
-                    for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (appState.relicItemIndex == n);
-                        String name = Database.getRelicSets().get(indexToId.get(n)).setName();
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.relicItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getRelicSets().get(indexToId.get(appState.relicItemIndex)).relicSetIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                RelicSet relicSet = Database.getRelicSets().get(indexToId.get(appState.relicItemIndex));
-
-                List<Relic> relicsBySet = new ArrayList<>();
-
-                if (ImGui.checkbox("2 Star", appState.add2Star)) {
-                    appState.add2Star = !appState.add2Star;
-                }
-                ImGui.sameLine();
-                if (ImGui.checkbox("3 Star", appState.add3Star)) {
-                    appState.add3Star = !appState.add3Star;
-                }
-                ImGui.sameLine();
-                if (ImGui.checkbox("4 Star", appState.add4Star)) {
-                    appState.add4Star = !appState.add4Star;
-                }
-                ImGui.sameLine();
-                if (ImGui.checkbox("5 Star", appState.add5Star)) {
-                    appState.add5Star = !appState.add5Star;
-                }
-
-                int enabledRarity = 0;
-                if (appState.add2Star) {
-                    enabledRarity |= 1 << 2;
-                }
-                if (appState.add3Star) {
-                    enabledRarity |= 1 << 3;
-                }
-                if (appState.add4Star) {
-                    enabledRarity |= 1 << 4;
-                }
-                if (appState.add5Star) {
-                    enabledRarity |= 1 << 5;
-                }
-
-
-                for (Relic entry : Database.getRelics().values()) {
-                    if (entry.setData().equals(relicSet)) {
-                        if ((enabledRarity & (1 << Integer.parseInt(entry.rarity().substring(entry.rarity().length() - 1)))) == 0) {
-                            continue;
-                        }
-
-                        relicsBySet.add(entry);
-                    }
-                }
-
-                ImGui.separator();
-
-                if (ImGui.beginListBox("##Relics")) {
-                    for (int n = 0; n < relicsBySet.size(); n++) {
-                        boolean isSelected = (appState.subRelicItemIndex == n);
-                        String name = String.format("%1$s * | %2$s (%3$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.subRelicItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(relicsBySet.get(appState.subRelicItemIndex).relicIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.separator();
-
-                ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).toString()) : new ImString());
-
-                ImGui.endTabItem();
-            }
-
-            if (ImGui.beginTabItem("Characters")) {
-                Map<Integer, Integer> indexToId = new HashMap<>();
-                int i = 0;
-
-                for (Map.Entry<Integer, Avatar> entry : Database.getAvatars().entrySet()) {
-                    indexToId.put(i, entry.getKey());
-                    i++;
-                }
-
-                if (ImGui.beginListBox("##Characters")) {
-                    for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (appState.characterItemIndex == n);
-                        String name = String.format("%1$s * | %2$s (%3$s)", Database.getAvatars().get(indexToId.get(n)).rarity().substring(Database.getAvatars().get(indexToId.get(n)).rarity().length() - 1), Database.getAvatars().get(indexToId.get(n)).avatarName(), Database.getAvatars().get(indexToId.get(n)).avatarId());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.characterItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getAvatarPaths().get(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarBaseType()).pathIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).damageTypeIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.separator();
-
-                ImGui.inputTextMultiline("##CharacterDetails", indexToId.size() > 0 ? new ImString(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).toString()) : new ImString());
-
-                ImGui.separator();
-
-                List<AvatarAbility> abilities = new ArrayList<>();
-
-                for (Map.Entry<Integer, Map<Integer, AvatarAbility>> entry : Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).abilities().entrySet()) {
-                    AvatarAbility ability = entry.getValue().get(entry.getValue().size());
-
-                    if (ability.abilityTypeDescription() != null) {
-                        abilities.add(entry.getValue().get(entry.getValue().size()));
-                    }
-                }
-
-                if (ImGui.beginListBox("##Abilities")) {
-                    for (int n = 0; n < abilities.size(); n++) {
-                        boolean isSelected = (appState.abilityItemIndex == n);
-                        String name = String.format("%1$s - %2$s (%3$s)", abilities.get(n).abilityTypeDescription(), abilities.get(n).abilityName(), abilities.get(n).abilityId());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.abilityItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(abilities.get(appState.abilityItemIndex).abilityIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.sameLine();
-
-                ImGui.inputTextMultiline("##AbilityDetails", abilities.size() > 0 ? new ImString(abilities.get(appState.abilityItemIndex).toString()) : new ImString());
-
-                ImGui.separator();
-
-                List<AvatarEidolon> eidolons = new ArrayList<>();
-
-                for (Map.Entry<Integer, AvatarEidolon> eidolon : Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).eidolons().entrySet()) {
-                    eidolons.add(eidolon.getValue());
-                }
-
-                if (ImGui.beginListBox("##Eidolons")) {
-                    for (int n = 0; n < eidolons.size(); n++) {
-                        boolean isSelected = (appState.eidolonItemIndex == n);
-                        String name = String.format("%1$s - %2$s (%3$s)", eidolons.get(n).eidolon(), eidolons.get(n).name(), eidolons.get(n).eidolonId());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.eidolonItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.inputTextMultiline("##EidolonDetails", eidolons.size() > 0 ? new ImString(eidolons.get(appState.eidolonItemIndex).toString()) : new ImString());
-
-                ImGui.endTabItem();
-            }
-
-            if (ImGui.beginTabItem("LightCones")) {
-                Map<Integer, Integer> indexToId = new HashMap<>();
-                int i = 0;
-
-                for (Map.Entry<Integer, LightCone> entry : Database.getLightCones().entrySet()) {
-                    indexToId.put(i, entry.getKey());
-                    i++;
-                }
-
-                if (ImGui.beginListBox("##LightCones")) {
-                    for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (appState.lightConeItemIndex == n);
-                        String name = String.format("%1$s * | %2$s (%3$s)", Database.getLightCones().get(indexToId.get(n)).rarity(), Database.getLightCones().get(indexToId.get(n)).name(), Database.getLightCones().get(indexToId.get(n)).lightConeId());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.lightConeItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).pathIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.separator();
-
-                ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
-
-                ImGui.endTabItem();
-            }
-
-            if (ImGui.beginTabItem("Items")) {
-                Map<Integer, Integer> indexToId = new HashMap<>();
-                int i = 0;
-
-                for (Map.Entry<Integer, Item> entry : Database.getNormalItems().entrySet()) {
-                    indexToId.put(i, entry.getKey());
-                    i++;
-                }
-
-                if (ImGui.beginListBox("##Items")) {
-                    for (int n = 0; n < indexToId.size(); n++) {
-                        boolean isSelected = (appState.normalItemIndex == n);
-                        String name = String.format("%1$s (%2$s)", Database.getNormalItems().get(indexToId.get(n)).getName(), Database.getNormalItems().get(indexToId.get(n)).getItemId());
-
-                        if (ImGui.selectable(name, isSelected)) {
-                            appState.normalItemIndex = n;
-
-                            if (isSelected) {
-                                ImGui.setItemDefaultFocus();
-                            }
-                        }
-                    }
-                    ImGui.endListBox();
-                }
-
-                ImGui.sameLine();
-
-                ImGui.image(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).getItemIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
-
-                ImGui.separator();
-
-                ImGui.inputTextMultiline("##ItemDetails", indexToId.size() > 0 ? new ImString(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).toString()) : new ImString());
-
-                ImGui.endTabItem();
-            }
+            relicTab.onUIRender();
+            characterTab.onUIRender();
+            lightConeTab.onUIRender();
+            itemTab.onUIRender();
 
             if (ImGui.beginTabItem("Hash")) {
                 ImGui.inputText("##Hash", appState.hashBuffer, ImGuiInputTextFlags.None);
