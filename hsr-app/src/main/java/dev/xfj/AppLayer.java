@@ -15,14 +15,9 @@ import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import dev.xfj.relic.RelicSetEffect;
 import dev.xfj.system.RelicGen;
-import dev.xfj.tabs.CharacterTab;
-import dev.xfj.tabs.ItemTab;
-import dev.xfj.tabs.LightConeTab;
-import dev.xfj.tabs.RelicTab;
+import dev.xfj.tabs.*;
 import imgui.ImGui;
-import imgui.flag.ImGuiInputTextFlags;
 import imgui.flag.ImGuiTabBarFlags;
-import imgui.type.ImString;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +29,7 @@ public class AppLayer implements Layer {
     private CharacterTab characterTab;
     private LightConeTab lightConeTab;
     private ItemTab itemTab;
+    private HashTab hashTab;
 
     @Override
     public void onAttach() {
@@ -42,6 +38,7 @@ public class AppLayer implements Layer {
         this.characterTab = new CharacterTab(appState);
         this.lightConeTab = new LightConeTab(appState);
         this.itemTab = new ItemTab(appState);
+        this.hashTab = new HashTab(appState);
 
         System.out.println("Loading Database...");
         try {
@@ -69,17 +66,7 @@ public class AppLayer implements Layer {
             characterTab.onUIRender();
             lightConeTab.onUIRender();
             itemTab.onUIRender();
-
-            if (ImGui.beginTabItem("Hash")) {
-                ImGui.inputText("##Hash", appState.hashBuffer, ImGuiInputTextFlags.None);
-
-                if (ImGui.button("Calculate")) {
-                    appState.lastHash = new ImString(String.valueOf(getStableHash(appState.hashBuffer.get())));
-                }
-
-                ImGui.inputText("##Result", appState.lastHash, ImGuiInputTextFlags.ReadOnly);
-                ImGui.endTabItem();
-            }
+            hashTab.onUIRender();
 
             if (ImGui.beginTabItem("Testing")) {
                 if (ImGui.button("Execute")) {
@@ -218,24 +205,5 @@ public class AppLayer implements Layer {
 
     @Override
     public void onEvent(Event event) {
-    }
-
-    //For example, "EquipmentConfig_EquipmentName_21001" returns "1352234379" which is "Good Night and Sleep Well"
-    public static int getStableHash(String str) {
-        char[] chars = str.toCharArray();
-        int hash1 = 5381;
-        int hash2 = hash1;
-
-        for (int i = 0; i < chars.length && chars[i] != '\0'; i += 2) {
-            hash1 = ((hash1 << 5) + hash1) ^ chars[i];
-
-            if (i == chars.length - 1 || chars[i + 1] == '\0') {
-                break;
-            }
-
-            hash2 = ((hash2 << 5) + hash2) ^ chars[i + 1];
-        }
-
-        return (hash1 + (hash2 * 1566083941));
     }
 }
