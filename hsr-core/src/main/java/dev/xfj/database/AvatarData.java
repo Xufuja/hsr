@@ -180,6 +180,7 @@ public class AvatarData {
                     avatarName,
                     Database.getTranslation(entry.getValue().getAvatarFullName().getHash()),
                     new Image(RESOURCE_PATH + "\\icon\\avatar\\" + icon.substring(icon.lastIndexOf("/") + 1)),
+                    new Image(RESOURCE_PATH + "\\image\\character_portrait\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     element,
                     new Image(RESOURCE_PATH + "\\icon\\element\\" + (element.equals("Thunder") ? "Lightning" : element) + ".png"),
                     entry.getValue().getSPNeed().getValue(),

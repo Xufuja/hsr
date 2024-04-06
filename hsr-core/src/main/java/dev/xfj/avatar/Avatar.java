@@ -16,6 +16,7 @@ public record Avatar(
         String avatarName,
         String avatarFullName,
         Image avatarIcon,
+        Image avatarImage,
         String damageType,
         Image damageTypeIcon,
         int ultimateCost,

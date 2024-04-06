@@ -1,6 +1,7 @@
 package dev.xfj.tabs;
 
 import dev.xfj.AppState;
+import dev.xfj.Image;
 import dev.xfj.avatar.Avatar;
 import dev.xfj.avatar.AvatarAbility;
 import dev.xfj.avatar.AvatarEidolon;
@@ -50,7 +51,16 @@ public class CharacterTab {
 
             ImGui.sameLine();
 
-            ImGui.image(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+            if (ImGui.imageButton(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarIcon().getRendererId(), 128, 128, 0, 1, 1, 0)) {
+                ImGui.openPopup("FullSize");
+            }
+
+            Image avatar = Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarImage();
+
+            if (ImGui.beginPopup("FullSize")) {
+                ImGui.image(avatar.getRendererId(), avatar.getWidth(), avatar.getHeight(), 0, 1, 1, 0);
+                ImGui.endPopup();
+            }
 
             ImGui.sameLine();
 
