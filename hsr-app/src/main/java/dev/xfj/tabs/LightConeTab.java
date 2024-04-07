@@ -1,6 +1,7 @@
 package dev.xfj.tabs;
 
 import dev.xfj.AppState;
+import dev.xfj.Image;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import imgui.ImGui;
@@ -44,7 +45,17 @@ public class LightConeTab {
 
             ImGui.sameLine();
 
-            ImGui.image(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+            if (ImGui.imageButton(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0)) {
+                ImGui.openPopup("FullSize");
+            }
+
+            Image lightCone = Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeImage();
+
+            if (ImGui.beginPopup("FullSize")) {
+                ImGui.image(lightCone.getRendererId(), lightCone.getWidth(), lightCone.getHeight(), 0, 1, 1, 0);
+                ImGui.endPopup();
+            }
+
 
             ImGui.sameLine();
 

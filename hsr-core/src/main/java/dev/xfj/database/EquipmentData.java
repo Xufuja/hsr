@@ -55,6 +55,7 @@ public class EquipmentData {
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getBackgroundDescription(),
                     Database.lightConeItems.get(entry.getValue().getEquipmentID()).getDescription(),
                     new Image(RESOURCE_PATH + "\\icon\\light_cone\\" + icon.substring(icon.lastIndexOf("/") + 1)),
+                    new Image(RESOURCE_PATH + "\\image\\light_cone_portrait\\" + icon.substring(icon.lastIndexOf("/") + 1)),
                     getRarity(entry.getValue().getRarity()),
                     path,
                     new Image(RESOURCE_PATH + "\\icon\\path\\" + (path.equals("The Hunt") ? "Hunt" : path) + ".png"),

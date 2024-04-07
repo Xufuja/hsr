@@ -15,6 +15,7 @@ public record LightCone(
         String backgroundDescription,
         String description,
         Image lightConeIcon,
+        Image lightConeImage,
         int rarity,
         String path,
         Image pathIcon,
