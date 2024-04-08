@@ -9,6 +9,7 @@ import dev.xfj.database.Database;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.type.ImString;
 
 import java.util.ArrayList;
@@ -51,9 +52,15 @@ public class CharacterTab {
 
             ImGui.sameLine();
 
+            ImGui.pushStyleColor(ImGuiCol.Button, 0, 0, 0, 0);
+            ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0, 0, 0, 0);
+            ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0, 0, 0, 0);
+
             if (ImGui.imageButton(Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarIcon().getRendererId(), 128, 128, 0, 1, 1, 0)) {
                 ImGui.openPopup("FullSize");
             }
+
+            ImGui.popStyleColor(3);
 
             Image avatar = Database.getAvatars().get(indexToId.get(appState.characterItemIndex)).avatarImage();
 

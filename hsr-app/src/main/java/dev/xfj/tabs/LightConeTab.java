@@ -5,6 +5,7 @@ import dev.xfj.Image;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import imgui.ImGui;
+import imgui.flag.ImGuiCol;
 import imgui.type.ImString;
 
 import java.util.HashMap;
@@ -45,9 +46,15 @@ public class LightConeTab {
 
             ImGui.sameLine();
 
+            ImGui.pushStyleColor(ImGuiCol.Button, 0, 0, 0, 0);
+            ImGui.pushStyleColor(ImGuiCol.ButtonActive, 0, 0, 0, 0);
+            ImGui.pushStyleColor(ImGuiCol.ButtonHovered, 0, 0, 0, 0);
+
             if (ImGui.imageButton(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeIcon().getRendererId(), 128, 128, 0, 1, 1, 0)) {
                 ImGui.openPopup("FullSize");
             }
+
+            ImGui.popStyleColor(3);
 
             Image lightCone = Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).lightConeImage();
 
