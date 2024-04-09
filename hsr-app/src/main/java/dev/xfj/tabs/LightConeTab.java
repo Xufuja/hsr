@@ -2,6 +2,7 @@ package dev.xfj.tabs;
 
 import dev.xfj.AppState;
 import dev.xfj.Image;
+import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import imgui.ImGui;
@@ -9,6 +10,7 @@ import imgui.flag.ImGuiCol;
 import imgui.type.ImString;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LightConeTab {
@@ -23,7 +25,12 @@ public class LightConeTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
-            for (Map.Entry<Integer, LightCone> entry : Database.getLightCones().entrySet()) {
+            Map<Integer, LightCone> sorted = Database.getLightCones().entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
+
+            for (Map.Entry<Integer, LightCone> entry : sorted.entrySet()) {
                 indexToId.put(i, entry.getKey());
                 i++;
             }
@@ -62,7 +69,6 @@ public class LightConeTab {
                 ImGui.image(lightCone.getRendererId(), lightCone.getWidth(), lightCone.getHeight(), 0, 1, 1, 0);
                 ImGui.endPopup();
             }
-
 
             ImGui.sameLine();
 

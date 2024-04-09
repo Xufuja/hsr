@@ -12,10 +12,8 @@ import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.type.ImString;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CharacterTab {
     private final AppState appState;
@@ -29,7 +27,12 @@ public class CharacterTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
-            for (Map.Entry<Integer, Avatar> entry : Database.getAvatars().entrySet()) {
+            Map<Integer, Avatar> sorted = Database.getAvatars().entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
+
+            for (Map.Entry<Integer, Avatar> entry : sorted.entrySet()) {
                 indexToId.put(i, entry.getKey());
                 i++;
             }
