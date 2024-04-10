@@ -146,6 +146,10 @@ public class CharacterTab {
 
             ImGui.sameLine();
 
+            ImGui.image(eidolons.get(appState.eidolonItemIndex).eidolonIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
+            ImGui.sameLine();
+
             ImGui.inputTextMultiline("##EidolonDetails", eidolons.size() > 0 ? new ImString(eidolons.get(appState.eidolonItemIndex).toString()) : new ImString());
 
             ImGui.endTabItem();

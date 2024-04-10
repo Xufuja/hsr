@@ -387,10 +387,21 @@ public class AvatarData {
         Map<Integer, AvatarEidolon> paths = new HashMap<>();
 
         for (Map.Entry<String, AvatarRankConfigJson> entry : avatarRankConfig.entrySet()) {
-            AvatarEidolon avatarEidolon = new AvatarEidolon(entry.getValue().getRankID(),
-                    entry.getValue().getRank(),
+            int eidolonId = entry.getValue().getRankID();
+            int rank = entry.getValue().getRank();
+
+            String icon = (eidolonId / 100) + switch (rank) {
+                case 1, 2, 4, 6 -> String.format("_rank%1$s.png", rank);
+                case 3 -> "_skill.png";
+                case 5 -> "_ultimate.png";
+                default -> "_not_found.png";
+            };
+
+            AvatarEidolon avatarEidolon = new AvatarEidolon(eidolonId,
+                    rank,
                     Database.getTranslationNoHash(entry.getValue().getName()),
                     Database.getTranslationNoHash(entry.getValue().getDesc()),
+                    new Image(RESOURCE_PATH + "\\icon\\skill\\" + icon),
                     entry.getValue().getRankAbility().stream().map(ability -> (String) ability).collect(Collectors.toList()),
                     entry.getValue().getUnlockCost().stream().map(cost -> new ItemCount(cost.getItemID(), cost.getItemNum())).collect(Collectors.toList()),
                     entry.getValue().getParam().stream().map(dev.xfj.jsonschema2pojo.avatarrankconfig.Param::getValue).collect(Collectors.toList())
