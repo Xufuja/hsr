@@ -1,12 +1,14 @@
 package dev.xfj.tabs;
 
 import dev.xfj.AppState;
+import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 import dev.xfj.item.Item;
 import imgui.ImGui;
 import imgui.type.ImString;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ItemTab {
@@ -21,7 +23,13 @@ public class ItemTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
-            for (Map.Entry<Integer, Item> entry : Database.getNormalItems().entrySet()) {
+            Map<Integer, Item> sorted = Database.getNormalItems().entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
+
+
+            for (Map.Entry<Integer, Item> entry : sorted.entrySet()) {
                 indexToId.put(i, entry.getKey());
                 i++;
             }
