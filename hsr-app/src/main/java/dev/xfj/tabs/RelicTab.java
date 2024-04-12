@@ -32,7 +32,7 @@ public class RelicTab {
             if (ImGui.beginListBox("##RelicSets")) {
                 for (int n = 0; n < indexToId.size(); n++) {
                     boolean isSelected = (appState.relicItemIndex == n);
-                    String name = Database.getRelicSets().get(indexToId.get(n)).setName();
+                    String name = String.format("%1$s (%2$s)", Database.getRelicSets().get(indexToId.get(n)).setName(), Database.getRelicSets().get(indexToId.get(n)).setId());
 
                     if (ImGui.selectable(name, isSelected)) {
                         appState.relicItemIndex = n;
@@ -99,7 +99,7 @@ public class RelicTab {
             if (ImGui.beginListBox("##Relics")) {
                 for (int n = 0; n < relicsBySet.size(); n++) {
                     boolean isSelected = (appState.subRelicItemIndex == n);
-                    String name = String.format("%1$s * | %2$s (%3$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type());
+                    String name = String.format("%1$s * | %2$s | %3$s (%4$s)", relicsBySet.get(n).rarity().substring(relicsBySet.get(n).rarity().length() - 1), relicsBySet.get(n).name(), relicsBySet.get(n).type(), relicsBySet.get(n).relicId());
 
                     if (ImGui.selectable(name, isSelected)) {
                         appState.subRelicItemIndex = n;
