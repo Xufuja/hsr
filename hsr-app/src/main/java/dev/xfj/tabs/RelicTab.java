@@ -2,15 +2,13 @@ package dev.xfj.tabs;
 
 import dev.xfj.AppState;
 import dev.xfj.database.Database;
+import dev.xfj.item.Item;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import imgui.ImGui;
 import imgui.type.ImString;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RelicTab {
     private final AppState appState;
@@ -24,7 +22,12 @@ public class RelicTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
-            for (Map.Entry<Integer, RelicSet> entry : Database.getRelicSets().entrySet()) {
+            Map<Integer, RelicSet> sorted = Database.getRelicSets().entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
+
+            for (Map.Entry<Integer, RelicSet> entry :sorted.entrySet()) {
                 indexToId.put(i, entry.getKey());
                 i++;
             }
