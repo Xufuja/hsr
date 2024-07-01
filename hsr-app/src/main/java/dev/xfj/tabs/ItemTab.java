@@ -1,7 +1,6 @@
 package dev.xfj.tabs;
 
 import dev.xfj.AppState;
-import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 import dev.xfj.item.Item;
 import imgui.ImGui;
@@ -25,6 +24,7 @@ public class ItemTab {
 
             Map<Integer, Item> sorted = Database.getNormalItems().entrySet()
                     .stream()
+                    .filter(relic -> !canSkip(relic.getValue().getSubType()))
                     .sorted(Map.Entry.comparingByKey())
                     .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
 
@@ -58,7 +58,18 @@ public class ItemTab {
 
             ImGui.inputTextMultiline("##ItemDetails", indexToId.size() > 0 ? new ImString(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).toString()) : new ImString());
 
+            ImGui.separator();
+
+            ImGui.inputTextMultiline("##ItemDescription", indexToId.size() > 0 ? new ImString(Database.getNormalItems().get(indexToId.get(appState.normalItemIndex)).getBackgroundDescription()) : new ImString());
+
             ImGui.endTabItem();
         }
+    }
+
+    private boolean canSkip(String entry) {
+        return switch (entry) {
+            case "RelicSetShowOnly", "RelicRarityShowOnly" -> true;
+            default -> false;
+        };
     }
 }
