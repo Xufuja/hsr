@@ -78,6 +78,11 @@ public class LightConeTab {
 
             ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
 
+            ImGui.separator();
+
+            ImGui.inputTextMultiline("##LightConeDescription", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).backgroundDescription()) : new ImString());
+
+
             ImGui.endTabItem();
         }
     }
