@@ -24,15 +24,20 @@ public class CharacterTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
+            ImGui.beginDisabled(!appState.add5Star);
             if (ImGui.checkbox("4 Star", appState.add4Star)) {
                 appState.add4Star = !appState.add4Star;
+
             }
+            ImGui.endDisabled();
 
             ImGui.sameLine();
 
+            ImGui.beginDisabled(!appState.add4Star);
             if (ImGui.checkbox("5 Star", appState.add5Star)) {
                 appState.add5Star = !appState.add5Star;
             }
+            ImGui.endDisabled();
 
             int enabledRarity = 0;
 
