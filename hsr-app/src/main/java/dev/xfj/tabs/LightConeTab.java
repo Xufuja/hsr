@@ -25,8 +25,49 @@ public class LightConeTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
+            ImGui.beginDisabled(!appState.add4Star && !appState.add5Star);
+            if (ImGui.checkbox("3 Star", appState.add3Star)) {
+                appState.add3Star = !appState.add3Star;
+
+            }
+            ImGui.endDisabled();
+
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(!appState.add3Star && !appState.add5Star);
+            if (ImGui.checkbox("4 Star", appState.add4Star)) {
+                appState.add4Star = !appState.add4Star;
+
+            }
+            ImGui.endDisabled();
+
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(!appState.add3Star && !appState.add4Star);
+            if (ImGui.checkbox("5 Star", appState.add5Star)) {
+                appState.add5Star = !appState.add5Star;
+            }
+            ImGui.endDisabled();
+
+            int enabledRarity = 0;
+
+            if (appState.add3Star) {
+                enabledRarity |= 1 << 3;
+            }
+
+            if (appState.add4Star) {
+                enabledRarity |= 1 << 4;
+            }
+
+            if (appState.add5Star) {
+                enabledRarity |= 1 << 5;
+            }
+
+            int temp = enabledRarity;
+
             Map<Integer, LightCone> sorted = Database.getLightCones().entrySet()
                     .stream()
+                    .filter(entry -> !isNotSelected(temp, entry.getValue()))
                     .sorted(Map.Entry.comparingByKey())
                     .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
 
@@ -85,6 +126,10 @@ public class LightConeTab {
 
             ImGui.endTabItem();
         }
+    }
+
+    private boolean isNotSelected(int enabledRarity, LightCone entry) {
+        return (enabledRarity & (1 << entry.rarity())) == 0;
     }
 
 }
