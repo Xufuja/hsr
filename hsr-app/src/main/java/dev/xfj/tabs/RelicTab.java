@@ -56,21 +56,35 @@ public class RelicTab {
 
             List<Relic> relicsBySet = new ArrayList<>();
 
+            ImGui.beginDisabled(!appState.add3Star && !appState.add4Star && !appState.add5Star);
             if (ImGui.checkbox("2 Star", appState.add2Star)) {
                 appState.add2Star = !appState.add2Star;
             }
+            ImGui.endDisabled();
+
             ImGui.sameLine();
+
+            ImGui.beginDisabled(!appState.add2Star && !appState.add4Star && !appState.add5Star);
             if (ImGui.checkbox("3 Star", appState.add3Star)) {
                 appState.add3Star = !appState.add3Star;
             }
+            ImGui.endDisabled();
+
             ImGui.sameLine();
+
+            ImGui.beginDisabled(!appState.add2Star && !appState.add3Star && !appState.add5Star);
             if (ImGui.checkbox("4 Star", appState.add4Star)) {
                 appState.add4Star = !appState.add4Star;
             }
+            ImGui.endDisabled();
+
             ImGui.sameLine();
+
+            ImGui.beginDisabled(!appState.add2Star && !appState.add3Star && !appState.add4Star);
             if (ImGui.checkbox("5 Star", appState.add5Star)) {
                 appState.add5Star = !appState.add5Star;
             }
+            ImGui.endDisabled();
 
             int enabledRarity = 0;
             if (appState.add2Star) {
