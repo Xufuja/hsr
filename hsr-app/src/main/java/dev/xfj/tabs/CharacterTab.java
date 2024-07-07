@@ -24,32 +24,7 @@ public class CharacterTab {
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
-            ImGui.beginDisabled(!appState.add5Star);
-            if (ImGui.checkbox("4 Star", appState.add4Star)) {
-                appState.add4Star = !appState.add4Star;
-
-            }
-            ImGui.endDisabled();
-
-            ImGui.sameLine();
-
-            ImGui.beginDisabled(!appState.add4Star);
-            if (ImGui.checkbox("5 Star", appState.add5Star)) {
-                appState.add5Star = !appState.add5Star;
-            }
-            ImGui.endDisabled();
-
-            int enabledRarity = 0;
-
-            if (appState.add4Star) {
-                enabledRarity |= 1 << 4;
-            }
-
-            if (appState.add5Star) {
-                enabledRarity |= 1 << 5;
-            }
-
-            int temp = enabledRarity;
+            int temp = filterRarity();
             Map<Integer, Avatar> sorted = Database.getAvatars().entrySet()
                     .stream()
                     .filter(entry -> !isNotSelected(temp, entry.getValue()))
@@ -183,5 +158,34 @@ public class CharacterTab {
 
     private boolean isNotSelected(int enabledRarity, Avatar entry) {
         return (enabledRarity & (1 << Integer.parseInt(entry.rarity().substring(entry.rarity().length() - 1)))) == 0;
+    }
+
+    private int filterRarity() {
+        ImGui.beginDisabled(!appState.add5Star);
+        if (ImGui.checkbox("4 Star", appState.add4Star)) {
+            appState.add4Star = !appState.add4Star;
+
+        }
+        ImGui.endDisabled();
+
+        ImGui.sameLine();
+
+        ImGui.beginDisabled(!appState.add4Star);
+        if (ImGui.checkbox("5 Star", appState.add5Star)) {
+            appState.add5Star = !appState.add5Star;
+        }
+        ImGui.endDisabled();
+
+        int enabledRarity = 0;
+
+        if (appState.add4Star) {
+            enabledRarity |= 1 << 4;
+        }
+
+        if (appState.add5Star) {
+            enabledRarity |= 1 << 5;
+        }
+
+        return enabledRarity;
     }
 }
