@@ -16,4 +16,36 @@ public class AppState {
     public int normalItemIndex = 0;
     public int abilityItemIndex = 0;
     public int eidolonItemIndex = 0;
+
+    public boolean isAdd2Star() {
+        return add2Star;
+    }
+
+    public void setAdd2Star(boolean add2Star) {
+        this.add2Star = add2Star;
+    }
+
+    public boolean isAdd3Star() {
+        return add3Star;
+    }
+
+    public void setAdd3Star(boolean add3Star) {
+        this.add3Star = add3Star;
+    }
+
+    public boolean isAdd4Star() {
+        return add4Star;
+    }
+
+    public void setAdd4Star(boolean add4Star) {
+        this.add4Star = add4Star;
+    }
+
+    public boolean isAdd5Star() {
+        return add5Star;
+    }
+
+    public void setAdd5Star(boolean add5Star) {
+        this.add5Star = add5Star;
+    }
 }
