@@ -7,15 +7,16 @@ public class AppState {
     public ImString lastHash = new ImString("");
     public int relicItemIndex = 0;
     public int subRelicItemIndex = 0;
-    public boolean add2Star = true;
-    public boolean add3Star = true;
-    public boolean add4Star = true;
-    public boolean add5Star = true;
     public int characterItemIndex = 0;
     public int lightConeItemIndex = 0;
     public int normalItemIndex = 0;
     public int abilityItemIndex = 0;
     public int eidolonItemIndex = 0;
+
+    private boolean add2Star = true;
+    private boolean add3Star = true;
+    private boolean add4Star = true;
+    private boolean add5Star = true;
 
     public boolean isAdd2Star() {
         return add2Star;

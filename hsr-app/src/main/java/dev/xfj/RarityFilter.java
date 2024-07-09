@@ -3,13 +3,14 @@ package dev.xfj;
 import imgui.ImGui;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class RarityFilter {
-    private AppState appState;
-    private boolean add2Star;
-    private boolean add3Star;
-    private boolean add4Star;
-    private boolean add5Star;
+    private final AppState appState;
+    private final boolean add2Star;
+    private final boolean add3Star;
+    private final boolean add4Star;
+    private final boolean add5Star;
 
     public RarityFilter(AppState appState, boolean add2Star, boolean add3Star, boolean add4Star, boolean add5Star) {
         this.appState = appState;
@@ -19,9 +20,9 @@ public class RarityFilter {
         this.add5Star = add5Star;
     }
 
-    public boolean raritiesDisabled(String skip) {
+    private boolean raritiesDisabled(String skip) {
         Field[] fields = getClass().getDeclaredFields();
-        boolean result = false;
+        boolean result = true;
 
         for (Field field : fields) {
             String name = field.getName();
@@ -29,15 +30,10 @@ public class RarityFilter {
             if (!name.contains(skip)) {
                 try {
                     if (name.startsWith("add")) {
-                        String getter = "is" + name.substring(0, 1).toUpperCase() + name.substring(1);
-                        boolean item = (boolean) getClass().getMethod(getter).invoke(this);
+                        field.setAccessible(true);
 
-                        if (item) {
-                            boolean state = (boolean) AppState.class.getMethod(getter).invoke(appState);
-                            
-                            if (!state) {
-                                result = true;
-                            } else {
+                        if ((boolean) field.get(this)) {
+                            if ((boolean) AppState.class.getMethod("is" + name.substring(0, 1).toUpperCase() + name.substring(1)).invoke(appState)) {
                                 result = false;
                                 break;
                             }
@@ -52,74 +48,62 @@ public class RarityFilter {
     }
 
     public int filterRarity() {
-        if (add2Star) {
-            ImGui.beginDisabled(raritiesDisabled("2"));
-            if (ImGui.checkbox("2 Star", appState.add2Star)) {
-                appState.add2Star = !appState.add2Star;
+        Field[] fields = getClass().getDeclaredFields();
+
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            String name = field.getName();
+
+            try {
+                if (name.startsWith("add")) {
+                    field.setAccessible(true);
+
+                    renderRarityCheckbox((boolean) field.get(this), name.replace("add", "").replace("Star", ""), i + 1 == fields.length);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
             }
-            ImGui.endDisabled();
-
-            ImGui.sameLine();
-        }
-
-        if (add3Star) {
-            ImGui.beginDisabled(raritiesDisabled("3"));
-            if (ImGui.checkbox("3 Star", appState.add3Star)) {
-                appState.add3Star = !appState.add3Star;
-            }
-            ImGui.endDisabled();
-
-            ImGui.sameLine();
-        }
-
-        if (add4Star) {
-            ImGui.beginDisabled(raritiesDisabled("4"));
-            if (ImGui.checkbox("4 Star", appState.add4Star)) {
-                appState.add4Star = !appState.add4Star;
-            }
-            ImGui.endDisabled();
-
-            ImGui.sameLine();
-        }
-
-        if (add5Star) {
-            ImGui.beginDisabled(raritiesDisabled("5"));
-            if (ImGui.checkbox("5 Star", appState.add5Star)) {
-                appState.add5Star = !appState.add5Star;
-            }
-            ImGui.endDisabled();
         }
 
         int enabledRarity = 0;
-        if (appState.add2Star) {
-            enabledRarity |= 1 << 2;
-        }
-        if (appState.add3Star) {
-            enabledRarity |= 1 << 3;
-        }
-        if (appState.add4Star) {
-            enabledRarity |= 1 << 4;
-        }
-        if (appState.add5Star) {
-            enabledRarity |= 1 << 5;
+
+        Method[] methods = AppState.class.getMethods();
+
+        for (Method method : methods) {
+            String name = method.getName();
+
+            if (name.startsWith("is")) {
+                try {
+                    if ((boolean) method.invoke(appState)) {
+                        enabledRarity |= 1 << Integer.parseInt(name.replace("isAdd", "").replace("Star", ""));
+                    }
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
+            }
         }
 
         return enabledRarity;
     }
 
-    public boolean isAdd2Star() {
-        return add2Star;
-    }
+    private void renderRarityCheckbox(boolean render, String rarity, boolean last) {
+        if (render) {
+            try {
+                boolean isStar = (boolean) AppState.class.getMethod(String.format("isAdd%sStar", rarity)).invoke(appState);
 
-    public boolean isAdd3Star() {
-        return add3Star;
-    }
+                ImGui.beginDisabled(raritiesDisabled(rarity));
+                if (ImGui.checkbox(rarity + " Star", isStar)) {
+                    AppState.class.getMethod(String.format("setAdd%sStar", rarity), boolean.class).invoke(appState, !isStar);
+                }
+                ImGui.endDisabled();
 
-    public boolean isAdd4Star() {
-        return add4Star;
-    }
-
-    public boolean isAdd5Star() {
-        return add5Star;
+                if (!last) {
+                    ImGui.sameLine();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
     }
 }
