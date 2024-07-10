@@ -57,8 +57,7 @@ public class RarityFilter {
             try {
                 if (name.startsWith("add")) {
                     field.setAccessible(true);
-
-                    renderRarityCheckbox((boolean) field.get(this), name.replace("add", "").replace("Star", ""), i + 1 == fields.length);
+                    renderRarityCheckbox((boolean) field.get(this), rarityFromString(name), i + 1 == fields.length);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e.getMessage());
@@ -75,7 +74,7 @@ public class RarityFilter {
             if (name.startsWith("is")) {
                 try {
                     if ((boolean) method.invoke(appState)) {
-                        enabledRarity |= 1 << Integer.parseInt(name.replace("isAdd", "").replace("Star", ""));
+                        enabledRarity |= 1 << Integer.parseInt(rarityFromString(name));
                     }
 
                 } catch (Exception e) {
@@ -105,5 +104,15 @@ public class RarityFilter {
                 throw new RuntimeException(e.getMessage());
             }
         }
+    }
+
+    private String rarityFromString(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            if (Character.isDigit(text.charAt(i))) {
+                return String.valueOf(text.charAt(i));
+            }
+        }
+
+        return "";
     }
 }
