@@ -13,7 +13,11 @@ public class HashTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("Hash")) {
+        String tabName = "Hash";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             ImGui.inputText("##Hash", appState.hashBuffer, ImGuiInputTextFlags.None);
 
             if (ImGui.button("Calculate")) {

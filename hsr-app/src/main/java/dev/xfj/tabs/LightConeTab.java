@@ -3,7 +3,6 @@ package dev.xfj.tabs;
 import dev.xfj.AppState;
 import dev.xfj.Image;
 import dev.xfj.RarityFilter;
-import dev.xfj.avatar.Avatar;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import imgui.ImGui;
@@ -22,7 +21,11 @@ public class LightConeTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("LightCones")) {
+        String tabName = "LightCones";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 

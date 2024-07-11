@@ -12,6 +12,7 @@ public class AppState {
     public int normalItemIndex = 0;
     public int abilityItemIndex = 0;
     public int eidolonItemIndex = 0;
+    public String currentTab = "";
 
     private boolean add2Star = true;
     private boolean add3Star = true;
@@ -48,5 +49,16 @@ public class AppState {
 
     public void setAdd5Star(boolean add5Star) {
         this.add5Star = add5Star;
+    }
+
+    public void resetFilters(String tabName) {
+        if (!currentTab.equals(tabName)) {
+            add2Star = true;
+            add3Star = true;
+            add4Star = true;
+            add5Star = true;
+        }
+        
+        currentTab = tabName;
     }
 }

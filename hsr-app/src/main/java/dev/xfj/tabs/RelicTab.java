@@ -3,7 +3,6 @@ package dev.xfj.tabs;
 import dev.xfj.AppState;
 import dev.xfj.RarityFilter;
 import dev.xfj.database.Database;
-import dev.xfj.item.Item;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
 import imgui.ImGui;
@@ -19,7 +18,11 @@ public class RelicTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("Relics")) {
+        String tabName = "Relics";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 

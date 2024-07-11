@@ -29,7 +29,11 @@ public class TestTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("Testing")) {
+        String tabName = "Testing";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             if (ImGui.button("Execute")) {
                 for (Map.Entry<Integer, LightCone> entry : Database.getLightCones().entrySet()) {
                     LightCone lc = entry.getValue();

@@ -21,7 +21,11 @@ public class CharacterTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("Characters")) {
+        String tabName = "Characters";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 

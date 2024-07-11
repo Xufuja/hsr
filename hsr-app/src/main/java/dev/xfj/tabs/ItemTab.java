@@ -18,7 +18,11 @@ public class ItemTab {
     }
 
     public void onUIRender() {
-        if (ImGui.beginTabItem("Items")) {
+        String tabName = "Items";
+
+        if (ImGui.beginTabItem(tabName)) {
+            appState.resetFilters(tabName);
+
             Map<Integer, Integer> indexToId = new HashMap<>();
             int i = 0;
 
