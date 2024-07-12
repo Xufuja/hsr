@@ -2,6 +2,7 @@ package dev.xfj.tabs;
 
 import dev.xfj.AppState;
 import dev.xfj.RarityFilter;
+import dev.xfj.character.RelicPiece;
 import dev.xfj.database.Database;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
@@ -9,6 +10,7 @@ import imgui.ImGui;
 import imgui.type.ImString;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RelicTab {
     private final AppState appState;
@@ -31,7 +33,7 @@ public class RelicTab {
                     .sorted(Map.Entry.comparingByKey())
                     .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), LinkedHashMap::putAll);
 
-            for (Map.Entry<Integer, RelicSet> entry :sorted.entrySet()) {
+            for (Map.Entry<Integer, RelicSet> entry : sorted.entrySet()) {
                 indexToId.put(i, entry.getKey());
                 i++;
             }
@@ -93,6 +95,11 @@ public class RelicTab {
             ImGui.sameLine();
 
             ImGui.image(relicsBySet.get(appState.subRelicItemIndex).relicIcon().getRendererId(), 128, 128, 0, 1, 1, 0);
+
+            ImGui.separator();
+
+            RelicPiece relicPiece = new RelicPiece(relicsBySet.get(appState.subRelicItemIndex).relicId());
+            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? new ImString(relicPiece.getRelic().getPossibleMainStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining(", "))) : new ImString());
 
             ImGui.separator();
 

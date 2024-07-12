@@ -58,7 +58,7 @@ public class AppState {
             add4Star = true;
             add5Star = true;
         }
-        
+
         currentTab = tabName;
     }
 }
