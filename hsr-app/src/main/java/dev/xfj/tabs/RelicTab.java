@@ -98,8 +98,7 @@ public class RelicTab {
 
             ImGui.separator();
 
-            RelicPiece relicPiece = new RelicPiece(relicsBySet.get(appState.subRelicItemIndex).relicId());
-            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? new ImString(relicPiece.getRelic().getPossibleMainStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining(", "))) : new ImString());
+            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).getPossibleMainStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining(", "))) : new ImString());
 
             ImGui.separator();
 
