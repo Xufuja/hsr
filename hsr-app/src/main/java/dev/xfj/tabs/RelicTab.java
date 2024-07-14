@@ -100,11 +100,11 @@ public class RelicTab {
 
             ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
 
-            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).getPossibleMainStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n "))) : new ImString());
+            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).getPossibleMainStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n"))) : new ImString());
 
             ImGui.sameLine();
 
-            ImGui.inputTextMultiline("##RelicSubStats", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).getPossibleSubStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n "))) : new ImString());
+            ImGui.inputTextMultiline("##RelicSubStats", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).getPossibleSubStats().stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n"))) : new ImString());
 
             ImGui.popItemWidth();
 
