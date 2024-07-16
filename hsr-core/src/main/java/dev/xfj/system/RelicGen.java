@@ -50,12 +50,12 @@ public class RelicGen {
         return createRelicFromList(relics);
     }
 
-    private static RelicPiece createRelicFromList(List<Relic> relics) {
+    public static RelicPiece createRelicFromList(List<Relic> relics) {
         int selected = relics.get(new Random().nextInt(relics.size())).relicId();
         return createRelic(selected);
     }
 
-    private static RelicPiece createRelic(int relicId) {
+    public static RelicPiece createRelic(int relicId) {
         RelicPiece relicPiece = new RelicPiece(relicId);
         relicPiece.setMainStat(relicPiece.getRelic().getPossibleMainStats().get(new Random().nextInt(relicPiece.getRelic().getPossibleMainStats().size())));
 

@@ -80,7 +80,7 @@ public class RelicPiece extends Data {
                 result.add(String.format("%1$s: %2$s", Database.getAvatarStatTypes().get(entry.getKey()).relicDescription(), sumUp(entry.getValue())));
             }
         }
-        return String.join(", ", result);
+        return String.join("\n", result);
     }
 
     private String convertToPercentage(List<Double> stats) {
@@ -101,13 +101,6 @@ public class RelicPiece extends Data {
 
     @Override
     public String toString() {
-        return "RelicPiece{" +
-                "name=" + getRelic().name() +
-                ", currentLevel=" + getCurrentLevel() +
-                ", isMaxLevel=" + isMaxLevel() +
-                ", currentExp=" + getCurrentExp() +
-                ", mainStat='" + Database.getAvatarStatTypes().get(mainStat).relicDescription() + "': " + (!mainStat.contains("Delta") ? String.format("%.2f", getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel()) * 100) : getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel())) +
-                ", subStats=" + subStatsToString() +
-                '}';
+        return String.format("%1$s (%2$s)\n\nLevel: %3$s/%4$s\nExp: %5$s\n\n%6$s\n\n%7$s", getRelic().name(), isLocked() ? "Locked" : "Unlocked", getCurrentLevel(), getRelic().maxLevel(), getCurrentExp(), Database.getAvatarStatTypes().get(mainStat).relicDescription() + ": " + (!mainStat.contains("Delta") ? String.format("%.2f", getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel()) * 100) : getRelic().getBaseMainStatAtLevel(mainStat, getCurrentLevel())), subStatsToString());
     }
 }

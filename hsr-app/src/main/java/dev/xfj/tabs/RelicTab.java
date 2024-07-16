@@ -6,6 +6,7 @@ import dev.xfj.character.RelicPiece;
 import dev.xfj.database.Database;
 import dev.xfj.relic.Relic;
 import dev.xfj.relic.RelicSet;
+import dev.xfj.system.RelicGen;
 import imgui.ImGui;
 import imgui.type.ImString;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class RelicTab {
     private final AppState appState;
+    private static RelicPiece generatedRelic = null;
 
     public RelicTab(AppState appState) {
         this.appState = appState;
@@ -100,13 +102,27 @@ public class RelicTab {
 
             ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
 
-            ImGui.inputTextMultiline("##RelicMainStats", relicsBySet.size() > 0 ? getStatNames(relicsBySet.get(appState.subRelicItemIndex).getPossibleMainStats()) : new ImString());
+            ImGui.inputTextMultiline("##RelicStats", relicsBySet.size() > 0 ? formatPossibleStats(relicsBySet.get(appState.subRelicItemIndex).getPossibleMainStats(), relicsBySet.get(appState.subRelicItemIndex).getPossibleSubStats()) : new ImString());
 
             ImGui.sameLine();
 
-            ImGui.inputTextMultiline("##RelicSubStats", relicsBySet.size() > 0 ? getStatNames(relicsBySet.get(appState.subRelicItemIndex).getPossibleSubStats()) : new ImString());
+            ImGui.inputTextMultiline("##RelicExample", generatedRelic != null ? new ImString(generatedRelic.toString()) : new ImString());
 
             ImGui.popItemWidth();
+
+            if (ImGui.button("Generate Example")) {
+                generatedRelic = RelicGen.createRelic(relicsBySet.get(appState.subRelicItemIndex).relicId());
+            }
+
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(generatedRelic == null);
+            if (ImGui.button("Next Roll")) {
+                if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
+                    generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), generatedRelic.getCurrentLevel() % 3 == 0 ? generatedRelic.getCurrentLevel() + 3 : generatedRelic.getCurrentLevel() + 2));
+                }
+            }
+            ImGui.endDisabled();
 
             ImGui.separator();
 
@@ -116,8 +132,15 @@ public class RelicTab {
         }
     }
 
-    private ImString getStatNames(List<String> possibleStats) {
-        return new ImString(possibleStats.stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n")));
+    private ImString formatPossibleStats(List<String> mainStats, List<String> subStats) {
+        String main = getPossibleStats(mainStats);
+        String sub = getPossibleStats(subStats);
+
+        return new ImString(String.format("Main Stats:\n%1$s\n\nSub Stats:\n%2$s", main, sub));
+    }
+
+    private String getPossibleStats(List<String> possibleStats) {
+        return possibleStats.stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n"));
     }
 
 }
