@@ -22,23 +22,19 @@ public class RelicPiece extends Data {
     }
 
     public boolean levelUp(int exp) {
-        int startingLevel = super.getCurrentLevel();
-
         if (super.levelUp(relic, exp)) {
-            for (int i = startingLevel; i <= super.getCurrentLevel(); i++) {
-                if (i == 3 || i == 6 || i == 9 || i == 12 || i == 15) {
-                    if (subStats.keySet().size() < 4) {
-                        List<String> possible = getRelic().getPossibleSubStats();
+            if (super.getCurrentLevel() % 3 == 0) {
+                if (subStats.keySet().size() < 4) {
+                    List<String> possible = getRelic().getPossibleSubStats();
 
-                        possible.removeAll(subStats.keySet());
+                    possible.removeAll(subStats.keySet());
 
-                        String selected = possible.get(new Random().nextInt(possible.size()));
-                        subStats.put(selected, Stream.of(doRoll(selected)).collect(toCollection(ArrayList::new)));
-                    } else {
-                        Object[] possible = subStats.keySet().toArray();
-                        String selected = (String) possible[(new Random().nextInt(possible.length))];
-                        subStats.get(selected).add(doRoll(selected));
-                    }
+                    String selected = possible.get(new Random().nextInt(possible.size()));
+                    subStats.put(selected, Stream.of(doRoll(selected)).collect(toCollection(ArrayList::new)));
+                } else {
+                    Object[] possible = subStats.keySet().toArray();
+                    String selected = (String) possible[(new Random().nextInt(possible.length))];
+                    subStats.get(selected).add(doRoll(selected));
                 }
             }
             return true;
