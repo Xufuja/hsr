@@ -124,6 +124,16 @@ public class RelicTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(generatedRelic == null);
+            if (ImGui.button("Max Level")) {
+                if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
+                    generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), generatedRelic.getRelic().maxLevel()));
+                }
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             ImGui.inputTextMultiline("##RelicDetails", relicsBySet.size() > 0 ? new ImString(relicsBySet.get(appState.subRelicItemIndex).toString()) : new ImString());
