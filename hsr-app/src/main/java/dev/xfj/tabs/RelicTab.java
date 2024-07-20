@@ -117,6 +117,16 @@ public class RelicTab {
             ImGui.sameLine();
 
             ImGui.beginDisabled(generatedRelic == null || generatedRelic.getCurrentLevel() == generatedRelic.getRelic().maxLevel());
+            if (ImGui.button("+1 Level")) {
+                if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
+                    generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), generatedRelic.getCurrentLevel() + 1));
+                }
+            }
+            ImGui.endDisabled();
+
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(generatedRelic == null || generatedRelic.getCurrentLevel() == generatedRelic.getRelic().maxLevel());
             if (ImGui.button("Next Roll")) {
                 if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
                     generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), generatedRelic.getCurrentLevel() % 3 == 0 ? generatedRelic.getCurrentLevel() + 3 : generatedRelic.getCurrentLevel() + 2));
