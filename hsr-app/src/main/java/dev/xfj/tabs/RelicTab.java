@@ -129,7 +129,7 @@ public class RelicTab {
             ImGui.beginDisabled(generatedRelic == null || generatedRelic.getCurrentLevel() == generatedRelic.getRelic().maxLevel());
             if (ImGui.button("Next Roll")) {
                 if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
-                    generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), generatedRelic.getCurrentLevel() % 3 == 0 ? generatedRelic.getCurrentLevel() + 3 : generatedRelic.getCurrentLevel() + 2));
+                    generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), rollableLevel(generatedRelic.getCurrentLevel())));
                 }
             }
             ImGui.endDisabled();
@@ -163,4 +163,13 @@ public class RelicTab {
         return possibleStats.stream().map(stat -> Database.getAvatarStatTypes().get(stat).relicDescription()).collect(Collectors.joining("\n"));
     }
 
+    private int rollableLevel(int level) {
+        int nextLevel = level + 1;
+
+        if (nextLevel % 3 == 0) {
+            return nextLevel;
+        } else {
+            return rollableLevel(nextLevel);
+        }
+    }
 }
