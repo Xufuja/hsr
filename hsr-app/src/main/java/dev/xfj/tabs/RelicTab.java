@@ -116,15 +116,15 @@ public class RelicTab {
 
             ImGui.sameLine();
 
-            levelUpButton("+1 Level", generatedRelic != null ? generatedRelic.getCurrentLevel() + 1 : 0);
+            levelUpButton("+1 Level", "add1");
 
             ImGui.sameLine();
 
-            levelUpButton("Next Roll", rollableLevel(generatedRelic != null ? generatedRelic.getCurrentLevel() : 0));
+            levelUpButton("Next Roll", "addNext");
 
             ImGui.sameLine();
 
-            levelUpButton("Max Level", rollableLevel(generatedRelic != null ? generatedRelic.getRelic().maxLevel() : 0));
+            levelUpButton("Max Level", "addMax");
 
             ImGui.separator();
 
@@ -155,8 +155,15 @@ public class RelicTab {
         }
     }
 
-    private void levelUpButton(String label, int expectedLevel) {
+    private void levelUpButton(String label, String type) {
         ImGui.beginDisabled(generatedRelic == null || generatedRelic.getCurrentLevel() == generatedRelic.getRelic().maxLevel());
+        int expectedLevel = generatedRelic != null ? switch (type) {
+            case "add1" -> generatedRelic.getCurrentLevel() + 1;
+            case "addNext" -> rollableLevel(generatedRelic.getCurrentLevel());
+            case "addMax" -> generatedRelic.getRelic().maxLevel();
+            default -> throw new RuntimeException("Invalid type!");
+        } : 0;
+
         if (ImGui.button(label)) {
             if (generatedRelic.getCurrentLevel() != generatedRelic.getRelic().maxLevel()) {
                 generatedRelic.levelUp(generatedRelic.getRelic().expRequiredForLevel(generatedRelic.getCurrentLevel(), expectedLevel));
