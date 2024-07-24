@@ -116,15 +116,15 @@ public class RelicTab {
 
             ImGui.sameLine();
 
-            levelUpButton("+1 Level", "add1");
+            levelUpButton("+1 Level", LevelUpType.ADD_ONE);
 
             ImGui.sameLine();
 
-            levelUpButton("Next Roll", "addNext");
+            levelUpButton("Next Roll", LevelUpType.ADD_NEXT);
 
             ImGui.sameLine();
 
-            levelUpButton("Max Level", "addMax");
+            levelUpButton("Max Level", LevelUpType.ADD_MAX);
 
             ImGui.separator();
 
@@ -135,10 +135,7 @@ public class RelicTab {
     }
 
     private ImString formatPossibleStats(List<String> mainStats, List<String> subStats) {
-        String main = getPossibleStats(mainStats);
-        String sub = getPossibleStats(subStats);
-
-        return new ImString(String.format("Main Stats:\n%1$s\n\nSub Stats:\n%2$s", main, sub));
+        return new ImString(String.format("Main Stats:\n%1$s\n\nSub Stats:\n%2$s", getPossibleStats(mainStats), getPossibleStats(subStats)));
     }
 
     private String getPossibleStats(List<String> possibleStats) {
@@ -155,13 +152,18 @@ public class RelicTab {
         }
     }
 
-    private void levelUpButton(String label, String type) {
+    private enum LevelUpType {
+        ADD_ONE,
+        ADD_NEXT,
+        ADD_MAX
+    }
+
+    private void levelUpButton(String label, LevelUpType type) {
         ImGui.beginDisabled(generatedRelic == null || generatedRelic.getCurrentLevel() == generatedRelic.getRelic().maxLevel());
         int expectedLevel = generatedRelic != null ? switch (type) {
-            case "add1" -> generatedRelic.getCurrentLevel() + 1;
-            case "addNext" -> rollableLevel(generatedRelic.getCurrentLevel());
-            case "addMax" -> generatedRelic.getRelic().maxLevel();
-            default -> throw new RuntimeException("Invalid type!");
+            case ADD_ONE -> generatedRelic.getCurrentLevel() + 1;
+            case ADD_NEXT -> rollableLevel(generatedRelic.getCurrentLevel());
+            case ADD_MAX -> generatedRelic.getRelic().maxLevel();
         } : 0;
 
         if (ImGui.button(label)) {
