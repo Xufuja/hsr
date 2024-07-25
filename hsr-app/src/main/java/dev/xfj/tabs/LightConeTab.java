@@ -3,6 +3,7 @@ package dev.xfj.tabs;
 import dev.xfj.AppState;
 import dev.xfj.Image;
 import dev.xfj.RarityFilter;
+import dev.xfj.character.LightConeData;
 import dev.xfj.database.Database;
 import dev.xfj.lightcone.LightCone;
 import imgui.ImGui;
@@ -83,12 +84,21 @@ public class LightConeTab {
 
             ImGui.separator();
 
-            ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
+            LightConeData lightConeData = new LightConeData(indexToId.get(appState.lightConeItemIndex));
+
+            ImGui.inputTextMultiline("##LightConeData", indexToId.size() > 0 ? new ImString(lightConeData.toString()) : new ImString());
 
             ImGui.separator();
 
+            ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
+
+            ImGui.inputTextMultiline("##LightConeDetails", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).toString()) : new ImString());
+
+            ImGui.sameLine();
+
             ImGui.inputTextMultiline("##LightConeDescription", indexToId.size() > 0 ? new ImString(Database.getLightCones().get(indexToId.get(appState.lightConeItemIndex)).backgroundDescription()) : new ImString());
 
+            ImGui.popItemWidth();
 
             ImGui.endTabItem();
         }

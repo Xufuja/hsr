@@ -11,6 +11,7 @@ public class LightConeData extends Data {
         super();
         this.lightCone = Database.getLightCones().get(lightConeId);
         this.locked = false;
+        unlockSuperimpose();
     }
 
     public boolean ascend() {
@@ -51,12 +52,6 @@ public class LightConeData extends Data {
 
     @Override
     public String toString() {
-        return "LightConeData{" +
-                "currentLevel=" + getCurrentLevel() +
-                ", isMaxLevel=" + isMaxLevel() +
-                ", currentExp=" + getCurrentExp() +
-                ", currentAscension=" + getCurrentAscension() +
-                ", currentSuperimposition=" + getCurrentDupe() +
-                '}';
+        return String.format("%1$s\n%2$s\n%3$s/%4$s\n\n%5$s\n%6$s\n%7$s\n\n%8$s", lightCone.name(), lightCone.path(), getCurrentLevel(), lightCone.getStatsByAscension(getCurrentAscension()).getMaxLevel(), getMaxHP(), getMaxAttack(), getMaxDefense(), lightCone.getInterpolatedPassive(getCurrentDupe()));
     }
 }
