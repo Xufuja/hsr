@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class LightConeTab {
     private final AppState appState;
+    private static LightConeData selectedLightCone;
 
     public LightConeTab(AppState appState) {
         this.appState = appState;
@@ -84,9 +85,19 @@ public class LightConeTab {
 
             ImGui.separator();
 
-            LightConeData lightConeData = new LightConeData(indexToId.get(appState.lightConeItemIndex));
+            ImGui.inputTextMultiline("##LightConeData", selectedLightCone != null && indexToId.size() > 0 ? new ImString(selectedLightCone.toString()) : new ImString());
 
-            ImGui.inputTextMultiline("##LightConeData", indexToId.size() > 0 ? new ImString(lightConeData.toString()) : new ImString());
+            if (ImGui.button("Show Stats")) {
+                selectedLightCone = new LightConeData(indexToId.get(appState.lightConeItemIndex));
+            }
+
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentLevel() == selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel());
+            if (ImGui.button("Level Up")) {
+                selectedLightCone.levelUp(selectedLightCone.getLightCone().expRequiredForLevel(selectedLightCone.getCurrentLevel(), selectedLightCone.getCurrentLevel() + 1));
+            }
+            ImGui.endDisabled();
 
             ImGui.separator();
 
