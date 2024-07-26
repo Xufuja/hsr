@@ -52,6 +52,6 @@ public class LightConeData extends Data {
 
     @Override
     public String toString() {
-        return String.format("%1$s\n%2$s\n%3$s/%4$s\n\n%5$s\n%6$s\n%7$s\n\n%8$s", lightCone.name(), lightCone.path(), getCurrentLevel(), lightCone.getStatsByAscension(getCurrentAscension()).getMaxLevel(), getMaxHP(), getMaxAttack(), getMaxDefense(), lightCone.getInterpolatedPassive(getCurrentDupe()));
+        return String.format("%1$s\n%2$s\nAscension: %3$s\nLevel: %4$s/%5$s\n\nHP: %6$s\nAttack: %7$s\n Defense: %8$s\n\nSuperimposition: %9$s\n\n%10$s\n%11$s", lightCone.name(), lightCone.path(), getCurrentAscension(), getCurrentLevel(), lightCone.getStatsByAscension(getCurrentAscension()).getMaxLevel(), getMaxHP(), getMaxAttack(), getMaxDefense(), getCurrentDupe(), lightCone.getPassiveBySuperimposition(getCurrentDupe()).name(), lightCone.getInterpolatedPassive(getCurrentDupe()));
     }
 }
