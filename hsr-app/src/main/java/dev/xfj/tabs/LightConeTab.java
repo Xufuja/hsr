@@ -99,6 +99,14 @@ public class LightConeTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentLevel() == selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel());
+            if (ImGui.button("Max Level")) {
+                selectedLightCone.levelUp(selectedLightCone.getLightCone().expRequiredForLevel(selectedLightCone.getCurrentLevel(), selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel()));
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
