@@ -107,6 +107,14 @@ public class LightConeTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentLevel() != selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel() || selectedLightCone.getCurrentAscension() == selectedLightCone.getLightCone().getMaxAscension());
+            if (ImGui.button("Ascend")) {
+                selectedLightCone.ascend();
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
