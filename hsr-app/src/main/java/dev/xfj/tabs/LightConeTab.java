@@ -115,6 +115,15 @@ public class LightConeTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentDupe() == selectedLightCone.getLightCone().maxSuperimpose());
+            if (ImGui.button("Superimpose")) {
+                selectedLightCone.unlockSuperimpose();
+            }
+            ImGui.endDisabled();
+
+
             ImGui.separator();
 
             ImGui.pushItemWidth(ImGui.calcItemWidth() / 2);
