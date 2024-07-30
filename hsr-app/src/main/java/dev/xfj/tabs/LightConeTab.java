@@ -123,6 +123,18 @@ public class LightConeTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentLevel() == selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getLightCone().getMaxAscension()).getMaxLevel());
+            if (ImGui.button("Max Out")) {
+
+                for (int j = selectedLightCone.getCurrentAscension(); j < selectedLightCone.getLightCone().getMaxAscension() + 1; j++) {
+                    selectedLightCone.levelUp(selectedLightCone.getLightCone().expRequiredForLevel(selectedLightCone.getCurrentLevel(), selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel()));
+                    selectedLightCone.ascend();
+                    selectedLightCone.unlockSuperimpose();
+                }
+            }
+            ImGui.endDisabled();
 
             ImGui.separator();
 
