@@ -125,9 +125,18 @@ public class LightConeTab {
 
             ImGui.sameLine();
 
+            ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentDupe() == selectedLightCone.getLightCone().maxSuperimpose());
+            if (ImGui.button("Max Superimpose")) {
+                for (int j = selectedLightCone.getCurrentDupe(); j < selectedLightCone.getLightCone().maxSuperimpose() + 1; j++) {
+                     selectedLightCone.unlockSuperimpose();
+                }
+            }
+            ImGui.endDisabled();
+
+            ImGui.sameLine();
+
             ImGui.beginDisabled(selectedLightCone == null || selectedLightCone.getCurrentLevel() == selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getLightCone().getMaxAscension()).getMaxLevel());
             if (ImGui.button("Max Out")) {
-
                 for (int j = selectedLightCone.getCurrentAscension(); j < selectedLightCone.getLightCone().getMaxAscension() + 1; j++) {
                     selectedLightCone.levelUp(selectedLightCone.getLightCone().expRequiredForLevel(selectedLightCone.getCurrentLevel(), selectedLightCone.getLightCone().getStatsByAscension(selectedLightCone.getCurrentAscension()).getMaxLevel()));
                     selectedLightCone.ascend();
