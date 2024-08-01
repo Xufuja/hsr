@@ -6,6 +6,8 @@ import dev.xfj.RarityFilter;
 import dev.xfj.avatar.Avatar;
 import dev.xfj.avatar.AvatarAbility;
 import dev.xfj.avatar.AvatarEidolon;
+import dev.xfj.character.CharacterData;
+import dev.xfj.character.LightConeData;
 import dev.xfj.database.Database;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
@@ -15,6 +17,7 @@ import java.util.*;
 
 public class CharacterTab {
     private final AppState appState;
+    private CharacterData selectedCharacter;
 
     public CharacterTab(AppState appState) {
         this.appState = appState;
@@ -87,7 +90,11 @@ public class CharacterTab {
 
             ImGui.separator();
 
-            ImGui.inputTextMultiline("##CharacterDetails", indexToId.size() > 0 ? new ImString(sorted.get(indexToId.get(appState.characterItemIndex)).toString()) : new ImString());
+            ImGui.inputTextMultiline("##CharacterDetails", selectedCharacter != null && indexToId.size() > 0 ? new ImString(selectedCharacter.toString()) : new ImString());
+
+            if (ImGui.button("Show Stats")) {
+                selectedCharacter = new CharacterData(indexToId.get(appState.characterItemIndex));
+            }
 
             ImGui.separator();
 
