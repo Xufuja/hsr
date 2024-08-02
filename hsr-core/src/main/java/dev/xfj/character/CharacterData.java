@@ -41,11 +41,6 @@ public class CharacterData extends Data {
 
     @Override
     public String toString() {
-        return "PlayerData{" +
-                "currentLevel=" + getCurrentLevel() +
-                ", currentExp=" + getCurrentExp() +
-                ", currentAscension=" + getCurrentAscension() +
-                ", currentEidolon=" + getCurrentDupe() +
-                '}';
+        return String.format("%1$s\n%2$s\n%3$s\n%4$s\nLevel: %5$s/%6$s\n\nHP: %7$s\nAttack: %8$s\nDefense: %9$s", avatar.avatarName(), avatar.damageType(), Database.getAvatarPaths().get(avatar.avatarBaseType()).name(), getCurrentAscension(), getCurrentLevel(), avatar.getStatsByAscension(getCurrentAscension()).maxLevel(), getMaxHP(), getMaxAttack(), getMaxDefense());
     }
 }
