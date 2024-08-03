@@ -96,6 +96,14 @@ public class CharacterTab {
                 selectedCharacter = new CharacterData(indexToId.get(appState.characterItemIndex));
             }
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedCharacter == null || selectedCharacter.getCurrentLevel() == selectedCharacter.getAvatar().getStatsByAscension(selectedCharacter.getCurrentAscension()).getMaxLevel());
+            if (ImGui.button("Level Up")) {
+                selectedCharacter.levelUp(selectedCharacter.getAvatar().expRequiredForLevel(selectedCharacter.getCurrentLevel(), selectedCharacter.getCurrentLevel() + 1));
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             List<AvatarAbility> abilities = new ArrayList<>();
