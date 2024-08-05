@@ -112,6 +112,14 @@ public class CharacterTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedCharacter == null || selectedCharacter.getCurrentLevel() != selectedCharacter.getAvatar().getStatsByAscension(selectedCharacter.getCurrentAscension()).getMaxLevel() || selectedCharacter.getCurrentAscension() == selectedCharacter.getAvatar().getMaxAscension());
+            if (ImGui.button("Ascend")) {
+                selectedCharacter.ascend();
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             List<AvatarAbility> abilities = new ArrayList<>();
