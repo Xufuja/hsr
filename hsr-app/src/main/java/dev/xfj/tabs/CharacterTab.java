@@ -128,6 +128,16 @@ public class CharacterTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedCharacter == null || selectedCharacter.getCurrentDupe() == selectedCharacter.getAvatar().maxEidolon());
+            if (ImGui.button("Max Eidolons")) {
+                for (int j = selectedCharacter.getCurrentDupe(); j < selectedCharacter.getAvatar().maxEidolon() + 1; j++) {
+                    selectedCharacter.unlockEidolon();
+                }
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             List<AvatarAbility> abilities = new ArrayList<>();
