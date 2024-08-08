@@ -138,6 +138,18 @@ public class CharacterTab {
             }
             ImGui.endDisabled();
 
+            ImGui.sameLine();
+
+            ImGui.beginDisabled(selectedCharacter == null || selectedCharacter.getCurrentLevel() == selectedCharacter.getAvatar().getStatsByAscension(selectedCharacter.getAvatar().getMaxAscension()).getMaxLevel());
+            if (ImGui.button("Max Out")) {
+                for (int j = selectedCharacter.getCurrentAscension(); j < selectedCharacter.getAvatar().getMaxAscension() + 1; j++) {
+                    selectedCharacter.levelUp(selectedCharacter.getAvatar().expRequiredForLevel(selectedCharacter.getCurrentLevel(), selectedCharacter.getAvatar().getStatsByAscension(selectedCharacter.getCurrentAscension()).getMaxLevel()));
+                    selectedCharacter.ascend();
+                    selectedCharacter.unlockEidolon();
+                }
+            }
+            ImGui.endDisabled();
+
             ImGui.separator();
 
             List<AvatarAbility> abilities = new ArrayList<>();
